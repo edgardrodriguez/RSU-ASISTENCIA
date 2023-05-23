@@ -1,0 +1,5 @@
+USE RSU_ASISTENCIA;
+ SELECT * FROM V_DOCENTES;
+ select * from ADMIN;
+ 
+ select * from V_ESTUDIANTES;
