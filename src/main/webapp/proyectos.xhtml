@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <body>
+
+        <ui:composition template="./plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:head>
+                    <title>proyectos</title>
+                    <f:event listener="#{proyectoC.listar()}" type="preRenderView" />
+                </h:head>
+                <h:body>
+                    <h:form id="formProyectos" style="align-content: center;align-items: center;text-align: center">
+                        <h1 style="font-family: sans-serif">PROYECTOS</h1>
+                        <div class="ui-g-2"></div>
+                        <div class="ui-g-10" style="background-color: white">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="NOMBRES" />
+                                <p:inputText value="#{proyectoC.pro.nombre}"  maxlength="60" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="DESCRIPCION" />
+                                <p:inputText value="#{proyectoC.pro.descripcion}" required="true" style="width: 250px" requiredMessage="Rellene la descripcion">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="TIPO"/><p:selectOneRadio value="#{proyectoC.pro.tipo}" required="true" requiredMessage="seleccione un tipo">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="PROYECCION SOCIAL" itemValue="P"/>
+                                    <f:selectItem itemLabel="VOLUNTARIADO" itemValue="V"/>
+                                    <f:selectItem itemLabel="EXTENSION UNIVERSITARIA" itemValue="E"/>
+                                </p:selectOneRadio>
+                                <p:outputLabel value="ESTADO"/><p:selectOneRadio value="#{proyectoC.pro.estado}" required="true" requiredMessage="seleccione un estado">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="APROBACION" itemValue="A"/>
+                                    <f:selectItem itemLabel="EJECUCION" itemValue="E"/>
+                                    <f:selectItem itemLabel="FINALIZACION" itemValue="F"/>
+                                </p:selectOneRadio>
+                                <p:outputLabel value="REVISADO"/><p:selectOneRadio value="#{proyectoC.pro.revisado}" required="true" requiredMessage="seleccione quien lo supervisa">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="COORDINADOR" itemValue="C"/>
+                                    <f:selectItem itemLabel="DIRECCION RSU" itemValue="D"/>
+                                </p:selectOneRadio>
+                                <p:outputLabel value="ASESOR"/>
+                                <p:selectOneMenu  value="#{proyectoC.pro.asesor_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{proyectoC.listAsesor}" var="apo" itemLabel="#{apo.nombreAse.concat(' ').concat(apo.apellidoAse)}" itemValue="#{apo.idAse}" /> 
+                                </p:selectOneMenu>
+                                <p:outputLabel value="ESTUDIANTE"/>
+                                <p:selectOneMenu  value="#{proyectoC.pro.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{proyectoC.listEstudiantes}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        </div>
+                    </h:form>
+                    <h:form id="formTblProyectos" style="text-align: center;">
+                        <p:dataTable id="tblProyectos"
+                                     var="pro"
+                                     value="#{proyectoC.listProyecto}"
+                                     selection="#{proyectoC.pro}"
+                                     selectionMode="single"
+                                     rowKey="#{pro.id}"
+                                     paginator="true"
+                                     paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15">
+                            <f:facet name="header">
+                                <h:commandLink value="Descargar Listado" >
+                                    <p:dataExporter type="xls" target="tblProyectos" fileName="Listado"/>
+                                </h:commandLink>
+                            </f:facet>
+                            <p:column headerText="FILA" sortBy="#{pro.fila}" filterBy="#{pro.fila}">
+                                <h:outputText value="#{pro.fila}" />
+                            </p:column>
+                            <p:column headerText="NOMBRE" sortBy="#{pro.nombre}" filterBy="#{pro.nombre}">
+                                <h:outputText value="#{pro.nombre}" />
+                            </p:column>
+                            <p:column headerText="TIPO" sortBy="#{pro.tipoConcat}" filterBy="#{pro.tipoConcat}">
+                                <h:outputText value="#{pro.tipoConcat}" />
+                            </p:column>
+                            <p:column headerText="ESTADO" sortBy="#{pro.estadoConcat}" filterBy="#{pro.estadoConcat}">
+                                <h:outputText value="#{pro.estadoConcat}" />
+                            </p:column>
+                            <p:column headerText="REVISADO" sortBy="#{pro.revisadoConcat}" filterBy="#{pro.revisadoConcat}">
+                                <h:outputText value="#{pro.revisadoConcat}" />
+                            </p:column>
+                            <p:column headerText="ASESOR" sortBy="#{pro.concatAse}" filterBy="#{pro.concatAse}">
+                                <h:outputText value="#{pro.concatAse}" />
+                            </p:column>
+                            <p:column headerText="ESTUDIANTE" sortBy="#{pro.concatEst}" filterBy="#{pro.concatEst}">
+                                <h:outputText value="#{pro.concatEst}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </h:body>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

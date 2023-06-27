@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <body>
+
+        <ui:composition template="./plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:head>
+                    <title>Estudiantes</title>
+                    <f:event listener="#{estudiantesC.listar()}" type="preRenderView" />
+                </h:head>
+                <h:body>
+                    <h:form id="formEstudiantes" style="align-content: center;align-items: center;text-align: center">
+                        <h1 style="font-family: sans-serif">ESTUDIANTES</h1>
+                        <div class="ui-g-2"></div>
+                        <div class="ui-g-10" style="background-color: white">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="NOMBRES" />
+                                <p:inputText value="#{estudiantesC.est.nombre}"  maxlength="60" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="APELLIDOS" />
+                                <p:inputText value="#{estudiantesC.est.apellidos}" required="true" style="width: 250px" requiredMessage="Rellene el apellido">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="CONTRASEÑA" />
+                                <p:inputText value="#{estudiantesC.est.password}" required="true" style="width: 250px" requiredMessage="Rellene la contraseña">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="EMAIL"/>
+                                <p:inputText id="email" value="#{estudiantesC.est.email}" maxlength="60" label="Email" validatorMessage="#{docentesC.doc.email} no es valido" required="true" requiredMessage="Rellene el correo">
+                                    <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" /> <p:message for="email" />
+                                </p:inputText>
+                                <p:outputLabel value="DNI" />
+                                <p:inputText value="#{estudiantesC.est.DNI}" maxlength="8" required="true" style="width: 250px" requiredMessage="Escriba el DNI">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="CELULAR" />
+                                <p:inputText value="#{estudiantesC.est.celular}" maxlength="9" required="true" style="width: 250px" requiredMessage="Escriba el celular">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="CARRERA"/>
+                                <p:selectOneMenu  value="#{estudiantesC.est.carreras_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{estudiantesC.listCarreras}" var="apo" itemLabel="#{apo.concatCarrer}" itemValue="#{apo.idCar}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="ROL"/><p:selectOneRadio id="rol" value="#{estudiantesC.est.rol_fk}" required="true" requiredMessage="seleccione un rol">
+                                    <p:ajax event="change" listener="#{estudiantesC.listEstN.clear()}" update="MenuID"/>
+                                    <f:selectItem itemLabel="ESTUDIANTE COORDINADOR" itemValue="1"/>
+                                    <f:selectItem itemLabel="ESTUDIANTE" itemValue="2"/>
+                                </p:selectOneRadio>
+                                <p:outputLabel value="RELACION APODERADO"/><p:selectOneMenu id="MenuID" value="#{estudiantesC.est.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="SELECCIONE"/>
+                                    <f:selectItems value="#{estudiantesC.listEstN}" var="apo" itemLabel="#{apo.nombre.concat(' ').concat(apo.apellidos)}" itemValue="#{apo.id}"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Registrar" actionListener="#{estudiantesC.registrar()}"
+                                                 update="formEstudiantes :formTblEstudiante:tblEstudiante"/>
+                            </p:panelGrid>
+                        </div>
+                    </h:form>
+                    <h:form id="formTblEstudiante" style="text-align: center;">
+                        <p:dataTable id="tblEstudiante"
+                                     var="est"
+                                     value="#{estudiantesC.listEst}"
+                                     selection="#{estudiantesC.est}"
+                                     selectionMode="single"
+                                     rowKey="#{est.id}"
+                                     paginator="true"
+                                     paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15">
+                            <f:facet name="header">
+                                <h:commandLink value="Descargar Listado" >
+                                    <p:dataExporter type="xls" target="tblEstudiante" fileName="Listado"/>
+                                </h:commandLink>
+                            </f:facet>
+                            <p:column headerText="FILA" sortBy="#{est.fila}" filterBy="#{est.fila}">
+                                <h:outputText value="#{est.fila}" />
+                            </p:column>
+                            <p:column headerText="NOMBRE" sortBy="#{est.nombre}" filterBy="#{est.nombre}">
+                                <h:outputText value="#{est.nombre}" />
+                            </p:column>
+                            <p:column headerText="APELLIDO" sortBy="#{est.apellidos}" filterBy="#{est.apellidos}">
+                                <h:outputText value="#{est.apellidos}" />
+                            </p:column>
+                            <p:column headerText="EMAIL" sortBy="#{est.email}" filterBy="#{est.email}">
+                                <h:outputText value="#{est.email}" />
+                            </p:column>
+                            <p:column headerText="DNI" sortBy="#{est.DNI}" filterBy="#{est.DNI}">
+                                <h:outputText value="#{est.DNI}" />
+                            </p:column>
+                            <p:column headerText="CELULAR" sortBy="#{est.celular}" filterBy="#{est.celular}">
+                                <h:outputText value="#{est.celular}" />
+                            </p:column>
+                            <p:column headerText="COORDINADOR" sortBy="#{est.relacion}" filterBy="#{est.relacion}">
+                                <h:outputText value="#{est.relacion}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                EN TOTAL HAY #{fn:length(estudiantesC.listEst)} REGISTROS.
+                            </f:facet>
+                        </p:dataTable>
+                        <p:contextMenu for="tblEstudiante">
+                            <p:menuitem value="MODIFICAR" oncomplete="PF('dloModEstudiante').show()" update=":formDialogEstudiante"/>
+                            <p:menuitem value="ELIMINAR" actionListener="#{estudiantesC.eliminar()}" update="tblEstudiante"> 
+                                <p:confirm header="CONFIRMACIÓN" message="¿Está seguro de eliminar este registro?"/>
+                            </p:menuitem>
+                        </p:contextMenu>
+                    </h:form>
+                    <p:dialog header="ACTUALIZAR DATOS" widgetVar="dloModEstudiante" resizable="false" modal="true">
+                        <h:form id="formDialogEstudiante">
+                            <p:panelGrid columns="4">
+                                <p:outputLabel value="NOMBRES" />
+                                <p:inputText value="#{estudiantesC.est.nombre}"  maxlength="60" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="APELLIDOS" />
+                                <p:inputText value="#{estudiantesC.est.apellidos}" required="true" style="width: 250px" requiredMessage="Rellene el apellido">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="CONTRASEÑA" />
+                                <p:inputText value="#{estudiantesC.est.password}" required="true" style="width: 250px" requiredMessage="Rellene la contraseña">
+                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="EMAIL"/>
+                                <p:inputText id="email" value="#{estudiantesC.est.email}" maxlength="60" label="Email" validatorMessage="#{asesorC.ase.email} no es valido" required="true" requiredMessage="Rellene el correo">
+                                    <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" /> <p:message for="email" />
+                                </p:inputText>
+
+                                <p:outputLabel value="DNI" />
+                                <p:inputText value="#{estudiantesC.est.DNI}" maxlength="8" required="true" style="width: 250px" requiredMessage="Escriba el DNI">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="CELULAR" />
+                                <p:inputText value="#{estudiantesC.est.celular}" maxlength="9" required="true" style="width: 250px" requiredMessage="Escriba el celular">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="ESTADO"/><p:selectOneRadio id="estado" value="#{estudiantesC.est.estado}" required="true" requiredMessage="seleccione estado">
+                                    <f:selectItem itemLabel="ACTIVO" itemValue="A"/>
+                                    <f:selectItem itemLabel="INACTIVO" itemValue="I"/>
+                                </p:selectOneRadio>
+                                <p:outputLabel value="CARRERA"/>
+                                <p:selectOneMenu  value="#{estudiantesC.est.carreras_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{estudiantesC.listCarreras}" var="apo" itemLabel="#{apo.concatCarrer}" itemValue="#{apo.idCar}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="ROL"/><p:selectOneRadio id="rol1" value="#{estudiantesC.est.rol_fk}" required="true" requiredMessage="seleccione un rol">
+                                    <p:ajax event="change" listener="#{estudiantesC.listEstN.clear()}" update="MenuID1"/>
+                                    <f:selectItem itemLabel="ESTUDIANTE COORDINADOR" itemValue="1"/>
+                                    <f:selectItem itemLabel="ESTUDIANTE" itemValue="2"/>
+                                </p:selectOneRadio>
+                                <p:outputLabel value="RELACION APODERADO"/><p:selectOneMenu id="MenuID1" value="#{estudiantesC.est.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="SELECCIONE"/>
+                                    <f:selectItems value="#{estudiantesC.listEstN}" var="apo" itemLabel="#{apo.nombre.concat(' ').concat(apo.apellidos)}" itemValue="#{apo.id}"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="MODIFICAR" actionListener="#{estudiantesC.modificar()}" update="@([id$=formTblEstudiante]) formDialogEstudiante"/>
+                                <p:commandButton value="CANCELAR" oncomplete="PF('dloModEstudiante').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                    <h:form>
+                        <p:confirmDialog global="true">
+                            <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes"/>
+                            <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no"/>
+                        </p:confirmDialog>
+                    </h:form>
+                </h:body>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
