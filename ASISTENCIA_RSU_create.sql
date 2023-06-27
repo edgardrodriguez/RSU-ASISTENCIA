@@ -83,6 +83,7 @@ CREATE TABLE PROYECTO_DETALLE (
     descripcion varchar(100)  NOT NULL COMMENT 'descripcion de registros de proyecto',
     proyectos_fk int  NOT NULL COMMENT 'llave foránea de la tabla proyectos',
     estudiantes_fk int  NOT NULL COMMENT 'llave foránea de la tabla estudiantes',
+    evidencia MEDIUMBLOB null,
     CONSTRAINT PROYECTO_DETALLE_pk PRIMARY KEY (id)
 ) COMMENT 'Detalles del proyecto numero de registro de cada asistente.';
 
@@ -139,3 +140,46 @@ ALTER TABLE ESTUDIANTES ADD CONSTRAINT ROL_ESTUDIANTES FOREIGN KEY ROL_ESTUDIANT
     REFERENCES ROL (id) on delete cascade on update cascade;
 
 -- End of file.
+CREATE OR REPLACE VIEW V_ASESOR AS
+select ROW_NUMBER() OVER( ORDER BY ASESOR.id desc) AS FILA,
+ASESOR.id, ASESOR.nombre, ASESOR.apellidos, ASESOR.password, ASESOR.email, ASESOR.DNI,
+ASESOR.celular, ASESOR.estado, ASESOR.rol_fk, ROL.role  from ASESOR
+INNER JOIN ROL ON ROL.id = ASESOR.rol_fk;
+
+CREATE OR REPLACE VIEW V_ESTUDIANTES AS
+select ROW_NUMBER() OVER( ORDER BY super.id desc) AS FILA,
+super.id, super.nombre, super.apellidos, super.password, super.email, super.DNI,
+super.celular, super.estado, super.rol_fk,
+super.carreras_fk,super.estudiantes_fk, ROL.role,
+CONCAT(CARRERAS.nombre," ",CARRERAS.ciclo," ",CARRERAS.turno) as CARRERA,
+CONCAT(infer.nombre," ",infer.apellidos) as RELACION 
+from ESTUDIANTES as super
+INNER JOIN ROL ON ROL.id = super.rol_fk
+INNER JOIN CARRERAS ON CARRERAS.ID = super.carreras_fk
+left join ESTUDIANTES as infer on super.estudiantes_fk =infer.id;
+
+CREATE OR REPLACE VIEW V_CARRERAS AS
+select CARRERAS.id,CONCAT(CARRERAS.nombre," ",CARRERAS.ciclo," ", CARRERAS.turno) as concatCarrer from CARRERAS;
+
+CREATE OR REPLACE VIEW V_PROYECTOS AS
+select ROW_NUMBER() OVER( ORDER BY PRO.id desc) AS fila, PRO.id,
+PRO.nombre, PRO.descripcion, PRO.tipo, PRO.estado, PRO.revisado, 
+PRO.asesor_fk, PRO.estudiantes_fk, 
+CASE WHEN PRO.tipo='P' THEN 'PROYECCION SOCIAL'
+WHEN PRO.tipo='V' THEN 'VOLUNTARIADO'
+WHEN PRO.tipo='E' THEN 'EXTENSION UNIVERSITARIA'
+END AS tipoConcat,
+CASE WHEN PRO.estado='A' THEN 'APROBACION'
+WHEN PRO.estado='E' THEN 'EJECUCION'
+WHEN PRO.estado='F' THEN 'FINALIZACION'
+END AS estadoConcat,
+CASE WHEN PRO.revisado='C' THEN 'COORDINADOR'
+WHEN PRO.revisado='D' THEN 'DIRECCION RSU'
+END AS revisadoConcat,
+CONCAT(ASESOR.nombre," ",ASESOR.apellidos) as concatAse, 
+CONCAT(ESTUDIANTES.nombre," ",ESTUDIANTES.apellidos) as concatEst from PROYECTOS as PRO
+INNER JOIN ASESOR ON ASESOR.id = PRO.asesor_fk
+INNER JOIN ESTUDIANTES ON ESTUDIANTES.id = PRO.estudiantes_fk;
+
+
+SELECT * FROM V_PROYECTOS;

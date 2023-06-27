@@ -1,10 +1,10 @@
 USE RSU_ASISTENCIA;
 
 INSERT INTO ROL (role) 
-values	('A'),
-		('E'),
-        ('L'),
-        ('S');
+values	('E'),  -- Estudiante Lider 
+		('e'), -- Estudiante
+        ('A'), -- asesor
+        ('S'); -- supervisor
 
 INSERT INTO CARRERAS (nombre,ciclo,turno)
 VALUES 	('INGENIERIA DE SISTEMAS','X','M'),
@@ -128,15 +128,15 @@ VALUES 	('Jose Eduardo','Sanchez Julian','1234','docente1@docente1.com','3453523
  
 
 INSERT INTO ESTUDIANTES (nombre,apellidos,password,email,DNI,celular,estado,rol_fk,carreras_fk)
-VALUES ('Jose Eduardo','Sanchez Julian','1234','docente1@docente1.com','34535234','923612459','A',3,1);
+VALUES ('Jose Eduardo','Sanchez Julian','1234','docente1@docente1.com','34535234','923612459','A',1,1);
  
 
 INSERT INTO ESTUDIANTES (nombre,apellidos,password,email,DNI,celular,estado,rol_fk,carreras_fk,estudiantes_fk)
-VALUES 	('Jose Eduardo','Sanchez Julian','1234','docente1@docente1.com','34535234','923612459','A',3,1,1),
-		('Ricardo Luis','Marcos Jimenez','1234','docente2@docente2.com','34535234','923612459','A',3,21,1),
-        ('Brian Marco','Quispe Lucas','1234','docente3@docente3.com','34535234','923612459','A',3,41,1),
-        ('Martin Carlos','Damian Garcia','1234','docente4@docente4.com','34535234','923612459','A',3,61,1),
-        ('Jean Simon','Felipe Santos','1234','docente5@docente5.com','34535234','923612459','A',3,81,1);
+VALUES 	('Jose Eduardo','Sanchez Julian','1234','docente1@docente1.com','34535234','923612459','A',2,1,2),
+		('Ricardo Luis','Marcos Jimenez','1234','docente2@docente2.com','34535234','923612459','A',2,21,2),
+        ('Brian Marco','Quispe Lucas','1234','docente3@docente3.com','34535234','923612459','A',2,41,2),
+        ('Martin Carlos','Damian Garcia','1234','docente4@docente4.com','34535234','923612459','A',2,61,2),
+        ('Jean Simon','Felipe Santos','1234','docente5@docente5.com','34535234','923612459','A',2,81,2);
 
 select * from PROYECTOS;
 INSERT INTO PROYECTOS (nombre,descripcion,tipo,estado,revisado,asesor_fk,estudiantes_fk)
