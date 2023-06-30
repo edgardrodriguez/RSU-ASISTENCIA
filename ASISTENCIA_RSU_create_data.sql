@@ -4,7 +4,7 @@ INSERT INTO ROL (role)
 values	('E'),  -- Estudiante Lider 
 		('e'), -- Estudiante
         ('A'), -- asesor
-        ('S'); -- supervisor
+        ('Z'); -- admin
 
 INSERT INTO CARRERAS (nombre,ciclo,turno)
 VALUES 	('INGENIERIA DE SISTEMAS','X','M'),
