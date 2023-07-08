@@ -31,4 +31,6 @@ public class ProyectoDetalleModel {
     
     int idPro;
     String nombrePro;
+    
+    int idDescar;
 }

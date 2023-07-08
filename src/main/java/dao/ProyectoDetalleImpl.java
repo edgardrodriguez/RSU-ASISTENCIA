@@ -4,18 +4,22 @@
  */
 package dao;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 import model.ProyectoDetalleModel;
-import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
+import org.primefaces.util.SerializableSupplier;
 
 /**
  *
@@ -153,8 +157,7 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-
-    public void modificarArchivo(UploadedFile archivo,ProyectoDetalleModel obj) throws Exception {
+    public void modificarArchivo(UploadedFile archivo, ProyectoDetalleModel obj) throws Exception {
         String sql = "update PROYECTO_DETALLE set evidencia=? where id=?";
         try {
             PreparedStatement ps = this.conectar().prepareStatement(sql);
@@ -169,4 +172,30 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
         }
     }
 
+    public StreamedContent traerImagen(StreamedContent archivo, int id) {
+
+        String sql = "select evidencia, descripcion from PROYECTO_DETALLE WHERE id =?";
+        try {
+            PreparedStatement ps = this.conectar().prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet st = ps.executeQuery();
+            while (st.next()) {
+                InputStream stream = st.getBinaryStream("evidencia");
+                String description = st.getString("descripcion");
+                archivo = DefaultStreamedContent.builder()
+                        .name(description + ".jpg")
+                        .contentType("image/jpg")
+                        .stream(() -> stream)
+                        .build();
+
+                System.out.println("Estoy en while dao traer imagen, " + archivo);
+            }
+        } catch (Exception e) {
+            System.out.println("Error en traer imagen: " + e.getMessage());
+        }
+        return archivo;
+    }
+
+   
+    
 }

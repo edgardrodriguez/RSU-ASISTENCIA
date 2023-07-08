@@ -9,6 +9,25 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <!--Creamos los Filters-->
+    <filter>
+        <filter-name> 
+            Primefaces FileUpload Filter
+        </filter-name>
+        <filter-class>
+            org.primefaces.webapp.filter.FileUploadFilter
+        </filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>
+            Primefaces FileUpload Filter
+        </filter-name>
+        
+        <servlet-name>
+            Faces Servlet
+        </servlet-name>
+    </filter-mapping>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>

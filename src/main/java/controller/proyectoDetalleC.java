@@ -11,31 +11,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import model.ProyectoDetalleModel;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.CommonsUploadedFile;
 import org.primefaces.model.file.UploadedFile;
+import org.primefaces.model.file.UploadedFiles;
 
 /**
  *
  * @author edgard
  */
-@Named(value = "proyectoDetalleC")
 @SessionScoped
+@Named(value = "proyectoDetalleC")
 public class proyectoDetalleC implements Serializable {
 
     private UploadedFile archivo;
     private ProyectoDetalleModel prod;
     private ProyectoDetalleImpl dao;
+    private StreamedContent archivoTraido;
     private List<ProyectoDetalleModel> listprod;
     private List<ProyectoDetalleModel> listproyectos;
     private List<ProyectoDetalleModel> listEstudiante;
 
     public proyectoDetalleC() {
         archivo = new CommonsUploadedFile();
+        archivoTraido = new DefaultStreamedContent();
         prod = new ProyectoDetalleModel();
         dao = new ProyectoDetalleImpl();
     }
@@ -57,14 +63,16 @@ public class proyectoDetalleC implements Serializable {
             Logger.getGlobal().log(Level.INFO, "Error en actualizar proyecto Detalle C {0}", e.getMessage());
         }
     }
+
     public void modificarArchivo() throws Exception {
         try {
-            dao.modificarArchivo(archivo,prod);
+            dao.modificarArchivo(archivo, prod);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Actualizado con éxito"));
         } catch (Exception e) {
             Logger.getGlobal().log(Level.INFO, "Error en actualizar proyecto Detalle C {0}", e.getMessage());
         }
     }
+
     public void eliminar() throws Exception {
         try {
             dao.eliminar(prod);
@@ -73,6 +81,17 @@ public class proyectoDetalleC implements Serializable {
             listar();
         } catch (Exception e) {
             Logger.getGlobal().log(Level.INFO, "Error en eliminar proyecto detalle C {0}", e.getMessage());
+        }
+    }
+
+    public void decargar(int id) {
+        try {
+            System.out.println("El idemp es esto " + id);
+            archivoTraido = dao.traerImagen(archivoTraido, id);
+            System.out.println("Mi archivo traido : " + archivoTraido);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Descargado", "Descarga completada"));
+        } catch (Exception e) {
+            System.out.println("Error en Descargar: " + e.getMessage());
         }
     }
 
@@ -150,6 +169,14 @@ public class proyectoDetalleC implements Serializable {
 
     public void setListEstudiante(List<ProyectoDetalleModel> listEstudiante) {
         this.listEstudiante = listEstudiante;
+    }
+
+    public StreamedContent getArchivoTraido() {
+        return archivoTraido;
+    }
+
+    public void setArchivoTraido(StreamedContent archivoTraido) {
+        this.archivoTraido = archivoTraido;
     }
 
 }
