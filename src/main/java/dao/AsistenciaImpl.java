@@ -7,6 +7,7 @@ package dao;
 import com.google.protobuf.TextFormat.ParseException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,7 +42,8 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
             ps.setString(1, obj.getDia());
             ps.setInt(2, obj.getCantHoras());
             ps.setTimestamp(3, fechaActual);
-            ps.setString(4, obj.getEstado());
+            String est = "A";
+            ps.setString(4, est);
             ps.setInt(5, obj.getEstudiantes_fk());
             ps.setInt(6, obj.getProyecto_detalle_fk());
             ps.execute();
@@ -108,11 +110,13 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
                 doc.setFila(rs.getString("fila"));
                 doc.setId(rs.getInt("id"));
                 doc.setDia(rs.getString("dia"));
+                doc.setDiaConcat(rs.getString("diaConcat"));
                 doc.setCantHoras(rs.getInt("cantHoras"));
-                doc.setFecha(rs.getTimestamp("fecha")); 
+                doc.setFecha(rs.getTimestamp("fecha"));
+                doc.setEstado(rs.getString("estado")); 
                 doc.setEstudiantes_fk(rs.getInt("estudiantes_fk"));
                 doc.setProyecto_detalle_fk(rs.getInt("proyecto_detalle_fk"));
-                doc.setConcatEst(rs.getString("concatEst")); 
+                doc.setConcatEst(rs.getString("concatEst"));
                 doc.setDescripcion(rs.getString("descripcion"));
                 listado.add(doc);
             }
@@ -124,4 +128,52 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
         return listado;
     }
 
+    public List<AsistenciaModel> ListarEstudiantes() throws SQLException {
+        List<AsistenciaModel> listadoA = null;
+        AsistenciaModel per;
+        ResultSet rs;
+        String sql = " select * from ESTUDIANTES WHERE rol_fk=2";
+        try {
+            listadoA = new ArrayList();
+            PreparedStatement ps = this.conectar().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                per = new AsistenciaModel();
+                per.setIdEst(rs.getInt("id"));
+                per.setNombreEst(rs.getString("nombre"));
+                per.setApellidoEst(rs.getString("apellidos"));
+                listadoA.add(per);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.WARNING, "Error aL listar ESTUDIANTES Dao {0} ", e.getMessage());
+        }
+        return listadoA;
+    }
+    
+    public List<AsistenciaModel> ListarProyectoDetalle(int estudiantes_fk) throws SQLException {
+        List<AsistenciaModel> listadoA = null;
+        AsistenciaModel per;
+        ResultSet rs;
+        String sql = "select id,descripcion,estudiantes_fk from PROYECTO_DETALLE where estudiantes_fk=?";
+        try {
+            listadoA = new ArrayList();
+            PreparedStatement ps = this.conectar().prepareStatement(sql);
+            ps.setInt(1, estudiantes_fk);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                per = new AsistenciaModel();
+                per.setIdProDet(rs.getInt("id"));
+                per.setDestProDet(rs.getString("descripcion"));
+                listadoA.add(per);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.WARNING, "Error aL listar ESTUDIANTES Dao {0} ", e.getMessage());
+        }
+        return listadoA;
+    }
+    
 }

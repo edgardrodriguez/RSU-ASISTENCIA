@@ -52,6 +52,12 @@
                             </p:panelGrid>
                         </div>
                     </h:form>
+                    <h:form>
+                        <p:panelGrid columns="1">
+                            <p:commandButton value="LISTAR" actionListener="#{asesorC.reporteAsesor()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                        </p:panelGrid>
+                    </h:form>
+
                     <h:form id="formTblAsesor" style="text-align: center;">
 
                         <p:dataTable id="tblAsesor"

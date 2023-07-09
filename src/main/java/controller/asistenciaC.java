@@ -9,6 +9,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,8 @@ public class asistenciaC implements Serializable {
     private AsistenciaModel asis;
     private AsistenciaImpl dao;
     private List<AsistenciaModel> listAsistencia;
-
+    private List<AsistenciaModel> listEstudiante;
+    private List<AsistenciaModel> listProyectosDetalle;
     public asistenciaC() {
         asis = new AsistenciaModel();
         dao = new AsistenciaImpl();
@@ -43,6 +45,7 @@ public class asistenciaC implements Serializable {
             Logger.getGlobal().log(Level.INFO, "Error en registrar asistencia C {0}", e.getMessage());
         }
     }
+
     public void modificar() throws Exception {
         try {
             dao.modificar(asis);
@@ -76,7 +79,7 @@ public class asistenciaC implements Serializable {
             Logger.getGlobal().log(Level.INFO, "Error en listar asistencia C {0}", e.getMessage());
         }
     }
-    
+
     public AsistenciaModel getAsis() {
         return asis;
     }
@@ -99,6 +102,38 @@ public class asistenciaC implements Serializable {
 
     public void setListAsistencia(List<AsistenciaModel> listAsistencia) {
         this.listAsistencia = listAsistencia;
+    }
+
+    public List<AsistenciaModel> getListEstudiante() {
+         listEstudiante = new ArrayList<AsistenciaModel>();
+         try {
+            listEstudiante=dao.ListarEstudiantes();
+        } catch (SQLException ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listEstudiante;
+    }
+
+    public void setListEstudiante(List<AsistenciaModel> listEstudiante) {
+        this.listEstudiante = listEstudiante;
+    }
+
+    public List<AsistenciaModel> getListProyectosDetalle() {
+        listProyectosDetalle = new ArrayList<AsistenciaModel>();
+        try {
+            listProyectosDetalle=dao.ListarProyectoDetalle(asis.getEstudiantes_fk());
+        } catch (SQLException ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listProyectosDetalle;
+    }
+
+    public void setListProyectosDetalle(List<AsistenciaModel> listProyectosDetalle) {
+        this.listProyectosDetalle = listProyectosDetalle;
     }
 
 }

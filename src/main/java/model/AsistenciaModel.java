@@ -15,6 +15,7 @@ import lombok.Data;
 
 @Data
 public class AsistenciaModel {
+
     int id;
     String dia;
     int cantHoras;
@@ -22,8 +23,16 @@ public class AsistenciaModel {
     String estado;
     int estudiantes_fk;
     int proyecto_detalle_fk;
-    
+
+    String diaConcat;
     String fila;
     String concatEst;
     String descripcion;
+
+    int idEst;
+    String nombreEst;
+    String apellidoEst;
+    
+    int idProDet;
+    String destProDet;
 }

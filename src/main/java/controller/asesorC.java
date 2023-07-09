@@ -10,13 +10,18 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import model.AsesorModel;
+import service.Reporte;
 
 /**
  *
@@ -89,6 +94,20 @@ public class asesorC implements Serializable {
             listAse = dao.listarTodos();
         } catch (Exception e) {
             Logger.getGlobal().log(Level.INFO, "Error en listar docente C {0}", e.getMessage());
+        }
+    }
+    public void reporteAsesor() throws Exception {
+        Reporte report = new Reporte();
+        try {
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date fechaActual = new Date(System.currentTimeMillis());
+            String fechSystem = dateFormat2.format(fechaActual);
+            Map<String, Object> parameters = new HashMap();
+            report.exportarPDFGlobal(parameters, "Asesor.jasper", fechSystem + " asesor.pdf");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
         }
     }
 

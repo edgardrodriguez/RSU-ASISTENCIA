@@ -16,6 +16,131 @@
                     <title>Asistencia</title>
                     <f:event listener="#{asistenciaC.listar()}" type="preRenderView" />
                 </h:head>
+                <h:body>
+                    <h:form id="formAsistencia" enctype="multipart/form-data" style="align-content: center;align-items: center;text-align: center">
+                        <h1 style="font-family: sans-serif">ASISTENCIA</h1>
+                        <div class="ui-g-2"></div>
+                        <div class="ui-g-10" style="background-color: white">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="DIA"/><p:selectOneRadio value="#{asistenciaC.asis.dia}" required="true" requiredMessage="seleccione un dia">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="LUNES" itemValue="1"/>
+                                    <f:selectItem itemLabel="MARTES" itemValue="2"/>
+                                    <f:selectItem itemLabel="MIERCOLES" itemValue="3"/>
+                                    <f:selectItem itemLabel="JUEVES" itemValue="4"/>
+                                    <f:selectItem itemLabel="VIERNES" itemValue="5"/>
+                                    <f:selectItem itemLabel="SABADO" itemValue="6"/>
+                                    <f:selectItem itemLabel="DOMINGO" itemValue="7"/>
+                                </p:selectOneRadio>
+                                <p:outputLabel value="CANTIDAD DE HORAS" />
+                                <p:inputText value="#{asistenciaC.asis.cantHoras}" required="true" style="width: 250px" requiredMessage="Digite la cantidad de horas">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="ESTUDIANTE"/>
+                                <p:selectOneMenu  value="#{asistenciaC.asis.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                    <p:ajax event="change" listener="#{asistenciaC.listProyectosDetalle.clear()}" update="proDetalle"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{asistenciaC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
+                                </p:selectOneMenu>
+                                <p:outputLabel value="PROYECTO DETALLE"/>
+                                <p:selectOneMenu id="proDetalle" value="#{asistenciaC.asis.proyecto_detalle_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{asistenciaC.listProyectosDetalle}" var="apo" itemLabel="#{apo.destProDet}" itemValue="#{apo.idProDet}" /> 
+                                </p:selectOneMenu>
+                                <p:commandButton value="Registrar" actionListener="#{asistenciaC.registrar()}"
+                                                 update="formAsistencia :formTblAsistencia:tblAsistencia"/>
+                            </p:panelGrid>
+                        </div>
+                    </h:form>
+                    <h:form id="formTblAsistencia" style="text-align: center;">
+                        <p:dataTable id="tblAsistencia"
+                                     var="asis"
+                                     value="#{asistenciaC.listAsistencia}"
+                                     selection="#{asistenciaC.asis}"
+                                     selectionMode="single"
+                                     rowKey="#{asis.id}"
+                                     paginator="true"
+                                     paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15">
+                            <f:facet name="header">
+                                <h:commandLink value="Descargar Listado" >
+                                    <p:dataExporter type="xls" target="tblAsistencia" fileName="Listado"/>
+                                </h:commandLink>
+                            </f:facet>
+                            <p:column headerText="FILA" sortBy="#{asis.fila}" filterBy="#{asis.fila}">
+                                <h:outputText value="#{asis.fila}" />
+                            </p:column>
+                            <p:column headerText="DIA" sortBy="#{asis.diaConcat}" filterBy="#{asis.diaConcat}">
+                                <h:outputText value="#{asis.diaConcat}" />
+                            </p:column>
+                            <p:column headerText="CANTIDAD DE HORAS" sortBy="#{asis.cantHoras}" filterBy="#{asis.cantHoras}">
+                                <h:outputText value="#{asis.cantHoras}" />
+                            </p:column>
+                            <p:column headerText="FECHA" sortBy="#{asis.fecha}" filterBy="#{asis.fecha}">
+                                <h:outputText value="#{asis.fecha}" />
+                            </p:column>
+                            <p:column headerText="ESTUDIANTE" sortBy="#{asis.concatEst}" filterBy="#{asis.concatEst}">
+                                <h:outputText value="#{asis.concatEst}" />
+                            </p:column>
+                            <p:column headerText="DESCRIPCION" sortBy="#{asis.descripcion}" filterBy="#{asis.descripcion}">
+                                <h:outputText value="#{asis.descripcion}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                EN TOTAL HAY #{fn:length(asistenciaC.listAsistencia)} REGISTROS.
+                            </f:facet>
+                        </p:dataTable>
+                        <p:contextMenu for="tblAsistencia">
+                            <p:menuitem value="MODIFICAR" oncomplete="PF('dloModAsistencia').show()" update=":formDialogAsistencia"/>
+                            <p:menuitem value="ELIMINAR" actionListener="#{asistenciaC.eliminar()}" update="tblAsistencia"> 
+                                <p:confirm header="CONFIRMACIÓN" message="¿Está seguro de eliminar este registro?"/>
+                            </p:menuitem>
+                        </p:contextMenu>
+                    </h:form>
+                    <p:dialog header="ACTUALIZAR DATOS" widgetVar="dloModAsistencia" resizable="false" modal="true">
+                        <h:form id="formDialogAsistencia">
+                            <p:panelGrid columns="4">
+                                <p:outputLabel value="DIA"/>
+                                <p:selectOneRadio value="#{asistenciaC.asis.dia}" required="true" requiredMessage="seleccione un dia">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="LUNES" itemValue="1"/>
+                                    <f:selectItem itemLabel="MARTES" itemValue="2"/>
+                                    <f:selectItem itemLabel="MIERCOLES" itemValue="3"/>
+                                    <f:selectItem itemLabel="JUEVES" itemValue="4"/>
+                                    <f:selectItem itemLabel="VIERNES" itemValue="5"/>
+                                    <f:selectItem itemLabel="SABADO" itemValue="6"/>
+                                    <f:selectItem itemLabel="DOMINGO" itemValue="7"/>
+                                </p:selectOneRadio>
+                                <p:outputLabel value="CANTIDAD DE HORAS" />
+                                <p:inputText value="#{asistenciaC.asis.cantHoras}" required="true" style="width: 250px" requiredMessage="Digite la cantidad de horas">
+                                    <p:keyFilter regEx="/[0-9]/"/>
+                                </p:inputText>
+                                <p:outputLabel value="ESTADO"/><p:selectOneRadio id="estado" value="#{asistenciaC.asis.estado}" required="true" requiredMessage="seleccione estado">
+                                    <f:selectItem itemLabel="ACTIVO" itemValue="A"/>
+                                    <f:selectItem itemLabel="INACTIVO" itemValue="I"/>
+                                </p:selectOneRadio>
+                                <p:outputLabel value="ESTUDIANTE"/>
+                                <p:selectOneMenu  value="#{asistenciaC.asis.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                     <p:ajax event="change" listener="#{asistenciaC.listProyectosDetalle.clear()}" update="proDetalle"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{asistenciaC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
+                                </p:selectOneMenu>
+                                <p:outputLabel value="PROYECTO DETALLE"/>
+                                <p:selectOneMenu id="proDetalle" value="#{asistenciaC.asis.proyecto_detalle_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{asistenciaC.listProyectosDetalle}" var="apo" itemLabel="#{apo.destProDet}" itemValue="#{apo.idProDet}" /> 
+                                </p:selectOneMenu>
+                                <p:commandButton value="MODIFICAR" actionListener="#{asistenciaC.modificar()}" update="@([id$=formTblAsistencia]) formDialogAsistencia"/>
+                                <p:commandButton value="CANCELAR" oncomplete="PF('dloModAsistencia').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                    <h:form>
+                        <p:confirmDialog global="true">
+                            <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes"/>
+                            <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no"/>
+                        </p:confirmDialog>
+                    </h:form>
+                </h:body>
             </ui:define>
 
         </ui:composition>
