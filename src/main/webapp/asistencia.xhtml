@@ -47,12 +47,14 @@
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{asistenciaC.listProyectosDetalle}" var="apo" itemLabel="#{apo.destProDet}" itemValue="#{apo.idProDet}" /> 
                                 </p:selectOneMenu>
+                                <p:outputLabel value="EVIDENCIA"  style="font-weight: bold; color: black" />
+                                <p:fileUpload value="#{asistenciaC.archivo}" mode="simple" required="true" skinSimple="true" />
                                 <p:commandButton value="Registrar" actionListener="#{asistenciaC.registrar()}"
                                                  update="formAsistencia :formTblAsistencia:tblAsistencia"/>
                             </p:panelGrid>
                         </div>
                     </h:form>
-                    <h:form id="formTblAsistencia" style="text-align: center;">
+                    <h:form id="formTblAsistencia" style="text-align: center;" enctype="multipart/form-data">
                         <p:dataTable id="tblAsistencia"
                                      var="asis"
                                      value="#{asistenciaC.listAsistencia}"
@@ -85,17 +87,35 @@
                             <p:column headerText="DESCRIPCION" sortBy="#{asis.descripcion}" filterBy="#{asis.descripcion}">
                                 <h:outputText value="#{asis.descripcion}" />
                             </p:column>
+                            <p:column>
+                                <p:fragment>
+                                    <p:commandButton value="Descargar" actionListener="#{asistenciaC.decargar(asis.id)}" ajax="false" >
+                                        <p:fileDownload value="#{asistenciaC.archivoTraido}"/>
+                                    </p:commandButton>
+                                </p:fragment>
+                            </p:column>
                             <f:facet name="footer">
                                 EN TOTAL HAY #{fn:length(asistenciaC.listAsistencia)} REGISTROS.
                             </f:facet>
                         </p:dataTable>
                         <p:contextMenu for="tblAsistencia">
                             <p:menuitem value="MODIFICAR" oncomplete="PF('dloModAsistencia').show()" update=":formDialogAsistencia"/>
+                            <p:menuitem value="MODIFICAR ARCHIVO" oncomplete="PF('dloModAsistenciaArch').show()" update=":formDialogAsistenciaArch"/>
                             <p:menuitem value="ELIMINAR" actionListener="#{asistenciaC.eliminar()}" update="tblAsistencia"> 
                                 <p:confirm header="CONFIRMACIÓN" message="¿Está seguro de eliminar este registro?"/>
                             </p:menuitem>
                         </p:contextMenu>
                     </h:form>
+                    <p:dialog header="ACTUALIZAR ARCHIVO" widgetVar="dloModAsistenciaArch" resizable="false" modal="true">
+                        <h:form id="formDialogAsistenciaArch" enctype="multipart/form-data">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="EVIDENCIA"  style="font-weight: bold; color: black" />
+                                <p:fileUpload value="#{asistenciaC.archivo}" mode="simple" required="true" skinSimple="true" />
+                                <p:commandButton value="MODIFICAR" actionListener="#{asistenciaC.modificarArchivo()}" update="@([id$=formTblProyectoDetalle]) formDialogAsistenciaArch"/>
+                                <p:commandButton value="CANCELAR" oncomplete="PF('dloModAsistenciaArch').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
                     <p:dialog header="ACTUALIZAR DATOS" widgetVar="dloModAsistencia" resizable="false" modal="true">
                         <h:form id="formDialogAsistencia">
                             <p:panelGrid columns="4">
@@ -120,7 +140,7 @@
                                 </p:selectOneRadio>
                                 <p:outputLabel value="ESTUDIANTE"/>
                                 <p:selectOneMenu  value="#{asistenciaC.asis.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
-                                     <p:ajax event="change" listener="#{asistenciaC.listProyectosDetalle.clear()}" update="proDetalle"/>
+                                    <p:ajax event="change" listener="#{asistenciaC.listProyectosDetalle.clear()}" update="proDetalle"/>
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{asistenciaC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>

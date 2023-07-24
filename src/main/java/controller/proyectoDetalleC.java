@@ -48,7 +48,7 @@ public class proyectoDetalleC implements Serializable {
 
     public void registrar() throws Exception {
         try {
-            dao.registrar(archivo, prod);
+            dao.registrarProyectos(archivo, prod);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Registrado con éxito"));
         } catch (Exception e) {
             Logger.getGlobal().log(Level.INFO, "Error en registrar proyecto Detalle C {0}", e.getMessage());

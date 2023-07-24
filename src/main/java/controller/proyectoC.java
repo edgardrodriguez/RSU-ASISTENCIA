@@ -7,8 +7,12 @@ package controller;
 import dao.ProyectosImpl;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
@@ -17,6 +21,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import model.ProyectosModel;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.file.UploadedFile;
+import service.Reporte;
 
 /**
  *
@@ -26,6 +33,8 @@ import model.ProyectosModel;
 @SessionScoped
 public class proyectoC implements Serializable {
 
+    private UploadedFile archivo;
+    private StreamedContent archivoTraido;
     private ProyectosModel pro;
     private ProyectosImpl dao;
     private List<ProyectosModel> listProyecto;
@@ -39,7 +48,7 @@ public class proyectoC implements Serializable {
 
     public void registrar() throws Exception {
         try {
-            dao.registrar(pro);
+            dao.registrarProyectos(archivo, pro);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Registrado con éxito"));
             limpiar();
             listar();
@@ -67,6 +76,26 @@ public class proyectoC implements Serializable {
         }
     }
 
+    public void modificarArchivo() throws Exception {
+        try {
+            dao.modificarArchivo(archivo, pro);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Actualizado con éxito"));
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.INFO, "Error en actualizar archivo asistencia C {0}", e.getMessage());
+        }
+    }
+
+    public void decargar(int id) {
+        try {
+            System.out.println("El idemp es esto " + id);
+            archivoTraido = dao.traerImagen(archivoTraido, id);
+            System.out.println("Mi archivo traido : " + archivoTraido);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Descargado", "Descarga completada"));
+        } catch (Exception e) {
+            System.out.println("Error en Descargar: " + e.getMessage());
+        }
+    }
+
     public void eliminar() throws Exception {
         try {
             dao.eliminar(pro);
@@ -87,6 +116,91 @@ public class proyectoC implements Serializable {
             listProyecto = dao.listarTodos();
         } catch (Exception e) {
             Logger.getGlobal().log(Level.INFO, "Error en listar docente C {0}", e.getMessage());
+        }
+    }
+
+    public void reporteProyecto() throws Exception {
+        Reporte report = new Reporte();
+        try {
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date fechaActual = new Date(System.currentTimeMillis());
+            String fechSystem = dateFormat2.format(fechaActual);
+            Map<String, Object> parameters = new HashMap();
+            report.exportarPDFGlobal(parameters, "proyectos.jasper", fechSystem + " proyectos.pdf");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
+        }
+    }
+
+    public void reporteTipo() throws Exception {
+
+        try {
+            if (pro.getReportTipo()== null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
+            }
+            if (pro.getReportTipo() != null) {
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date fechaActual = new Date(System.currentTimeMillis());
+                String fechSystem = dateFormat2.format(fechaActual);
+                String sts = pro.getReportTipo();
+                Reporte report = new Reporte();
+
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("Parametro1", sts);
+                report.exportarPDFGlobal(parameters, "proyectosEstado.jasper", fechSystem + " proyectosTipo.pdf");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
+        }
+    }
+    public void reporteEstado() throws Exception {
+
+        try {
+            if (pro.getReportEstado()== null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
+            }
+            if (pro.getReportEstado() != null) {
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date fechaActual = new Date(System.currentTimeMillis());
+                String fechSystem = dateFormat2.format(fechaActual);
+                String sts = pro.getReportEstado();
+                Reporte report = new Reporte();
+
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("Parametro1", sts);
+                report.exportarPDFGlobal(parameters, "proyectosEstadoPorceso.jasper", fechSystem + " proyectosEstado.pdf");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
+        }
+    }
+    public void reporteRevisado() throws Exception {
+
+        try {
+            if (pro.getReportRevisado()== null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
+            }
+            if (pro.getReportRevisado() != null) {
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date fechaActual = new Date(System.currentTimeMillis());
+                String fechSystem = dateFormat2.format(fechaActual);
+                String sts = pro.getReportRevisado();
+                Reporte report = new Reporte();
+
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("Parametro1", sts);
+                report.exportarPDFGlobal(parameters, "proyectosRevisado.jasper", fechSystem + " proyectosRevisado.pdf");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
         }
     }
 
@@ -144,6 +258,22 @@ public class proyectoC implements Serializable {
 
     public void setListAsesor(List<ProyectosModel> listAsesor) {
         this.listAsesor = listAsesor;
+    }
+
+    public UploadedFile getArchivo() {
+        return archivo;
+    }
+
+    public void setArchivo(UploadedFile archivo) {
+        this.archivo = archivo;
+    }
+
+    public StreamedContent getArchivoTraido() {
+        return archivoTraido;
+    }
+
+    public void setArchivoTraido(StreamedContent archivoTraido) {
+        this.archivoTraido = archivoTraido;
     }
 
 }

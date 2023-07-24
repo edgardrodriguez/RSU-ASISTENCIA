@@ -17,7 +17,7 @@
                     <f:event listener="#{proyectoC.listar()}" type="preRenderView" />
                 </h:head>
                 <h:body>
-                    <h:form id="formProyectos" style="align-content: center;align-items: center;text-align: center">
+                    <h:form id="formProyectos" enctype="multipart/form-data" style="align-content: center;align-items: center;text-align: center">
                         <h1 style="font-family: sans-serif">PROYECTOS</h1>
                         <div class="ui-g-2"></div>
                         <div class="ui-g-10" style="background-color: white">
@@ -38,15 +38,20 @@
                                 </p:selectOneRadio>
                                 <p:outputLabel value="ESTADO"/><p:selectOneRadio value="#{proyectoC.pro.estado}" required="true" requiredMessage="seleccione un estado">
                                     <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="EN PROCESO" itemValue="P"/>
                                     <f:selectItem itemLabel="APROBACION" itemValue="A"/>
                                     <f:selectItem itemLabel="EJECUCION" itemValue="E"/>
                                     <f:selectItem itemLabel="FINALIZACION" itemValue="F"/>
                                 </p:selectOneRadio>
                                 <p:outputLabel value="REVISADO"/><p:selectOneRadio value="#{proyectoC.pro.revisado}" required="true" requiredMessage="seleccione quien lo supervisa">
                                     <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="SIN REVISAR" itemValue="S"/>
                                     <f:selectItem itemLabel="COORDINADOR" itemValue="C"/>
                                     <f:selectItem itemLabel="DIRECCION RSU" itemValue="D"/>
                                 </p:selectOneRadio>
+                                <p:outputLabel value="LINK DE DRIVE" />
+                                <p:inputText value="#{proyectoC.pro.link}" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
+                                </p:inputText>
                                 <p:outputLabel value="ASESOR"/>
                                 <p:selectOneMenu  value="#{proyectoC.pro.asesor_fk}" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem itemLabel="- Seleccione -"/>
@@ -57,11 +62,67 @@
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoC.listEstudiantes}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>
+                                <p:outputLabel value="ACTA DEL PROYECTO"  style="font-weight: bold; color: black" />
+                                <p:fileUpload value="#{proyectoC.archivo}" mode="simple" required="true" skinSimple="true" />
                                 <p:commandButton value="Registrar" actionListener="#{proyectoC.registrar()}"
                                                  update="formProyectos :formTblProyectos:tblProyectos"/>
                             </p:panelGrid>
                         </div>
                     </h:form>
+                    <div class="ui-g-5"></div>
+                    <div class="ui-g-7">
+                        <h:form style="align-content: center;align-items: center">
+                            <p:outputLabel value="LISTAR TOTAL"/>
+                            <p:panelGrid columns="2">
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteProyecto()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>                    
+                    </div>
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="TIPO"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu value="#{proyectoC.pro.reportTipo}" required="true" requiredMessage="seleccione un tipo">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="PROYECCION SOCIAL" itemValue="P"/>
+                                    <f:selectItem itemLabel="VOLUNTARIADO" itemValue="V"/>
+                                    <f:selectItem itemLabel="EXTENSION UNIVERSITARIA" itemValue="E"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteTipo()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="ESTADO"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu value="#{proyectoC.pro.reportEstado}" required="true" requiredMessage="seleccione un estado">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="EN PROCESO" itemValue="P"/>
+                                    <f:selectItem itemLabel="APROBACION" itemValue="A"/>
+                                    <f:selectItem itemLabel="EJECUCION" itemValue="E"/>
+                                    <f:selectItem itemLabel="FINALIZACION" itemValue="F"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteEstado()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="REVISADO"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu value="#{proyectoC.pro.reportRevisado}" required="true" requiredMessage="seleccione un revisado">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="SIN REVISAR" itemValue="S"/>
+                                    <f:selectItem itemLabel="COORDINADOR" itemValue="C"/>
+                                    <f:selectItem itemLabel="DIRECCION RSU" itemValue="D"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteRevisado()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
                     <h:form id="formTblProyectos" style="text-align: center;">
                         <p:dataTable id="tblProyectos"
                                      var="pro"
@@ -98,14 +159,33 @@
                             <p:column headerText="ESTUDIANTE" sortBy="#{pro.concatEst}" filterBy="#{pro.concatEst}">
                                 <h:outputText value="#{pro.concatEst}" />
                             </p:column>
+                            <p:column>
+                                <p:fragment>
+                                    <p:commandButton value="Descargar" actionListener="#{proyectoC.decargar(pro.id)}" ajax="false" >
+                                        <p:fileDownload value="#{proyectoC.archivoTraido}"/>
+                                    </p:commandButton>
+                                </p:fragment>
+                            </p:column>
                         </p:dataTable>
                         <p:contextMenu for="tblProyectos">
                             <p:menuitem value="MODIFICAR" oncomplete="PF('dloModProyectos').show()" update=":formDialogProyectos"/>
+                            <p:menuitem value="MODIFICAR ARCHIVO" oncomplete="PF('dloModProyectoArch').show()" update=":formDialogProyectoArch"/>
                             <p:menuitem value="ELIMINAR" actionListener="#{proyectoC.eliminar()}" update="tblProyectos"> 
                                 <p:confirm header="CONFIRMACIÓN" message="¿Está seguro de eliminar este registro?"/>
                             </p:menuitem>
                         </p:contextMenu>
                     </h:form>
+                    <p:dialog header="ACTUALIZAR ARCHIVO" widgetVar="dloModProyectoArch" resizable="false" modal="true">
+                        <h:form id="formDialogProyectoArch" enctype="multipart/form-data">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="EVIDENCIA"  style="font-weight: bold; color: black" />
+                                <p:fileUpload value="#{proyectoC.archivo}" mode="simple" required="true" skinSimple="true" />
+
+                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo()}" update="@([id$=formTblProyectos]) formDialogProyectoArch"/>
+                                <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectoArch').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
                     <p:dialog header="ACTUALIZAR DATOS" widgetVar="dloModProyectos" resizable="false" modal="true">
                         <h:form id="formDialogProyectos">
                             <p:panelGrid columns="2">
@@ -125,15 +205,20 @@
                                 </p:selectOneRadio>
                                 <p:outputLabel value="ESTADO"/><p:selectOneRadio value="#{proyectoC.pro.estado}" required="true" requiredMessage="seleccione un estado">
                                     <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="EN PROCESO" itemValue="P"/>
                                     <f:selectItem itemLabel="APROBACION" itemValue="A"/>
                                     <f:selectItem itemLabel="EJECUCION" itemValue="E"/>
                                     <f:selectItem itemLabel="FINALIZACION" itemValue="F"/>
                                 </p:selectOneRadio>
                                 <p:outputLabel value="REVISADO"/><p:selectOneRadio value="#{proyectoC.pro.revisado}" required="true" requiredMessage="seleccione quien lo supervisa">
                                     <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="SIN REVISAR" itemValue="S"/>
                                     <f:selectItem itemLabel="COORDINADOR" itemValue="C"/>
                                     <f:selectItem itemLabel="DIRECCION RSU" itemValue="D"/>
                                 </p:selectOneRadio>
+                                <p:outputLabel value="LINK DE DRIVE" />
+                                <p:inputText value="#{proyectoC.pro.link}" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
+                                </p:inputText>
                                 <p:outputLabel value="ASESOR"/>
                                 <p:selectOneMenu  value="#{proyectoC.pro.asesor_fk}" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem itemLabel="- Seleccione -"/>

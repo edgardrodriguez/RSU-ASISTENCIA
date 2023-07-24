@@ -5,6 +5,7 @@
 package dao;
 
 import com.google.protobuf.TextFormat.ParseException;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +18,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.AsistenciaModel;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.file.UploadedFile;
 
 /**
  *
@@ -30,9 +34,9 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
         return fecha != null ? new SimpleDateFormat("dd-MM-yyyy").parse(fecha) : null;
     }
 
-    @Override
-    public void registrar(AsistenciaModel obj) throws Exception {
-        String sql = "INSERT INTO ASISTENCIA (dia,cantHoras,fecha,estado,estudiantes_fk,proyecto_detalle_fk) VALUES (?,?,?,?,?,?)";
+
+    public void registrarAsistencia(UploadedFile archivo, AsistenciaModel obj) throws Exception {
+        String sql = "INSERT INTO ASISTENCIA (dia,cantHoras,fecha,estado,evidencia,estudiantes_fk,proyecto_detalle_fk) VALUES (?,?,?,?,?,?,?)";
         try ( PreparedStatement ps = this.conectar().prepareStatement(sql)) {
 
             //SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -44,8 +48,9 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
             ps.setTimestamp(3, fechaActual);
             String est = "A";
             ps.setString(4, est);
-            ps.setInt(5, obj.getEstudiantes_fk());
-            ps.setInt(6, obj.getProyecto_detalle_fk());
+            ps.setBinaryStream(5, archivo.getInputStream());
+            ps.setInt(6, obj.getEstudiantes_fk());
+            ps.setInt(7, obj.getProyecto_detalle_fk());
             ps.execute();
             ps.close();
         } catch (Exception e) {
@@ -175,5 +180,47 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
         }
         return listadoA;
     }
-    
+    public void modificarArchivo(UploadedFile archivo, AsistenciaModel obj) throws Exception {
+        String sql = "update ASISTENCIA set evidencia=? where id=?";
+        try {
+            PreparedStatement ps = this.conectar().prepareStatement(sql);
+            ps.setBinaryStream(1, archivo.getInputStream());
+            ps.setInt(2, obj.getId());
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.WARNING, "Error al modificar archivo Dao {0} ", e.getMessage());
+        } finally {
+            this.Cerrar();
+        }
+    }
+
+    public StreamedContent traerImagen(StreamedContent archivo, int id) {
+
+        String sql = "select evidencia, fecha from ASISTENCIA WHERE id =?";
+        try {
+            PreparedStatement ps = this.conectar().prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet st = ps.executeQuery();
+            while (st.next()) {
+                InputStream stream = st.getBinaryStream("evidencia");
+                String fecha = st.getString("fecha");
+                archivo = DefaultStreamedContent.builder()
+                        .name(fecha + ".jpg")
+                        .contentType("image/jpg")
+                        .stream(() -> stream)
+                        .build();
+
+                System.out.println("Estoy en while dao traer imagen, " + archivo);
+            }
+        } catch (Exception e) {
+            System.out.println("Error en traer imagen: " + e.getMessage());
+        }
+        return archivo;
+    }
+
+    @Override
+    public void registrar(AsistenciaModel obj) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

@@ -10,9 +10,15 @@ package model;
  */
 import java.util.Date;
 import lombok.Data;
+import java.lang.String;
+
+
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.file.UploadedFile;
 
 @Data
 public class ProyectosModel {
+
     int id;
     String nombre;
     String descripcion;
@@ -23,19 +29,26 @@ public class ProyectosModel {
     String estudiantes_fk;
     String concatAse;
     String concatEst;
-    
+    String link;
+    private UploadedFile archivo;
+    private StreamedContent archivoTraido;
+
     String fila;
     String tipoConcat;
     String estadoConcat;
     String revisadoConcat;
-    
+
     //exterm
     int idAse;
     String nombreAse;
     String apellidoAse;
-    
+
     int idEst;
     String nombreEst;
     String apellidoEst;
     int rol_fk;
+    
+    String reportEstado;
+    String reportTipo;
+    String reportRevisado;
 }

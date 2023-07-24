@@ -27,7 +27,7 @@ import org.primefaces.util.SerializableSupplier;
  */
 public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetalleModel> {
 
-    public void registrar(UploadedFile archivo, ProyectoDetalleModel obj) throws Exception {
+    public void registrarProyectos(UploadedFile archivo, ProyectoDetalleModel obj) throws Exception {
         String sql = "INSERT INTO PROYECTO_DETALLE (descripcion,proyectos_fk,estudiantes_fk,evidencia) VALUES (?,?,?,?)";
         try ( PreparedStatement ps = this.conectar().prepareStatement(sql)) {
             ps.setString(1, obj.getDescripcion());
