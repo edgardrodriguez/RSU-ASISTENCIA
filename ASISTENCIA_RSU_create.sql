@@ -34,6 +34,7 @@ CREATE TABLE ASISTENCIA (
     cantHoras int  NOT NULL COMMENT 'cantidad de horas realizadas por día.',
     fecha timestamp  NOT NULL COMMENT 'fecha de la realización de la asistencia.',
     estado char(1)  NOT NULL COMMENT 'estado de la asistencia (activo=A, inactivo=I)',
+    evidencia MEDIUMBLOB NULL COMMENT 'evidencia de asistencia',
     estudiantes_fk int  NOT NULL COMMENT 'llave foránea de la tabla estudiantes.',
     proyecto_detalle_fk int  NOT NULL COMMENT 'llave foranea de proyecto detalle.',
     CONSTRAINT ASISTENCIA_pk PRIMARY KEY (id)
@@ -72,6 +73,8 @@ CREATE TABLE PROYECTOS (
     tipo char(1)  NOT NULL COMMENT 'tipo de proyecto de resposabilidad social (proyeccion social, voluntariado, extension universitaria)',
     estado char(1)  NOT NULL COMMENT 'estado de la tabla proyectos (aprobacion=A, ejecucion(suben evidencia)=E, finalizacion=F)',
     revisado char(1)  NOT NULL COMMENT 'revisado por (coordinador=C, direccion RSU=D)',
+    link TEXT null COMMENT 'link de el proyecto',
+    acta MEDIUMBLOB NULL COMMENT 'acta de proyecto',
     asesor_fk int  NOT NULL COMMENT 'llave foránea de la tabla docentes',
     estudiantes_fk int  NOT NULL COMMENT 'llave foránea de la tabla estudiantes',
     CONSTRAINT PROYECTOS_pk PRIMARY KEY (id)
@@ -163,7 +166,7 @@ select CARRERAS.id,CONCAT(CARRERAS.nombre," ",CARRERAS.ciclo," ", CARRERAS.turno
 
 CREATE OR REPLACE VIEW V_PROYECTOS AS
 select ROW_NUMBER() OVER( ORDER BY PRO.id desc) AS fila, PRO.id,
-PRO.nombre, PRO.descripcion, PRO.tipo, PRO.estado, PRO.revisado, 
+PRO.nombre, PRO.descripcion, PRO.tipo, PRO.estado, PRO.revisado, PRO.link, 
 PRO.asesor_fk, PRO.estudiantes_fk, 
 CASE WHEN PRO.tipo='P' THEN 'PROYECCION SOCIAL'
 WHEN PRO.tipo='V' THEN 'VOLUNTARIADO'
@@ -172,9 +175,11 @@ END AS tipoConcat,
 CASE WHEN PRO.estado='A' THEN 'APROBACION'
 WHEN PRO.estado='E' THEN 'EJECUCION'
 WHEN PRO.estado='F' THEN 'FINALIZACION'
+WHEN PRO.estado='P' THEN 'EN PROCESO'
 END AS estadoConcat,
 CASE WHEN PRO.revisado='C' THEN 'COORDINADOR'
 WHEN PRO.revisado='D' THEN 'DIRECCION RSU'
+WHEN PRO.revisado='S' THEN 'SIN REVISAR'
 END AS revisadoConcat,
 CONCAT(ASESOR.nombre," ",ASESOR.apellidos) as concatAse, 
 CONCAT(ESTUDIANTES.nombre," ",ESTUDIANTES.apellidos) as concatEst from PROYECTOS as PRO
