@@ -30,8 +30,10 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
             ps.setString(1, obj.getNombre());
             ps.setString(2, obj.getDescripcion());
             ps.setString(3, obj.getTipo());
-            ps.setString(4, obj.getEstado());
-            ps.setString(5, obj.getRevisado());
+            String estado="P";
+            String revisado="S";
+            ps.setString(4, estado);
+            ps.setString(5, revisado);
             ps.setString(6, obj.getLink());
             ps.setBinaryStream(7, archivo.getInputStream());
             ps.setString(8, obj.getAsesor_fk());

@@ -28,18 +28,21 @@ import org.primefaces.model.charts.pie.PieChartModel;
 @SessionScoped
 public class DashboardC implements Serializable {
     private PieChartModel dashboardProyecto;
-    private List<Number> listaProyecto;
+    private List<Number> listaProyectoTipo;
+    private PieChartModel dashboardProyectoEstado;
+    private List<Number> listaProyectoEstado;
     private DashboardImpl dao;
     
     public DashboardC() {
         dashboardProyecto = new PieChartModel();
+        dashboardProyectoEstado = new PieChartModel();
         dao = new DashboardImpl();
         
     }
-    private void dashboardProyecto() throws Exception {
+    private void dashboardProyectotipo() throws Exception {
         ChartData data = new ChartData();
         PieChartDataSet dataSet = new PieChartDataSet();
-        List<Number> values = listaProyecto;
+        List<Number> values = listaProyectoTipo;
         dataSet.setData(values);
 
         List<String> bgColors = new ArrayList<>();
@@ -56,11 +59,35 @@ public class DashboardC implements Serializable {
         data.setLabels(labels);
         dashboardProyecto.setData(data);
     }
+    private void dashboardProyectoEstado() throws Exception {
+        ChartData data = new ChartData();
+        PieChartDataSet dataSet = new PieChartDataSet();
+        List<Number> values = listaProyectoEstado;
+        dataSet.setData(values);
+
+        List<String> bgColors = new ArrayList<>();
+        bgColors.add("rgb(113, 175, 220)");
+        bgColors.add("rgb(227, 99, 91)");
+        bgColors.add("rgb(152, 135, 34)");
+        bgColors.add("rgb(160, 200, 58)");
+        dataSet.setBackgroundColor(bgColors);
+
+        data.addChartDataSet(dataSet);
+        List<String> labels = new ArrayList<>();
+        labels.add("EN_PROCESO");
+        labels.add("APROBACION");
+        labels.add("EJECUCION");
+        labels.add("FINALIZACION");
+        data.setLabels(labels);
+        dashboardProyectoEstado.setData(data);
+    }
     @PostConstruct
     public void construir() {
         try {
-            listaProyecto = dao.dashboardPersonal();
-            dashboardProyecto();
+            listaProyectoTipo = dao.dashboardProyectoTipo();
+            listaProyectoEstado = dao.dashboardProyectoEstado();
+            dashboardProyectoEstado();
+            dashboardProyectotipo();
         } catch (Exception e) {
             Logger.getGlobal().log(Level.WARNING, "Error en el dashboardCargoD {0}", e.getMessage());
         }
@@ -73,13 +100,6 @@ public class DashboardC implements Serializable {
         this.dashboardProyecto = dashboardProyecto;
     }
 
-    public List<Number> getListaProyecto() {
-        return listaProyecto;
-    }
-
-    public void setListaProyecto(List<Number> listaProyecto) {
-        this.listaProyecto = listaProyecto;
-    }
 
     public DashboardImpl getDao() {
         return dao;
@@ -87,6 +107,30 @@ public class DashboardC implements Serializable {
 
     public void setDao(DashboardImpl dao) {
         this.dao = dao;
+    }
+
+    public List<Number> getListaProyectoTipo() {
+        return listaProyectoTipo;
+    }
+
+    public void setListaProyectoTipo(List<Number> listaProyectoTipo) {
+        this.listaProyectoTipo = listaProyectoTipo;
+    }
+
+    public PieChartModel getDashboardProyectoEstado() {
+        return dashboardProyectoEstado;
+    }
+
+    public void setDashboardProyectoEstado(PieChartModel dashboardProyectoEstado) {
+        this.dashboardProyectoEstado = dashboardProyectoEstado;
+    }
+
+    public List<Number> getListaProyectoEstado() {
+        return listaProyectoEstado;
+    }
+
+    public void setListaProyectoEstado(List<Number> listaProyectoEstado) {
+        this.listaProyectoEstado = listaProyectoEstado;
     }
     
 }

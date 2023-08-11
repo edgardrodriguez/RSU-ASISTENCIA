@@ -36,19 +36,7 @@
                                     <f:selectItem itemLabel="VOLUNTARIADO" itemValue="V"/>
                                     <f:selectItem itemLabel="EXTENSION UNIVERSITARIA" itemValue="E"/>
                                 </p:selectOneRadio>
-                                <p:outputLabel value="ESTADO"/><p:selectOneRadio value="#{proyectoC.pro.estado}" required="true" requiredMessage="seleccione un estado">
-                                    <p:ajax event="change"/>
-                                    <f:selectItem itemLabel="EN PROCESO" itemValue="P"/>
-                                    <f:selectItem itemLabel="APROBACION" itemValue="A"/>
-                                    <f:selectItem itemLabel="EJECUCION" itemValue="E"/>
-                                    <f:selectItem itemLabel="FINALIZACION" itemValue="F"/>
-                                </p:selectOneRadio>
-                                <p:outputLabel value="REVISADO"/><p:selectOneRadio value="#{proyectoC.pro.revisado}" required="true" requiredMessage="seleccione quien lo supervisa">
-                                    <p:ajax event="change"/>
-                                    <f:selectItem itemLabel="SIN REVISAR" itemValue="S"/>
-                                    <f:selectItem itemLabel="COORDINADOR" itemValue="C"/>
-                                    <f:selectItem itemLabel="DIRECCION RSU" itemValue="D"/>
-                                </p:selectOneRadio>
+                                
                                 <p:outputLabel value="LINK DE DRIVE" />
                                 <p:inputText value="#{proyectoC.pro.link}" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
                                 </p:inputText>
