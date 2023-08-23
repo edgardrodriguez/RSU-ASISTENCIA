@@ -138,25 +138,24 @@ VALUES 	('Jose Eduardo','Sanchez Julian','1234','docente1@docente1.com','3453523
         ('Martin Carlos','Damian Garcia','1234','docente4@docente4.com','34535234','923612459','A',2,61,2),
         ('Jean Simon','Felipe Santos','1234','docente5@docente5.com','34535234','923612459','A',2,81,2);
 
-select * from PROYECTOS;
-INSERT INTO PROYECTOS (nombre,descripcion,tipo,estado,revisado,asesor_fk,estudiantes_fk)
-VALUES	('NAVIDAD EN SAN LUIS','CHOCOLATADA NAVIDEÑA','P','A','C','1','1'),
-		('PROYECTO SOCIAL','ENTREGA DE VIVERES','P','A','C','2','1'),
-        ('ORIENTACION FAMILIAR','ATENCION A POBLACION VULNERABLE','P','A','D','3','1'),
-        ('SHOW INFANTIL','ENTREGA DE REGALOS','P','A','D','4','1'),
-        ('COMPARTIR IMPERIAL','ENTREGA DE PANETONES','P','A','C','5','1'),
-        ('NAVIDAD EN SAN ASIA','CHOCOLATADA NAVIDEÑA','P','A','C','6','1');
+INSERT INTO PROYECTOS (nombre,descripcion,tipo,estado,revisado,ods,facultad,escuelaProfesional,fecha,asesor_fk,estudiantes_fk)
+VALUES	('NAVIDAD EN SAN LUIS','CHOCOLATADA NAVIDEÑA','P','A','C','2','1','3','2023-01-01 00:00:01','1','1'),
+		('PROYECTO SOCIAL','ENTREGA DE VIVERES','P','A','C','2','2','3','2023-01-01 00:00:01','2','1'),
+        ('ORIENTACION FAMILIAR','ATENCION A POBLACION VULNERABLE','P','A','D','2','2','3','2023-01-01 00:00:01','3','1'),
+        ('SHOW INFANTIL','ENTREGA DE REGALOS','P','A','D','3','2','3','2023-01-01 00:00:01','4','1'),
+        ('COMPARTIR IMPERIAL','ENTREGA DE PANETONES','P','A','C','3','2','3','2023-01-01 00:00:01','5','1'),
+        ('NAVIDAD EN SAN ASIA','CHOCOLATADA NAVIDEÑA','P','A','C','2','2','3','2023-01-01 00:00:01','6','1');
 
-INSERT INTO PROYECTO_DETALLE (descripcion,proyectos_fk,estudiantes_fk)
-values ('APOYO','1','3'),
-	   ('COMPRA DE COSAS','2','3'),
-       ('ACTIVIDAD','2','3'),
-       ('COCINAR','3','4'),
-       ('REPARTIR','4','2'),
-       ('LIMPIAR','3','5');
+INSERT INTO PROYECTO_DETALLE (estado,fecha,proyectos_fk,estudiantes_fk)
+values ('A','2023-01-01 00:00:01','1','3'),
+	   ('A','2023-01-01 00:00:01','2','3'),
+       ('A','2023-01-01 00:00:01','2','3'),
+       ('A','2023-01-01 00:00:01','3','4'),
+       ('A','2023-01-01 00:00:01','4','2'),
+       ('A','2023-01-01 00:00:01','3','5');
        
 
-INSERT INTO ASISTENCIA (dia,cantHoras,fecha,estado,estudiantes_fk,proyecto_detalle_fk)
+INSERT INTO ASISTENCIA (dia,cantHoras,fecha,estado,estudiantes_fk,proyecto_fk)
 VALUES	('1',4,'2023-01-01 00:00:01','A',1,1),
 		('1',3,'2023-02-08 00:00:01','A',2,1),
         ('1',2,'2023-04-05 00:00:01','A',2,1), 
@@ -166,3 +165,13 @@ VALUES	('1',4,'2023-01-01 00:00:01','A',1,1),
         ('1',3,'2023-01-01 00:00:01','A',4,3),
         ('1',4,'2023-01-01 00:00:01','A',4,3),
         ('1',3,'2023-01-01 00:00:01','A',4,3);
+
+INSERT INTO REPOSITORIO_PROYECTO (descripcion,proyecto_fk)
+VALUES	('CERTIFICADO','1'),
+		('CONSTANCIA','2'),
+        ('DOCUMENTACION','3'),
+        ('DOCUMENTACION','4'),
+        ('DOCUMENTACION','5'),
+        ('DOCUMENTACION','6'),
+        ('DOCUMENTACION','3'),
+        ('CONSTANCIA','2');
