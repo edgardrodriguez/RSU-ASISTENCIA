@@ -35,11 +35,14 @@ public class proyectoC implements Serializable {
 
     private UploadedFile archivo;
     private StreamedContent archivoTraido;
+    private UploadedFile archivo2;
+    private StreamedContent archivoTraido2;
     private ProyectosModel pro;
     private ProyectosImpl dao;
     private List<ProyectosModel> listProyecto;
     private List<ProyectosModel> listEstudiantes;
     private List<ProyectosModel> listAsesor;
+    private List<ProyectosModel> listProyectFecha;
 
     public proyectoC() {
         pro = new ProyectosModel();
@@ -48,7 +51,7 @@ public class proyectoC implements Serializable {
 
     public void registrar() throws Exception {
         try {
-            dao.registrarProyectos(archivo, pro);
+            dao.registrarProyectos(archivo, archivo2, pro);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Registrado con éxito"));
             limpiar();
             listar();
@@ -85,11 +88,31 @@ public class proyectoC implements Serializable {
         }
     }
 
+    public void modificarArchivo2() throws Exception {
+        try {
+            dao.modificarArchivo2(archivo2, pro);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Actualizado con éxito"));
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.INFO, "Error en actualizar archivo asistencia C {0}", e.getMessage());
+        }
+    }
+
     public void decargar(int id) {
         try {
             System.out.println("El idemp es esto " + id);
             archivoTraido = dao.traerImagen(archivoTraido, id);
             System.out.println("Mi archivo traido : " + archivoTraido);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Descargado", "Descarga completada"));
+        } catch (Exception e) {
+            System.out.println("Error en Descargar: " + e.getMessage());
+        }
+    }
+
+    public void decarga2(int id) {
+        try {
+            System.out.println("El idemp es esto " + id);
+            archivoTraido2 = dao.traerImagen(archivoTraido2, id);
+            System.out.println("Mi archivo traido : " + archivoTraido2);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Descargado", "Descarga completada"));
         } catch (Exception e) {
             System.out.println("Error en Descargar: " + e.getMessage());
@@ -137,7 +160,7 @@ public class proyectoC implements Serializable {
     public void reporteTipo() throws Exception {
 
         try {
-            if (pro.getReportTipo()== null) {
+            if (pro.getReportTipo() == null) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
             }
             if (pro.getReportTipo() != null) {
@@ -157,10 +180,11 @@ public class proyectoC implements Serializable {
             throw e;
         }
     }
+
     public void reporteEstado() throws Exception {
 
         try {
-            if (pro.getReportEstado()== null) {
+            if (pro.getReportEstado() == null) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
             }
             if (pro.getReportEstado() != null) {
@@ -180,10 +204,11 @@ public class proyectoC implements Serializable {
             throw e;
         }
     }
+
     public void reporteRevisado() throws Exception {
 
         try {
-            if (pro.getReportRevisado()== null) {
+            if (pro.getReportRevisado() == null) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
             }
             if (pro.getReportRevisado() != null) {
@@ -196,6 +221,30 @@ public class proyectoC implements Serializable {
                 Map<String, Object> parameters = new HashMap();
                 parameters.put("Parametro1", sts);
                 report.exportarPDFGlobal(parameters, "proyectosRevisado.jasper", fechSystem + " proyectosRevisado.pdf");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
+        }
+    }
+
+    public void reporteFecha() throws Exception {
+
+        try {
+            if (pro.getFechaNew() == null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
+            }
+            if (pro.getFechaNew() != null) {
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date fechaActual = new Date(System.currentTimeMillis());
+                String fechSystem = dateFormat2.format(fechaActual);
+                String sts = pro.getFechaNew();
+                Reporte report = new Reporte();
+
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("Parametro1", sts);
+                report.exportarPDFGlobal(parameters, "proyectoFecha.jasper", fechSystem + " proyectoFecha.pdf");
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
             }
         } catch (Exception e) {
@@ -274,6 +323,38 @@ public class proyectoC implements Serializable {
 
     public void setArchivoTraido(StreamedContent archivoTraido) {
         this.archivoTraido = archivoTraido;
+    }
+
+    public UploadedFile getArchivo2() {
+        return archivo2;
+    }
+
+    public void setArchivo2(UploadedFile archivo2) {
+        this.archivo2 = archivo2;
+    }
+
+    public StreamedContent getArchivoTraido2() {
+        return archivoTraido2;
+    }
+
+    public void setArchivoTraido2(StreamedContent archivoTraido2) {
+        this.archivoTraido2 = archivoTraido2;
+    }
+
+    public List<ProyectosModel> getListProyectFecha() {
+        listProyectFecha = new ArrayList<ProyectosModel>();
+        try {
+            listProyectFecha = dao.listarFecha();
+        } catch (SQLException ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listProyectFecha;
+    }
+
+    public void setListProyectFecha(List<ProyectosModel> listProyectFecha) {
+        this.listProyectFecha = listProyectFecha;
     }
 
 }

@@ -7,9 +7,12 @@ package dao;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,13 +30,15 @@ import org.primefaces.util.SerializableSupplier;
  */
 public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetalleModel> {
 
-    public void registrarProyectos(UploadedFile archivo, ProyectoDetalleModel obj) throws Exception {
-        String sql = "INSERT INTO PROYECTO_DETALLE (descripcion,proyectos_fk,estudiantes_fk,evidencia) VALUES (?,?,?,?)";
+    public void registrarProyectos(ProyectoDetalleModel obj) throws Exception {
+        String sql = "INSERT INTO PROYECTO_DETALLE (estado,fecha,proyectos_fk,estudiantes_fk) VALUES (?,?,?,?)";
         try ( PreparedStatement ps = this.conectar().prepareStatement(sql)) {
-            ps.setString(1, obj.getDescripcion());
-            ps.setInt(2, obj.getProyectos_fk());
-            ps.setInt(3, obj.getEstudiantes_fk());
-            ps.setBinaryStream(4, archivo.getInputStream());
+            Timestamp fechaActual = new Timestamp(System.currentTimeMillis());
+            String estado = "A";
+            ps.setString(1, estado);
+            ps.setTimestamp(2, fechaActual);
+            ps.setInt(3, obj.getProyectos_fk());
+            ps.setInt(4, obj.getEstudiantes_fk());
             ps.execute();
             ps.close();
         } catch (Exception e) {
@@ -44,13 +49,13 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
 
     @Override
     public void modificar(ProyectoDetalleModel obj) throws Exception {
-        String sql = "update PROYECTO_DETALLE set descripcion=?,proyectos_fk=?,estudiantes_fk=? where id=?";
+        String sql = "update PROYECTO_DETALLE set estado=?,fecha=? where id=?";
         try {
             PreparedStatement ps = this.conectar().prepareStatement(sql);
-            ps.setString(1, obj.getDescripcion());
-            ps.setInt(2, obj.getProyectos_fk());
-            ps.setInt(3, obj.getEstudiantes_fk());
-            ps.setInt(4, obj.getId());
+            Timestamp fechaActual = new Timestamp(System.currentTimeMillis());
+            ps.setString(1, obj.getEstado());
+            ps.setTimestamp(2, fechaActual);
+            ps.setInt(3, obj.getId());
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
@@ -88,12 +93,13 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
             while (rs.next()) {
 
                 doc = new ProyectoDetalleModel();
+                doc.setFila(rs.getString("fila"));
                 doc.setId(rs.getInt("id"));
-                doc.setDescripcion(rs.getString("descripcion"));
                 doc.setProyectos_fk(rs.getInt("proyectos_fk"));
                 doc.setEstudiantes_fk(rs.getInt("estudiantes_fk"));
-                doc.setFila(rs.getString("fila"));
+                doc.setEstado(rs.getString("estado"));
                 doc.setConcatEst(rs.getString("concatEst"));
+                doc.setEstadoConcat(rs.getString("estadoConcat"));
                 doc.setProNom(rs.getString("proNom"));
                 listado.add(doc);
             }
@@ -133,7 +139,7 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
         List<ProyectoDetalleModel> listadoA = null;
         ProyectoDetalleModel per;
         ResultSet rs;
-        String sql = "select id,nombre from PROYECTOS where estado ='A' OR estado='E'";
+        String sql = "select id,nombre from PROYECTOS where estado ='A'";
         try {
             listadoA = new ArrayList();
             PreparedStatement ps = this.conectar().prepareStatement(sql);
@@ -152,50 +158,55 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
         return listadoA;
     }
 
+    public List<ProyectoDetalleModel> ListarPro(int useID) throws SQLException {
+        List<ProyectoDetalleModel> listadoA = null;
+        ProyectoDetalleModel per;
+        ResultSet rs;
+        String sql = "select id, nombre from PROYECTOS where id not in (select distinct proyectos_fk from PROYECTO_DETALLE where estudiantes_fk =?) and estado='A'";
+        try {
+            listadoA = new ArrayList();
+            PreparedStatement ps = this.conectar().prepareStatement(sql);
+            ps.setInt(1, useID);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                per = new ProyectoDetalleModel();
+                per.setIdPro(rs.getInt("id"));
+                per.setNombrePro(rs.getString("nombre"));
+                listadoA.add(per);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.WARNING, "Error aL listar PROYECTOS Dao {0} ", e.getMessage());
+        }
+        return listadoA;
+    }
+
+    public List<ProyectoDetalleModel> listarFecha() throws Exception {
+        List<ProyectoDetalleModel> lisFech = null;
+        ProyectoDetalleModel fech;
+        ResultSet rs;
+        String sql = "SELECT distinct DATE_FORMAT(fecha,'%Y-%m-%d')AS fechaNew from V_PROYECTO_DETALLE;";
+        try {
+            lisFech = new ArrayList();
+            PreparedStatement ps = this.getCn().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                fech = new ProyectoDetalleModel();
+                fech.setFechaNew(rs.getString("fechaNew"));
+                lisFech.add(fech);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.SEVERE, "Error al listar fecha cuot {0} ", e.getMessage());
+        }
+        return lisFech;
+    }
+
     @Override
     public void registrar(ProyectoDetalleModel obj) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    public void modificarArchivo(UploadedFile archivo, ProyectoDetalleModel obj) throws Exception {
-        String sql = "update PROYECTO_DETALLE set evidencia=? where id=?";
-        try {
-            PreparedStatement ps = this.conectar().prepareStatement(sql);
-            ps.setBinaryStream(1, archivo.getInputStream());
-            ps.setInt(2, obj.getId());
-            ps.executeUpdate();
-            ps.close();
-        } catch (Exception e) {
-            Logger.getGlobal().log(Level.WARNING, "Error al modificar archivo Dao {0} ", e.getMessage());
-        } finally {
-            this.Cerrar();
-        }
-    }
-
-    public StreamedContent traerImagen(StreamedContent archivo, int id) {
-
-        String sql = "select evidencia, descripcion from PROYECTO_DETALLE WHERE id =?";
-        try {
-            PreparedStatement ps = this.conectar().prepareStatement(sql);
-            ps.setInt(1, id);
-            ResultSet st = ps.executeQuery();
-            while (st.next()) {
-                InputStream stream = st.getBinaryStream("evidencia");
-                String description = st.getString("descripcion");
-                archivo = DefaultStreamedContent.builder()
-                        .name(description + ".jpg")
-                        .contentType("image/jpg")
-                        .stream(() -> stream)
-                        .build();
-
-                System.out.println("Estoy en while dao traer imagen, " + archivo);
-            }
-        } catch (Exception e) {
-            System.out.println("Error en traer imagen: " + e.getMessage());
-        }
-        return archivo;
-    }
-
-   
-    
 }

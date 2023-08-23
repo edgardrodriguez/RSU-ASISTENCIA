@@ -22,11 +22,11 @@
                         <div class="ui-g-2"></div>
                         <div class="ui-g-10" style="background-color: white">
                             <p:panelGrid columns="2">
-                                <p:outputLabel value="NOMBRES" />
+                                <p:outputLabel value="TITULO" />
                                 <p:inputText value="#{proyectoC.pro.nombre}"  maxlength="60" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
                                     <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
                                 </p:inputText>
-                                <p:outputLabel value="DESCRIPCION" />
+                                <p:outputLabel value="RESUMEN" />
                                 <p:inputText value="#{proyectoC.pro.descripcion}" required="true" style="width: 250px" requiredMessage="Rellene la descripcion">
                                     <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
                                 </p:inputText>
@@ -36,7 +36,43 @@
                                     <f:selectItem itemLabel="VOLUNTARIADO" itemValue="V"/>
                                     <f:selectItem itemLabel="EXTENSION UNIVERSITARIA" itemValue="E"/>
                                 </p:selectOneRadio>
-                                
+                                <p:outputLabel value="OBJETIVOS DE DESARROLLO SOSTENIBLE"/><p:selectOneMenu value="#{proyectoC.pro.ods}" required="true" requiredMessage="seleccione">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="FIN DE LA POBREZA" itemValue="1"/>
+                                    <f:selectItem itemLabel="HAMBRE CERO" itemValue="2"/>
+                                    <f:selectItem itemLabel="SALUD Y BIENESTAR" itemValue="3"/>
+                                    <f:selectItem itemLabel="EDUCACIÒN DE CALIDAD" itemValue="4"/>
+                                    <f:selectItem itemLabel="IGUALDAD DE GENERO" itemValue="5"/>
+                                    <f:selectItem itemLabel="AGUA LIMPIA Y SANEAMIENTO" itemValue="6"/>
+                                    <f:selectItem itemLabel="ENERGIA ASEQUIBLE Y NO CONTAMINANTE" itemValue="7"/>
+                                    <f:selectItem itemLabel="TRABAJO DECENTE Y CRECIMIENTO ECONOMICO" itemValue="8"/>
+                                    <f:selectItem itemLabel="INDUSTRIA INNOVACION E INFRAESTRUCTURA" itemValue="9"/>
+                                    <f:selectItem itemLabel="REDUCCION DE LAS DESIGUALDADES" itemValue="10"/>
+                                    <f:selectItem itemLabel="CIUDADES Y COMUNIDADES SOSTENIBLES" itemValue="11"/>
+                                    <f:selectItem itemLabel="PRODUCCION Y CONSUMO RESPONSABLE" itemValue="12"/>
+                                    <f:selectItem itemLabel="ACCION POR EL CLIMA" itemValue="13"/>
+                                    <f:selectItem itemLabel="VIDA SUBMARINA" itemValue="14"/>
+                                    <f:selectItem itemLabel="VIDA DE ECOSISTEMAS TERRESTRES" itemValue="15"/>
+                                    <f:selectItem itemLabel="PAZ, JUSTICIA E INSTITUCIONES SOLIDAS" itemValue="16"/>
+                                    <f:selectItem itemLabel="ALIANZAS PARA LOGRAR OBJETIVOS" itemValue="17"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="FACULTAD"/><p:selectOneMenu value="#{proyectoC.pro.facultad}" required="true" requiredMessage="seleccione un tipo">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="FACULTAD DE CIENCIAS AGRARIAS" itemValue="1"/>
+                                    <f:selectItem itemLabel="FACULTAD DE INGENIERIA" itemValue="2"/>
+                                    <f:selectItem itemLabel="FACULTAD DE CIENCIAS EMPRESARIALES" itemValue="3"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="ESCUELA PROFESIONAL"/><p:selectOneMenu value="#{proyectoC.pro.escuelaProfesional}" required="true" requiredMessage="seleccione un tipo">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="INGENIERIA DE SISTEMAS" itemValue="1"/>
+                                    <f:selectItem itemLabel="AGRONOMIA" itemValue="2"/>
+                                    <f:selectItem itemLabel="ADMINISTRACION" itemValue="3"/>
+                                    <f:selectItem itemLabel="CONTABILIDAD" itemValue="4"/>
+                                    <f:selectItem itemLabel="ADMINITRACION DE TURISMO Y HOTELERIA" itemValue="5"/>
+                                </p:selectOneMenu>
                                 <p:outputLabel value="LINK DE DRIVE" />
                                 <p:inputText value="#{proyectoC.pro.link}" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
                                 </p:inputText>
@@ -50,22 +86,15 @@
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoC.listEstudiantes}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>
-                                <p:outputLabel value="ACTA DEL PROYECTO"  style="font-weight: bold; color: black" />
+                                <p:outputLabel value="FORMADO DEL PROYECTO"  style="font-weight: bold; color: black" />
                                 <p:fileUpload value="#{proyectoC.archivo}" mode="simple" required="true" skinSimple="true" />
+                                <p:outputLabel value="RESOLUCION DEL PROYECTO"  style="font-weight: bold; color: black" />
+                                <p:fileUpload value="#{proyectoC.archivo2}" mode="simple" required="true" skinSimple="true" />
                                 <p:commandButton value="Registrar" actionListener="#{proyectoC.registrar()}"
                                                  update="formProyectos :formTblProyectos:tblProyectos"/>
                             </p:panelGrid>
                         </div>
                     </h:form>
-                    <div class="ui-g-5"></div>
-                    <div class="ui-g-7">
-                        <h:form style="align-content: center;align-items: center">
-                            <p:outputLabel value="LISTAR TOTAL"/>
-                            <p:panelGrid columns="2">
-                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteProyecto()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
-                            </p:panelGrid>
-                        </h:form>                    
-                    </div>
                     <div class="ui-g-4">
                         <h:form style="align-content: center;align-items: center;text-align: center">
                             <p:outputLabel value="TIPO"/>
@@ -111,6 +140,26 @@
                             </p:panelGrid>
                         </h:form>
                     </div>
+                    <div class="ui-g-6">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="POR FECHA"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu  value="#{proyectoC.pro.fechaNew}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{proyectoC.listProyectFecha}" var="apo" itemLabel="#{apo.fechaNew}" itemValue="#{apo.fechaNew}" /> 
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteFecha()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-6">
+                        <h:form style="align-content: center;align-items: center">
+                            <p:outputLabel value="LISTAR TOTAL"/>
+                            <p:panelGrid columns="2">
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteProyecto()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>                    
+                    </div>
                     <h:form id="formTblProyectos" style="text-align: center;">
                         <p:dataTable id="tblProyectos"
                                      var="pro"
@@ -149,34 +198,53 @@
                             </p:column>
                             <p:column>
                                 <p:fragment>
-                                    <p:commandButton value="Descargar" actionListener="#{proyectoC.decargar(pro.id)}" ajax="false" >
+                                    <p:commandButton value="FORMATO" actionListener="#{proyectoC.decargar(pro.id)}" ajax="false" >
                                         <p:fileDownload value="#{proyectoC.archivoTraido}"/>
+                                    </p:commandButton>
+                                </p:fragment>
+                            </p:column>
+                            <p:column>
+                                <p:fragment>
+                                    <p:commandButton value="RESOLUCION" actionListener="#{proyectoC.decarga2(pro.id)}" ajax="false" >
+                                        <p:fileDownload value="#{proyectoC.archivoTraido2}"/>
                                     </p:commandButton>
                                 </p:fragment>
                             </p:column>
                         </p:dataTable>
                         <p:contextMenu for="tblProyectos">
                             <p:menuitem value="MODIFICAR" oncomplete="PF('dloModProyectos').show()" update=":formDialogProyectos"/>
-                            <p:menuitem value="MODIFICAR ARCHIVO" oncomplete="PF('dloModProyectoArch').show()" update=":formDialogProyectoArch"/>
+                            <p:menuitem value="MODIFICAR FORMATO" oncomplete="PF('dloModProyectoArch1').show()" update=":formDialogProyectoArch1"/>
+                            <p:menuitem value="MODIFICAR RESOLUCION" oncomplete="PF('dloModProyectoArch2').show()" update="formDialogProyectoArch2"/>
                             <p:menuitem value="ELIMINAR" actionListener="#{proyectoC.eliminar()}" update="tblProyectos"> 
                                 <p:confirm header="CONFIRMACIÓN" message="¿Está seguro de eliminar este registro?"/>
                             </p:menuitem>
                         </p:contextMenu>
                     </h:form>
-                    <p:dialog header="ACTUALIZAR ARCHIVO" widgetVar="dloModProyectoArch" resizable="false" modal="true">
-                        <h:form id="formDialogProyectoArch" enctype="multipart/form-data">
+                    <p:dialog header="ACTUALIZAR FORMATO" widgetVar="dloModProyectoArch1" resizable="false" modal="true">
+                        <h:form id="formDialogProyectoArch1" enctype="multipart/form-data">
                             <p:panelGrid columns="2">
-                                <p:outputLabel value="EVIDENCIA"  style="font-weight: bold; color: black" />
+                                <p:outputLabel value="FORMATO"  style="font-weight: bold; color: black" />
                                 <p:fileUpload value="#{proyectoC.archivo}" mode="simple" required="true" skinSimple="true" />
 
-                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo()}" update="@([id$=formTblProyectos]) formDialogProyectoArch"/>
-                                <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectoArch').hide()"/>
+                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo()}" update="@([id$=formTblProyectos]) formDialogProyectoArch1"/>
+                                <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectoArch1').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                    <p:dialog header="ACTUALIZAR RESOLUCION" widgetVar="dloModProyectoArch2" resizable="false" modal="true">
+                        <h:form id="formDialogProyectoArch2" enctype="multipart/form-data">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="RESOLUCION"  style="font-weight: bold; color: black" />
+                                <p:fileUpload value="#{proyectoC.archivo2}" mode="simple" required="true" skinSimple="true" />
+
+                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo2()}" update="@([id$=formTblProyectos]) formDialogProyectoArch2"/>
+                                <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectoArch2').hide()"/>
                             </p:panelGrid>
                         </h:form>
                     </p:dialog>
                     <p:dialog header="ACTUALIZAR DATOS" widgetVar="dloModProyectos" resizable="false" modal="true">
                         <h:form id="formDialogProyectos">
-                            <p:panelGrid columns="2">
+                            <p:panelGrid columns="4">
                                 <p:outputLabel value="NOMBRES" />
                                 <p:inputText value="#{proyectoC.pro.nombre}"  maxlength="60" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
                                     <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
@@ -204,6 +272,43 @@
                                     <f:selectItem itemLabel="COORDINADOR" itemValue="C"/>
                                     <f:selectItem itemLabel="DIRECCION RSU" itemValue="D"/>
                                 </p:selectOneRadio>
+                                <p:outputLabel value="OBJETIVOS DE DESARROLLO SOSTENIBLE"/><p:selectOneMenu value="#{proyectoC.pro.ods}" required="true" requiredMessage="seleccione">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="FIN DE LA POBREZA" itemValue="1"/>
+                                    <f:selectItem itemLabel="HAMBRE CERO" itemValue="2"/>
+                                    <f:selectItem itemLabel="SALUD Y BIENESTAR" itemValue="3"/>
+                                    <f:selectItem itemLabel="EDUCACIÒN DE CALIDAD" itemValue="4"/>
+                                    <f:selectItem itemLabel="IGUALDAD DE GENERO" itemValue="5"/>
+                                    <f:selectItem itemLabel="AGUA LIMPIA Y SANEAMIENTO" itemValue="6"/>
+                                    <f:selectItem itemLabel="ENERGIA ASEQUIBLE Y NO CONTAMINANTE" itemValue="7"/>
+                                    <f:selectItem itemLabel="TRABAJO DECENTE Y CRECIMIENTO ECONOMICO" itemValue="8"/>
+                                    <f:selectItem itemLabel="INDUSTRIA INNOVACION E INFRAESTRUCTURA" itemValue="9"/>
+                                    <f:selectItem itemLabel="REDUCCION DE LAS DESIGUALDADES" itemValue="10"/>
+                                    <f:selectItem itemLabel="CIUDADES Y COMUNIDADES SOSTENIBLES" itemValue="11"/>
+                                    <f:selectItem itemLabel="PRODUCCION Y CONSUMO RESPONSABLE" itemValue="12"/>
+                                    <f:selectItem itemLabel="ACCION POR EL CLIMA" itemValue="13"/>
+                                    <f:selectItem itemLabel="VIDA SUBMARINA" itemValue="14"/>
+                                    <f:selectItem itemLabel="VIDA DE ECOSISTEMAS TERRESTRES" itemValue="15"/>
+                                    <f:selectItem itemLabel="PAZ, JUSTICIA E INSTITUCIONES SOLIDAS" itemValue="16"/>
+                                    <f:selectItem itemLabel="ALIANZAS PARA LOGRAR OBJETIVOS" itemValue="17"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="FACULTAD"/><p:selectOneMenu value="#{proyectoC.pro.facultad}" required="true" requiredMessage="seleccione un tipo">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="FACULTAD DE CIENCIAS AGRARIAS" itemValue="1"/>
+                                    <f:selectItem itemLabel="FACULTAD DE INGENIERIA" itemValue="2"/>
+                                    <f:selectItem itemLabel="FACULTAD DE CIENCIAS EMPRESARIALES" itemValue="3"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="ESCUELA PROFESIONAL"/><p:selectOneMenu value="#{proyectoC.pro.escuelaProfesional}" required="true" requiredMessage="seleccione un tipo">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="INGENIERIA DE SISTEMAS" itemValue="1"/>
+                                    <f:selectItem itemLabel="AGRONOMIA" itemValue="2"/>
+                                    <f:selectItem itemLabel="ADMINISTRACION" itemValue="3"/>
+                                    <f:selectItem itemLabel="CONTABILIDAD" itemValue="4"/>
+                                    <f:selectItem itemLabel="ADMINITRACION DE TURISMO Y HOTELERIA" itemValue="5"/>
+                                </p:selectOneMenu>
                                 <p:outputLabel value="LINK DE DRIVE" />
                                 <p:inputText value="#{proyectoC.pro.link}" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
                                 </p:inputText>

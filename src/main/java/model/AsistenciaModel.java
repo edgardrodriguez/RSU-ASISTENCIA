@@ -22,8 +22,9 @@ public class AsistenciaModel {
     Timestamp fecha;
     String estado;
     int estudiantes_fk;
-    int proyecto_detalle_fk;
-
+    int proyecto_fk;
+    String nombrePro;
+    
     String diaConcat;
     String fila;
     String concatEst;
@@ -33,6 +34,6 @@ public class AsistenciaModel {
     String nombreEst;
     String apellidoEst;
     
-    int idProDet;
-    String destProDet;
+    int idPro;
+    String nomPro;
 }

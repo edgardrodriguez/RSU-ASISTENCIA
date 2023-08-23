@@ -36,7 +36,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
 
 
     public void registrarAsistencia(UploadedFile archivo, AsistenciaModel obj) throws Exception {
-        String sql = "INSERT INTO ASISTENCIA (dia,cantHoras,fecha,estado,evidencia,estudiantes_fk,proyecto_detalle_fk) VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO ASISTENCIA (dia,cantHoras,fecha,estado,evidencia,estudiantes_fk,proyecto_fk) VALUES (?,?,?,?,?,?,?)";
         try ( PreparedStatement ps = this.conectar().prepareStatement(sql)) {
 
             //SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -50,7 +50,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
             ps.setString(4, est);
             ps.setBinaryStream(5, archivo.getInputStream());
             ps.setInt(6, obj.getEstudiantes_fk());
-            ps.setInt(7, obj.getProyecto_detalle_fk());
+            ps.setInt(7, obj.getProyecto_fk());
             ps.execute();
             ps.close();
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
 
     @Override
     public void modificar(AsistenciaModel obj) throws Exception {
-        String sql = "update ASISTENCIA set dia=?,cantHoras=?,fecha=?,estado=?,estudiantes_fk=?,proyecto_detalle_fk=? where id=?";
+        String sql = "update ASISTENCIA set dia=?,cantHoras=?,fecha=?,estado=?,estudiantes_fk=?,proyecto_fk=? where id=?";
         try {
             PreparedStatement ps = this.conectar().prepareStatement(sql);
 
@@ -74,7 +74,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
             ps.setTimestamp(3, fechaActual);
             ps.setString(4, obj.getEstado());
             ps.setInt(5, obj.getEstudiantes_fk());
-            ps.setInt(6, obj.getProyecto_detalle_fk());
+            ps.setInt(6, obj.getProyecto_fk());
             ps.setInt(7, obj.getId());
             ps.executeUpdate();
             ps.close();
@@ -120,9 +120,9 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
                 doc.setFecha(rs.getTimestamp("fecha"));
                 doc.setEstado(rs.getString("estado")); 
                 doc.setEstudiantes_fk(rs.getInt("estudiantes_fk"));
-                doc.setProyecto_detalle_fk(rs.getInt("proyecto_detalle_fk"));
+                doc.setProyecto_fk(rs.getInt("proyecto_fk"));
                 doc.setConcatEst(rs.getString("concatEst"));
-                doc.setDescripcion(rs.getString("descripcion"));
+                doc.setNombrePro(rs.getString("nombre"));
                 listado.add(doc);
             }
             rs.close();
@@ -157,26 +157,25 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
         return listadoA;
     }
     
-    public List<AsistenciaModel> ListarProyectoDetalle(int estudiantes_fk) throws SQLException {
+    public List<AsistenciaModel> ListarProyectos() throws SQLException {
         List<AsistenciaModel> listadoA = null;
         AsistenciaModel per;
         ResultSet rs;
-        String sql = "select id,descripcion,estudiantes_fk from PROYECTO_DETALLE where estudiantes_fk=?";
+        String sql = "select id,nombre from PROYECTOS where estado='A'";
         try {
             listadoA = new ArrayList();
             PreparedStatement ps = this.conectar().prepareStatement(sql);
-            ps.setInt(1, estudiantes_fk);
             rs = ps.executeQuery();
             while (rs.next()) {
                 per = new AsistenciaModel();
-                per.setIdProDet(rs.getInt("id"));
-                per.setDestProDet(rs.getString("descripcion"));
+                per.setIdPro(rs.getInt("id"));
+                per.setNomPro(rs.getString("nombre"));
                 listadoA.add(per);
             }
             rs.close();
             ps.close();
         } catch (Exception e) {
-            Logger.getGlobal().log(Level.WARNING, "Error aL listar ESTUDIANTES Dao {0} ", e.getMessage());
+            Logger.getGlobal().log(Level.WARNING, "Error aL listar PROYECTOS Dao {0} ", e.getMessage());
         }
         return listadoA;
     }
@@ -206,8 +205,8 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
                 InputStream stream = st.getBinaryStream("evidencia");
                 String fecha = st.getString("fecha");
                 archivo = DefaultStreamedContent.builder()
-                        .name(fecha + ".jpg")
-                        .contentType("image/jpg")
+                        .name(fecha + ".pdf")
+                        .contentType("application/pdf")
                         .stream(() -> stream)
                         .build();
 

@@ -11,7 +11,7 @@ package model;
 import java.util.Date;
 import lombok.Data;
 import java.lang.String;
-
+import java.sql.Timestamp;
 
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
@@ -25,19 +25,27 @@ public class ProyectosModel {
     String tipo;
     String estado;
     String revisado;
+    String ods;
+    String facultad;
+    String escuelaProfesional;
     String asesor_fk;
     String estudiantes_fk;
     String concatAse;
     String concatEst;
     String link;
+    Timestamp fecha;
     private UploadedFile archivo;
     private StreamedContent archivoTraido;
+    private UploadedFile archivo2;
+    private StreamedContent archivoTraido2;
 
     String fila;
     String tipoConcat;
     String estadoConcat;
     String revisadoConcat;
-
+    String odsConcat;
+    String facultadConcat;
+    String escuelProfesionalConcat;
     //exterm
     int idAse;
     String nombreAse;
@@ -47,8 +55,10 @@ public class ProyectosModel {
     String nombreEst;
     String apellidoEst;
     int rol_fk;
-    
+
     String reportEstado;
     String reportTipo;
     String reportRevisado;
+
+    String fechaNew;
 }

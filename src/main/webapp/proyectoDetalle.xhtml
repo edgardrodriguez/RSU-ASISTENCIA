@@ -22,29 +22,81 @@
                         <div class="ui-g-2"></div>
                         <div class="ui-g-10" style="background-color: white">
                             <p:panelGrid columns="2">
-                                <p:outputLabel value="DESCRIPCION" />
-                                <p:inputText value="#{proyectoDetalleC.prod.descripcion}" required="true" style="width: 250px" requiredMessage="Rellene la descripcion">
-                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
-                                </p:inputText>
                                 <p:outputLabel value="ESTUDIANTE"/>
                                 <p:selectOneMenu  value="#{proyectoDetalleC.prod.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                    <p:ajax event="change" listener="#{proyectoDetalleC.listproyectos.clear()}" update="proDetalle"/>
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoDetalleC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>
 
                                 <p:outputLabel value="PROYECTOS"/>
-                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu id="proDetalle" value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoDetalleC.listproyectos}" var="apo" itemLabel="#{apo.nombrePro}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
-                                <p:outputLabel value="EVIDENCIA"  style="font-weight: bold; color: black" />
-                                <p:fileUpload value="#{proyectoDetalleC.archivo}" mode="simple" required="true" skinSimple="true" />
                                 <p:commandButton value="Registrar" actionListener="#{proyectoDetalleC.registrar()}"
                                                  update="formProyectoDetalle :formTblProyectoDetalle:tblProyectoDetalle"/>
                             </p:panelGrid>
                         </div>
                     </h:form>
-                    <h:form id="formTblProyectoDetalle" style="text-align: center;"  enctype="multipart/form-data">
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="POR PROYECTO"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{proyectoDetalleC.listProyectFilter}" var="apo" itemLabel="#{apo.nombrePro}" itemValue="#{apo.idPro}" /> 
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoDetalleC.reporteProyecto()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="POR ESTUDIANTE"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{proyectoDetalleC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst}" itemValue="#{apo.idEst}" /> 
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoDetalleC.reporteEstudiante()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="POR ESTADO"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneRadio value="#{proyectoDetalleC.prod.estado}" required="true" requiredMessage="seleccione un estado">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="ACTIVO" itemValue="A"/>
+                                    <f:selectItem itemLabel="INACTIVO" itemValue="I"/>
+                                </p:selectOneRadio>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoDetalleC.reporteEstado()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                        <div class="ui-g-6">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="POR FECHA"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.fechaNew}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{proyectoDetalleC.listProyectFecha}" var="apo" itemLabel="#{apo.fechaNew}" itemValue="#{apo.fechaNew}" /> 
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoDetalleC.reporteFecha()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-6">
+                        <h:form style="align-content: center;align-items: center">
+                            <p:outputLabel value="LISTAR TOTAL"/>
+                            <p:panelGrid columns="2">
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoDetalleC.reporteProyectoDetalle()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <h:form id="formTblProyectoDetalle" style="text-align: center;">
                         <p:dataTable id="tblProyectoDetalle"
                                      var="prod"
                                      value="#{proyectoDetalleC.listprod}"
@@ -62,8 +114,8 @@
                             <p:column headerText="FILA" sortBy="#{prod.fila}" filterBy="#{prod.fila}">
                                 <h:outputText value="#{prod.fila}" />
                             </p:column>
-                            <p:column headerText="DESCRIPCION" sortBy="#{prod.descripcion}" filterBy="#{prod.descripcion}">
-                                <h:outputText value="#{prod.descripcion}" />
+                            <p:column headerText="estado" sortBy="#{prod.estadoConcat}" filterBy="#{prod.estadoConcat}">
+                                <h:outputText value="#{prod.estadoConcat}" />
                             </p:column>
                             <p:column headerText="ESTUDIANTE" sortBy="#{prod.concatEst}" filterBy="#{prod.concatEst}">
                                 <h:outputText value="#{prod.concatEst}" />
@@ -71,52 +123,23 @@
                             <p:column headerText="PROYECTO" sortBy="#{prod.proNom}" filterBy="#{prod.proNom}">
                                 <h:outputText value="#{prod.proNom}" />
                             </p:column>
-                            <p:column>
-                                <p:fragment>
-                                    <p:commandButton value="Descargar" actionListener="#{proyectoDetalleC.decargar(prod.id)}" ajax="false" >
-                                        <p:fileDownload value="#{proyectoDetalleC.archivoTraido}"/>
-                                    </p:commandButton>
-                                </p:fragment>
-                            </p:column>
                         </p:dataTable>
                         <p:contextMenu for="tblProyectoDetalle">
                             <p:menuitem value="MODIFICAR" oncomplete="PF('dloModProyectoDetalle').show()" update=":formDialogProyectoDetalle"/>
-                            <p:menuitem value="MODIFICAR ARCHIVO" oncomplete="PF('dloModProyectoDetalleArch').show()" update=":formDialogProyectoDetalleArch"/>
                             <p:menuitem value="ELIMINAR" actionListener="#{proyectoDetalleC.eliminar()}" update="tblProyectoDetalle"> 
                                 <p:confirm header="CONFIRMACIÓN" message="¿Está seguro de eliminar este registro?"/>
                             </p:menuitem>
                         </p:contextMenu>
                     </h:form>
-                    <p:dialog header="ACTUALIZAR ARCHIVO" widgetVar="dloModProyectoDetalleArch" resizable="false" modal="true">
-                        <h:form id="formDialogProyectoDetalleArch" enctype="multipart/form-data">
-                            <p:panelGrid columns="2">
-                                <p:outputLabel value="EVIDENCIA"  style="font-weight: bold; color: black" />
-                                <p:fileUpload value="#{proyectoDetalleC.archivo}" mode="simple" required="true" skinSimple="true" />
-
-                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoDetalleC.modificarArchivo()}" update="@([id$=formTblProyectoDetalle]) formDialogProyectoDetalleArch"/>
-                                <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectoDetalleArch').hide()"/>
-                            </p:panelGrid>
-                        </h:form>
-                    </p:dialog>
                     <p:dialog header="ACTUALIZAR DATOS" widgetVar="dloModProyectoDetalle" resizable="false" modal="true">
                         <h:form id="formDialogProyectoDetalle" enctype="multipart/form-data">
                             <p:panelGrid columns="2">
-                                <p:outputLabel value="DESCRIPCION" />
-                                <p:inputText value="#{proyectoDetalleC.prod.descripcion}" required="true" style="width: 250px" requiredMessage="Rellene la descripcion">
-                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
-                                </p:inputText>
-                                <p:outputLabel value="ESTUDIANTE"/>
-                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{proyectoDetalleC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
-                                </p:selectOneMenu>
-
-                                <p:outputLabel value="PROYECTOS"/>
-                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{proyectoDetalleC.listproyectos}" var="apo" itemLabel="#{apo.nombrePro}" itemValue="#{apo.idPro}" /> 
-                                </p:selectOneMenu>
-
+                                <p:outputLabel value="ESTADO" />
+                                <p:selectOneRadio value="#{proyectoDetalleC.prod.estado}" required="true" requiredMessage="seleccione un estado">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="ACTIVO" itemValue="A"/>
+                                    <f:selectItem itemLabel="INACTIVO" itemValue="I"/>
+                                </p:selectOneRadio>
                                 <p:commandButton value="MODIFICAR" actionListener="#{proyectoDetalleC.modificar()}" update="@([id$=formTblProyectoDetalle]) formDialogProyectoDetalle"/>
                                 <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectoDetalle').hide()"/>
                             </p:panelGrid>

@@ -16,7 +16,9 @@ public class ProyectoDetalleModel {
     String descripcion;
     int proyectos_fk;
     int estudiantes_fk;
-
+    String estado;
+    String estadoConcat;
+    
     private UploadedFile archivo;
     private StreamedContent archivoTraido;
     
@@ -32,5 +34,7 @@ public class ProyectoDetalleModel {
     int idPro;
     String nombrePro;
     
-    int idDescar;
+    int idFecha;
+    String fechaNew;
+    
 }

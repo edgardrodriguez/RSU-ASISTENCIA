@@ -33,7 +33,7 @@ public class asistenciaC implements Serializable {
     private AsistenciaImpl dao;
     private List<AsistenciaModel> listAsistencia;
     private List<AsistenciaModel> listEstudiante;
-    private List<AsistenciaModel> listProyectosDetalle;
+    private List<AsistenciaModel> listProyecto;
 
     public asistenciaC() {
         asis = new AsistenciaModel();
@@ -145,20 +145,20 @@ public class asistenciaC implements Serializable {
         this.listEstudiante = listEstudiante;
     }
 
-    public List<AsistenciaModel> getListProyectosDetalle() {
-        listProyectosDetalle = new ArrayList<AsistenciaModel>();
+    public List<AsistenciaModel> getListProyecto() {
+        listProyecto = new ArrayList<AsistenciaModel>();
         try {
-            listProyectosDetalle = dao.ListarProyectoDetalle(asis.getEstudiantes_fk());
+            listProyecto = dao.ListarProyectos();
         } catch (SQLException ex) {
             Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return listProyectosDetalle;
+        return listProyecto;
     }
 
-    public void setListProyectosDetalle(List<AsistenciaModel> listProyectosDetalle) {
-        this.listProyectosDetalle = listProyectosDetalle;
+    public void setListProyecto(List<AsistenciaModel> listProyecto) {
+        this.listProyecto = listProyecto;
     }
 
     public UploadedFile getArchivo() {

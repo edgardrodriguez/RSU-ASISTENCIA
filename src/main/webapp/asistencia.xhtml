@@ -38,14 +38,13 @@
                                 </p:inputText>
                                 <p:outputLabel value="ESTUDIANTE"/>
                                 <p:selectOneMenu  value="#{asistenciaC.asis.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
-                                    <p:ajax event="change" listener="#{asistenciaC.listProyectosDetalle.clear()}" update="proDetalle"/>
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{asistenciaC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>
-                                <p:outputLabel value="PROYECTO DETALLE"/>
-                                <p:selectOneMenu id="proDetalle" value="#{asistenciaC.asis.proyecto_detalle_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:outputLabel value="PROYECTO"/>
+                                <p:selectOneMenu value="#{asistenciaC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{asistenciaC.listProyectosDetalle}" var="apo" itemLabel="#{apo.destProDet}" itemValue="#{apo.idProDet}" /> 
+                                    <f:selectItems value="#{asistenciaC.listProyecto}" var="apo" itemLabel="#{apo.nomPro}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
                                 <p:outputLabel value="EVIDENCIA"  style="font-weight: bold; color: black" />
                                 <p:fileUpload value="#{asistenciaC.archivo}" mode="simple" required="true" skinSimple="true" />
@@ -84,8 +83,8 @@
                             <p:column headerText="ESTUDIANTE" sortBy="#{asis.concatEst}" filterBy="#{asis.concatEst}">
                                 <h:outputText value="#{asis.concatEst}" />
                             </p:column>
-                            <p:column headerText="DESCRIPCION" sortBy="#{asis.descripcion}" filterBy="#{asis.descripcion}">
-                                <h:outputText value="#{asis.descripcion}" />
+                            <p:column headerText="DESCRIPCION" sortBy="#{asis.nombrePro}" filterBy="#{asis.nombrePro}">
+                                <h:outputText value="#{asis.nombrePro}" />
                             </p:column>
                             <p:column>
                                 <p:fragment>
@@ -140,14 +139,13 @@
                                 </p:selectOneRadio>
                                 <p:outputLabel value="ESTUDIANTE"/>
                                 <p:selectOneMenu  value="#{asistenciaC.asis.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
-                                    <p:ajax event="change" listener="#{asistenciaC.listProyectosDetalle.clear()}" update="proDetalle"/>
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{asistenciaC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>
-                                <p:outputLabel value="PROYECTO DETALLE"/>
-                                <p:selectOneMenu id="proDetalle" value="#{asistenciaC.asis.proyecto_detalle_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:outputLabel value="PROYECTO"/>
+                                <p:selectOneMenu value="#{asistenciaC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{asistenciaC.listProyectosDetalle}" var="apo" itemLabel="#{apo.destProDet}" itemValue="#{apo.idProDet}" /> 
+                                    <f:selectItems value="#{asistenciaC.listProyecto}" var="apo" itemLabel="#{apo.nomPro}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
                                 <p:commandButton value="MODIFICAR" actionListener="#{asistenciaC.modificar()}" update="@([id$=formTblAsistencia]) formDialogAsistencia"/>
                                 <p:commandButton value="CANCELAR" oncomplete="PF('dloModAsistencia').hide()"/>
