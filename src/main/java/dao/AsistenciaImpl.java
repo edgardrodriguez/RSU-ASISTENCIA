@@ -36,7 +36,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
 
 
     public void registrarAsistencia(UploadedFile archivo, AsistenciaModel obj) throws Exception {
-        String sql = "INSERT INTO ASISTENCIA (dia,cantHoras,fecha,estado,evidencia,estudiantes_fk,proyecto_fk) VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO ASISTENCIA (dia,cantHoras,fecha,estado,evidencia,proyecto_fk) VALUES (?,?,?,?,?,?)";
         try ( PreparedStatement ps = this.conectar().prepareStatement(sql)) {
 
             //SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -49,8 +49,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
             String est = "A";
             ps.setString(4, est);
             ps.setBinaryStream(5, archivo.getInputStream());
-            ps.setInt(6, obj.getEstudiantes_fk());
-            ps.setInt(7, obj.getProyecto_fk());
+            ps.setInt(6, obj.getProyecto_fk());
             ps.execute();
             ps.close();
         } catch (Exception e) {
@@ -61,7 +60,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
 
     @Override
     public void modificar(AsistenciaModel obj) throws Exception {
-        String sql = "update ASISTENCIA set dia=?,cantHoras=?,fecha=?,estado=?,estudiantes_fk=?,proyecto_fk=? where id=?";
+        String sql = "update ASISTENCIA set dia=?,cantHoras=?,fecha=?,estado=?,proyecto_fk=? where id=?";
         try {
             PreparedStatement ps = this.conectar().prepareStatement(sql);
 
@@ -73,9 +72,8 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
             ps.setInt(2, obj.getCantHoras());
             ps.setTimestamp(3, fechaActual);
             ps.setString(4, obj.getEstado());
-            ps.setInt(5, obj.getEstudiantes_fk());
-            ps.setInt(6, obj.getProyecto_fk());
-            ps.setInt(7, obj.getId());
+            ps.setInt(5, obj.getProyecto_fk());
+            ps.setInt(6, obj.getId());
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
@@ -119,9 +117,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
                 doc.setCantHoras(rs.getInt("cantHoras"));
                 doc.setFecha(rs.getTimestamp("fecha"));
                 doc.setEstado(rs.getString("estado")); 
-                doc.setEstudiantes_fk(rs.getInt("estudiantes_fk"));
                 doc.setProyecto_fk(rs.getInt("proyecto_fk"));
-                doc.setConcatEst(rs.getString("concatEst"));
                 doc.setNombrePro(rs.getString("nombre"));
                 listado.add(doc);
             }
@@ -133,29 +129,6 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
         return listado;
     }
 
-    public List<AsistenciaModel> ListarEstudiantes() throws SQLException {
-        List<AsistenciaModel> listadoA = null;
-        AsistenciaModel per;
-        ResultSet rs;
-        String sql = " select * from ESTUDIANTES WHERE rol_fk=2";
-        try {
-            listadoA = new ArrayList();
-            PreparedStatement ps = this.conectar().prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                per = new AsistenciaModel();
-                per.setIdEst(rs.getInt("id"));
-                per.setNombreEst(rs.getString("nombre"));
-                per.setApellidoEst(rs.getString("apellidos"));
-                listadoA.add(per);
-            }
-            rs.close();
-            ps.close();
-        } catch (Exception e) {
-            Logger.getGlobal().log(Level.WARNING, "Error aL listar ESTUDIANTES Dao {0} ", e.getMessage());
-        }
-        return listadoA;
-    }
     
     public List<AsistenciaModel> ListarProyectos() throws SQLException {
         List<AsistenciaModel> listadoA = null;

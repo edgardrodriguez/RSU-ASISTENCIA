@@ -12,15 +12,20 @@
         <ui:composition template="./plantilla.xhtml">
 
             <ui:define name="content">
+                <p:growl id="msj" showDetail="true" skipDetailIfEqualsSummary="true">
+                    <p:autoUpdate/>
+                </p:growl>
                 <h:head>
-                    <title>Asesor</title>
-                    <f:event listener="#{adminC.listar()}" type="preRenderView" />
+                    <f:facet name="first">
+                        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                        <title>Asesor</title>
+                        <f:event listener="#{adminC.listar()}" type="preRenderView" />
+                    </f:facet>
                 </h:head>
                 <h:body>
                     <h:form id="formAdmin" style="align-content: center;align-items: center;text-align: center">
-                        <h1 style="font-family: sans-serif">ADMIN</h1>
-                        <div class="ui-g-2"></div>
-                        <div class="ui-g-10" style="background-color: white">
+                        <h1 style="font-family: sans-serif">REGISTRO DE ADMINISTRADORES</h1>
+                        <div align="center" >
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="EMAIL"/>
                                 <p:inputText id="email" value="#{adminC.adm.email}" maxlength="60" label="Email" validatorMessage="#{docentesC.doc.email} no es valido" required="true" requiredMessage="Rellene el correo">

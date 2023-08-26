@@ -9,10 +9,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.el.PropertyNotFoundException;
 import model.ProyectosModel;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -24,10 +27,11 @@ import org.primefaces.model.file.UploadedFile;
  */
 public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
 
-    public void registrarProyectos(UploadedFile archivo, UploadedFile archivo2, ProyectosModel obj) throws Exception {
-        String sql = "INSERT INTO PROYECTOS (nombre,descripcion,tipo,estado,revisado,ods,facultad,escuelaProfesional,fecha,link,resolucion,formato,asesor_fk,estudiantes_fk) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public void registrarProyectos(UploadedFile archivo2, ProyectosModel obj) throws SQLException,PropertyNotFoundException, Exception {
+        String sql = "INSERT INTO PROYECTOS (nombre,descripcion,tipo,estado,revisado,ods,facultad,escuelaProfesional,fecha,link,formato,asesor_fk,estudiantes_fk) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try ( PreparedStatement ps = this.conectar().prepareStatement(sql)) {
             Timestamp fechaActual = new Timestamp(System.currentTimeMillis());
+            InputStream inputStream = InputStream.nullInputStream();
 
             ps.setString(1, obj.getNombre());
             ps.setString(2, obj.getDescripcion());
@@ -41,15 +45,17 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
             ps.setString(8, obj.getEscuelaProfesional());
             ps.setTimestamp(9, fechaActual);
             ps.setString(10, obj.getLink());
-            ps.setBinaryStream(11, archivo.getInputStream());
-            ps.setBinaryStream(12, archivo2.getInputStream());
-            ps.setString(13, obj.getAsesor_fk());
-            ps.setString(14, obj.getEstudiantes_fk());
+            ps.setBinaryStream(11, archivo2.getInputStream());
+            ps.setString(12, obj.getAsesor_fk());
+            ps.setString(13, obj.getEstudiantes_fk());
             ps.execute();
             ps.close();
         } catch (Exception e) {
+            if (e instanceof PropertyNotFoundException) {
+               throw e;
+            }
             Logger.getGlobal().log(Level.WARNING, "Error al Ingresar PROYECTOS Dao {0} ", e.getMessage());
-            e.printStackTrace();
+           
         }
     }
 
@@ -222,7 +228,7 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
         }
     }
 
-    public StreamedContent traerImagen(StreamedContent archivo, int id) {
+    public StreamedContent traerImagen(StreamedContent archivo, int id) throws SQLException, NullPointerException {
 
         String sql = "select formato, nombre from PROYECTOS WHERE id =?";
         try {
@@ -230,7 +236,8 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
             ps.setInt(1, id);
             ResultSet st = ps.executeQuery();
             while (st.next()) {
-                InputStream stream = st.getBinaryStream("formato");
+                InputStream stream = Objects.requireNonNull(st.getBinaryStream("formato"), "archivo no debe ser nulo");
+                        
                 String description = st.getString("nombre");
                 archivo = DefaultStreamedContent.builder()
                         .name(description + ".pdf")
@@ -240,13 +247,16 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
 
                 System.out.println("Estoy en while dao traer pdf, " + archivo);
             }
-        } catch (Exception e) {
+         } catch (Exception e) {
+            if (e instanceof NullPointerException) {
+               throw e;
+            }
             System.out.println("Error en traer pdf: " + e.getMessage());
         }
         return archivo;
     }
 
-    public StreamedContent traerImagen2(StreamedContent archivo2, int id) {
+    public StreamedContent traerImagen2(StreamedContent archivo2, int id) throws SQLException, NullPointerException {
 
         String sql = "select resolucion, nombre from PROYECTOS WHERE id =?";
         try {
@@ -254,7 +264,8 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
             ps.setInt(1, id);
             ResultSet st = ps.executeQuery();
             while (st.next()) {
-                InputStream stream = st.getBinaryStream("resolucion");
+                InputStream stream = Objects.requireNonNull(st.getBinaryStream("resolucion"), "archivo no debe ser nulo");
+                
                 String description = st.getString("nombre");
                 archivo2 = DefaultStreamedContent.builder()
                         .name(description + ".pdf")
@@ -265,6 +276,9 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
                 System.out.println("Estoy en while dao traer pdf, " + archivo2);
             }
         } catch (Exception e) {
+            if (e instanceof NullPointerException) {
+               throw e;
+            }
             System.out.println("Error en traer pdf: " + e.getMessage());
         }
         return archivo2;

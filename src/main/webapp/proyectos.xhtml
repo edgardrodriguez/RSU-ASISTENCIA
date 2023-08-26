@@ -12,15 +12,20 @@
         <ui:composition template="./plantilla.xhtml">
 
             <ui:define name="content">
+                <p:growl id="msj" showDetail="true" skipDetailIfEqualsSummary="true">
+                    <p:autoUpdate/>
+                </p:growl>
                 <h:head>
-                    <title>proyectos</title>
-                    <f:event listener="#{proyectoC.listar()}" type="preRenderView" />
+                    <f:facet name="first">
+                        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                        <title>proyectos</title>
+                        <f:event listener="#{proyectoC.listar()}" type="preRenderView" />
+                    </f:facet>
                 </h:head>
                 <h:body>
                     <h:form id="formProyectos" enctype="multipart/form-data" style="align-content: center;align-items: center;text-align: center">
-                        <h1 style="font-family: sans-serif">PROYECTOS</h1>
-                        <div class="ui-g-2"></div>
-                        <div class="ui-g-10" style="background-color: white">
+                        <h1 style="font-family: sans-serif">REGISTRO DE PROYECTOS</h1>
+                        <div align="center" >
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="TITULO" />
                                 <p:inputText value="#{proyectoC.pro.nombre}"  maxlength="60" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
@@ -39,23 +44,23 @@
                                 <p:outputLabel value="OBJETIVOS DE DESARROLLO SOSTENIBLE"/><p:selectOneMenu value="#{proyectoC.pro.ods}" required="true" requiredMessage="seleccione">
                                     <p:ajax event="change"/>
                                     <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItem itemLabel="FIN DE LA POBREZA" itemValue="1"/>
-                                    <f:selectItem itemLabel="HAMBRE CERO" itemValue="2"/>
-                                    <f:selectItem itemLabel="SALUD Y BIENESTAR" itemValue="3"/>
-                                    <f:selectItem itemLabel="EDUCACIÒN DE CALIDAD" itemValue="4"/>
-                                    <f:selectItem itemLabel="IGUALDAD DE GENERO" itemValue="5"/>
-                                    <f:selectItem itemLabel="AGUA LIMPIA Y SANEAMIENTO" itemValue="6"/>
-                                    <f:selectItem itemLabel="ENERGIA ASEQUIBLE Y NO CONTAMINANTE" itemValue="7"/>
-                                    <f:selectItem itemLabel="TRABAJO DECENTE Y CRECIMIENTO ECONOMICO" itemValue="8"/>
-                                    <f:selectItem itemLabel="INDUSTRIA INNOVACION E INFRAESTRUCTURA" itemValue="9"/>
-                                    <f:selectItem itemLabel="REDUCCION DE LAS DESIGUALDADES" itemValue="10"/>
-                                    <f:selectItem itemLabel="CIUDADES Y COMUNIDADES SOSTENIBLES" itemValue="11"/>
-                                    <f:selectItem itemLabel="PRODUCCION Y CONSUMO RESPONSABLE" itemValue="12"/>
-                                    <f:selectItem itemLabel="ACCION POR EL CLIMA" itemValue="13"/>
-                                    <f:selectItem itemLabel="VIDA SUBMARINA" itemValue="14"/>
-                                    <f:selectItem itemLabel="VIDA DE ECOSISTEMAS TERRESTRES" itemValue="15"/>
-                                    <f:selectItem itemLabel="PAZ, JUSTICIA E INSTITUCIONES SOLIDAS" itemValue="16"/>
-                                    <f:selectItem itemLabel="ALIANZAS PARA LOGRAR OBJETIVOS" itemValue="17"/>
+                                    <f:selectItem itemLabel="1 FIN DE LA POBREZA" itemValue="1"/>
+                                    <f:selectItem itemLabel="2 HAMBRE CERO" itemValue="2"/>
+                                    <f:selectItem itemLabel="3 SALUD Y BIENESTAR" itemValue="3"/>
+                                    <f:selectItem itemLabel="4 EDUCACIÒN DE CALIDAD" itemValue="4"/>
+                                    <f:selectItem itemLabel="5 IGUALDAD DE GENERO" itemValue="5"/>
+                                    <f:selectItem itemLabel="6 AGUA LIMPIA Y SANEAMIENTO" itemValue="6"/>
+                                    <f:selectItem itemLabel="7 ENERGIA ASEQUIBLE Y NO CONTAMINANTE" itemValue="7"/>
+                                    <f:selectItem itemLabel="8 TRABAJO DECENTE Y CRECIMIENTO ECONOMICO" itemValue="8"/>
+                                    <f:selectItem itemLabel="9 INDUSTRIA INNOVACION E INFRAESTRUCTURA" itemValue="9"/>
+                                    <f:selectItem itemLabel="10 REDUCCION DE LAS DESIGUALDADES" itemValue="10"/>
+                                    <f:selectItem itemLabel="11 CIUDADES Y COMUNIDADES SOSTENIBLES" itemValue="11"/>
+                                    <f:selectItem itemLabel="12 PRODUCCION Y CONSUMO RESPONSABLE" itemValue="12"/>
+                                    <f:selectItem itemLabel="13 ACCION POR EL CLIMA" itemValue="13"/>
+                                    <f:selectItem itemLabel="14 VIDA SUBMARINA" itemValue="14"/>
+                                    <f:selectItem itemLabel="15 VIDA DE ECOSISTEMAS TERRESTRES" itemValue="15"/>
+                                    <f:selectItem itemLabel="16 PAZ, JUSTICIA E INSTITUCIONES SOLIDAS" itemValue="16"/>
+                                    <f:selectItem itemLabel="17 ALIANZAS PARA LOGRAR OBJETIVOS" itemValue="17"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="FACULTAD"/><p:selectOneMenu value="#{proyectoC.pro.facultad}" required="true" requiredMessage="seleccione un tipo">
                                     <p:ajax event="change"/>
@@ -77,19 +82,18 @@
                                 <p:inputText value="#{proyectoC.pro.link}" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
                                 </p:inputText>
                                 <p:outputLabel value="ASESOR"/>
-                                <p:selectOneMenu  value="#{proyectoC.pro.asesor_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu  value="#{proyectoC.pro.asesor_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un asesor">
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoC.listAsesor}" var="apo" itemLabel="#{apo.nombreAse.concat(' ').concat(apo.apellidoAse)}" itemValue="#{apo.idAse}" /> 
                                 </p:selectOneMenu>
                                 <p:outputLabel value="ESTUDIANTE"/>
-                                <p:selectOneMenu  value="#{proyectoC.pro.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu  value="#{proyectoC.pro.estudiantes_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un asesor">
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoC.listEstudiantes}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>
-                                <p:outputLabel value="FORMADO DEL PROYECTO"  style="font-weight: bold; color: black" />
-                                <p:fileUpload value="#{proyectoC.archivo}" mode="simple" required="true" skinSimple="true" />
-                                <p:outputLabel value="RESOLUCION DEL PROYECTO"  style="font-weight: bold; color: black" />
-                                <p:fileUpload value="#{proyectoC.archivo2}" mode="simple" required="true" skinSimple="true" />
+                                <p:outputLabel value="FORMATO DEL PROYECTO"  style="font-weight: bold; color: black" />
+                                <p:fileUpload value="#{proyectoC.archivo2}" mode="simple" required="true" skinSimple="true" requiredMessage="seleccione un archivo"/>
+           
                                 <p:commandButton value="Registrar" actionListener="#{proyectoC.registrar()}"
                                                  update="formProyectos :formTblProyectos:tblProyectos"/>
                             </p:panelGrid>
@@ -142,6 +146,64 @@
                     </div>
                     <div class="ui-g-6">
                         <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="OBJETIVOS DE DESARROLLO SOSTENIBLE"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu value="#{proyectoC.pro.ods}" required="true" requiredMessage="seleccione un ods">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="1 FIN DE LA POBREZA" itemValue="1"/>
+                                    <f:selectItem itemLabel="2 HAMBRE CERO" itemValue="2"/>
+                                    <f:selectItem itemLabel="3 SALUD Y BIENESTAR" itemValue="3"/>
+                                    <f:selectItem itemLabel="4 EDUCACIÒN DE CALIDAD" itemValue="4"/>
+                                    <f:selectItem itemLabel="5 IGUALDAD DE GENERO" itemValue="5"/>
+                                    <f:selectItem itemLabel="6 AGUA LIMPIA Y SANEAMIENTO" itemValue="6"/>
+                                    <f:selectItem itemLabel="7 ENERGIA ASEQUIBLE Y NO CONTAMINANTE" itemValue="7"/>
+                                    <f:selectItem itemLabel="8 TRABAJO DECENTE Y CRECIMIENTO ECONOMICO" itemValue="8"/>
+                                    <f:selectItem itemLabel="9 INDUSTRIA INNOVACION E INFRAESTRUCTURA" itemValue="9"/>
+                                    <f:selectItem itemLabel="10 REDUCCION DE LAS DESIGUALDADES" itemValue="10"/>
+                                    <f:selectItem itemLabel="11 CIUDADES Y COMUNIDADES SOSTENIBLES" itemValue="11"/>
+                                    <f:selectItem itemLabel="12 PRODUCCION Y CONSUMO RESPONSABLE" itemValue="12"/>
+                                    <f:selectItem itemLabel="13 ACCION POR EL CLIMA" itemValue="13"/>
+                                    <f:selectItem itemLabel="14 VIDA SUBMARINA" itemValue="14"/>
+                                    <f:selectItem itemLabel="15 VIDA DE ECOSISTEMAS TERRESTRES" itemValue="15"/>
+                                    <f:selectItem itemLabel="16 PAZ, JUSTICIA E INSTITUCIONES SOLIDAS" itemValue="16"/>
+                                    <f:selectItem itemLabel="17 ALIANZAS PARA LOGRAR OBJETIVOS" itemValue="17"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteOds()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-6">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="FACULTAD"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu value="#{proyectoC.pro.facultad}" required="true" requiredMessage="seleccione una facultad">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="FACULTAD DE CIENCIAS AGRARIAS" itemValue="1"/>
+                                    <f:selectItem itemLabel="FACULTAD DE INGENIERIA" itemValue="2"/>
+                                    <f:selectItem itemLabel="FACULTAD DE CIENCIAS EMPRESARIALES" itemValue="3"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteFacultad()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-6">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="CARRERA"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu value="#{proyectoC.pro.escuelaProfesional}" required="true" requiredMessage="seleccione una escuela profesiona">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="INGENIERIA DE SISTEMAS" itemValue="1"/>
+                                    <f:selectItem itemLabel="AGRONOMIA" itemValue="2"/>
+                                    <f:selectItem itemLabel="ADMINISTRACION" itemValue="3"/>
+                                    <f:selectItem itemLabel="CONTABILIDAD" itemValue="4"/>
+                                    <f:selectItem itemLabel="ADMINITRACION DE TURISMO Y HOTELERIA" itemValue="5"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteEscuelaProfesional()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
                             <p:outputLabel value="POR FECHA"/>
                             <p:panelGrid columns="2">
                                 <p:selectOneMenu  value="#{proyectoC.pro.fechaNew}" filter="true" filterMatchMode="startsWith">
@@ -152,7 +214,7 @@
                             </p:panelGrid>
                         </h:form>
                     </div>
-                    <div class="ui-g-6">
+                    <div class="ui-g-2">
                         <h:form style="align-content: center;align-items: center">
                             <p:outputLabel value="LISTAR TOTAL"/>
                             <p:panelGrid columns="2">
@@ -196,16 +258,16 @@
                             <p:column headerText="ESTUDIANTE" sortBy="#{pro.concatEst}" filterBy="#{pro.concatEst}">
                                 <h:outputText value="#{pro.concatEst}" />
                             </p:column>
-                            <p:column>
+                            <p:column headerText="FORMATO" exportable="false">
                                 <p:fragment>
-                                    <p:commandButton value="FORMATO" actionListener="#{proyectoC.decargar(pro.id)}" ajax="false" >
+                                    <p:commandButton value="FILE" styleClass="ui-button-warning" icon="pi pi-download" actionListener="#{proyectoC.decargar(pro.id)}" ajax="true" >
                                         <p:fileDownload value="#{proyectoC.archivoTraido}"/>
                                     </p:commandButton>
                                 </p:fragment>
                             </p:column>
-                            <p:column>
+                            <p:column headerText="RESOLUCION" exportable="false">
                                 <p:fragment>
-                                    <p:commandButton value="RESOLUCION" actionListener="#{proyectoC.decarga2(pro.id)}" ajax="false" >
+                                    <p:commandButton value="FILE" styleClass="ui-button-danger" icon="pi pi-download" actionListener="#{proyectoC.decarga2(pro.id)}" ajax="true" >
                                         <p:fileDownload value="#{proyectoC.archivoTraido2}"/>
                                     </p:commandButton>
                                 </p:fragment>
@@ -213,17 +275,17 @@
                         </p:dataTable>
                         <p:contextMenu for="tblProyectos">
                             <p:menuitem value="MODIFICAR" oncomplete="PF('dloModProyectos').show()" update=":formDialogProyectos"/>
-                            <p:menuitem value="MODIFICAR FORMATO" oncomplete="PF('dloModProyectoArch1').show()" update=":formDialogProyectoArch1"/>
-                            <p:menuitem value="MODIFICAR RESOLUCION" oncomplete="PF('dloModProyectoArch2').show()" update="formDialogProyectoArch2"/>
+                            <p:menuitem value="AÑADIR RESOLUCION" oncomplete="PF('dloModProyectoArch1').show()" update=":formDialogProyectoArch1"/>
+                            <p:menuitem value="ACTUALIZAR FORMATO" oncomplete="PF('dloModProyectoArch2').show()" update="formDialogProyectoArch2"/>
                             <p:menuitem value="ELIMINAR" actionListener="#{proyectoC.eliminar()}" update="tblProyectos"> 
                                 <p:confirm header="CONFIRMACIÓN" message="¿Está seguro de eliminar este registro?"/>
                             </p:menuitem>
                         </p:contextMenu>
                     </h:form>
-                    <p:dialog header="ACTUALIZAR FORMATO" widgetVar="dloModProyectoArch1" resizable="false" modal="true">
+                    <p:dialog header="AÑADIR RESOLUCION" widgetVar="dloModProyectoArch1" resizable="false" modal="true">
                         <h:form id="formDialogProyectoArch1" enctype="multipart/form-data">
                             <p:panelGrid columns="2">
-                                <p:outputLabel value="FORMATO"  style="font-weight: bold; color: black" />
+                                <p:outputLabel value="RESOLUCION"  style="font-weight: bold; color: black" />
                                 <p:fileUpload value="#{proyectoC.archivo}" mode="simple" required="true" skinSimple="true" />
 
                                 <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo()}" update="@([id$=formTblProyectos]) formDialogProyectoArch1"/>
@@ -231,10 +293,10 @@
                             </p:panelGrid>
                         </h:form>
                     </p:dialog>
-                    <p:dialog header="ACTUALIZAR RESOLUCION" widgetVar="dloModProyectoArch2" resizable="false" modal="true">
+                    <p:dialog header="ACTUALIZAR FORMATO" widgetVar="dloModProyectoArch2" resizable="false" modal="true">
                         <h:form id="formDialogProyectoArch2" enctype="multipart/form-data">
                             <p:panelGrid columns="2">
-                                <p:outputLabel value="RESOLUCION"  style="font-weight: bold; color: black" />
+                                <p:outputLabel value="FORMATO"  style="font-weight: bold; color: black" />
                                 <p:fileUpload value="#{proyectoC.archivo2}" mode="simple" required="true" skinSimple="true" />
 
                                 <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo2()}" update="@([id$=formTblProyectos]) formDialogProyectoArch2"/>
@@ -275,23 +337,23 @@
                                 <p:outputLabel value="OBJETIVOS DE DESARROLLO SOSTENIBLE"/><p:selectOneMenu value="#{proyectoC.pro.ods}" required="true" requiredMessage="seleccione">
                                     <p:ajax event="change"/>
                                     <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItem itemLabel="FIN DE LA POBREZA" itemValue="1"/>
-                                    <f:selectItem itemLabel="HAMBRE CERO" itemValue="2"/>
-                                    <f:selectItem itemLabel="SALUD Y BIENESTAR" itemValue="3"/>
-                                    <f:selectItem itemLabel="EDUCACIÒN DE CALIDAD" itemValue="4"/>
-                                    <f:selectItem itemLabel="IGUALDAD DE GENERO" itemValue="5"/>
-                                    <f:selectItem itemLabel="AGUA LIMPIA Y SANEAMIENTO" itemValue="6"/>
-                                    <f:selectItem itemLabel="ENERGIA ASEQUIBLE Y NO CONTAMINANTE" itemValue="7"/>
-                                    <f:selectItem itemLabel="TRABAJO DECENTE Y CRECIMIENTO ECONOMICO" itemValue="8"/>
-                                    <f:selectItem itemLabel="INDUSTRIA INNOVACION E INFRAESTRUCTURA" itemValue="9"/>
-                                    <f:selectItem itemLabel="REDUCCION DE LAS DESIGUALDADES" itemValue="10"/>
-                                    <f:selectItem itemLabel="CIUDADES Y COMUNIDADES SOSTENIBLES" itemValue="11"/>
-                                    <f:selectItem itemLabel="PRODUCCION Y CONSUMO RESPONSABLE" itemValue="12"/>
-                                    <f:selectItem itemLabel="ACCION POR EL CLIMA" itemValue="13"/>
-                                    <f:selectItem itemLabel="VIDA SUBMARINA" itemValue="14"/>
-                                    <f:selectItem itemLabel="VIDA DE ECOSISTEMAS TERRESTRES" itemValue="15"/>
-                                    <f:selectItem itemLabel="PAZ, JUSTICIA E INSTITUCIONES SOLIDAS" itemValue="16"/>
-                                    <f:selectItem itemLabel="ALIANZAS PARA LOGRAR OBJETIVOS" itemValue="17"/>
+                                    <f:selectItem itemLabel="1 FIN DE LA POBREZA" itemValue="1"/>
+                                    <f:selectItem itemLabel="2 HAMBRE CERO" itemValue="2"/>
+                                    <f:selectItem itemLabel="3 SALUD Y BIENESTAR" itemValue="3"/>
+                                    <f:selectItem itemLabel="4 EDUCACIÒN DE CALIDAD" itemValue="4"/>
+                                    <f:selectItem itemLabel="5 IGUALDAD DE GENERO" itemValue="5"/>
+                                    <f:selectItem itemLabel="6 AGUA LIMPIA Y SANEAMIENTO" itemValue="6"/>
+                                    <f:selectItem itemLabel="7 ENERGIA ASEQUIBLE Y NO CONTAMINANTE" itemValue="7"/>
+                                    <f:selectItem itemLabel="8 TRABAJO DECENTE Y CRECIMIENTO ECONOMICO" itemValue="8"/>
+                                    <f:selectItem itemLabel="9 INDUSTRIA INNOVACION E INFRAESTRUCTURA" itemValue="9"/>
+                                    <f:selectItem itemLabel="10 REDUCCION DE LAS DESIGUALDADES" itemValue="10"/>
+                                    <f:selectItem itemLabel="11 CIUDADES Y COMUNIDADES SOSTENIBLES" itemValue="11"/>
+                                    <f:selectItem itemLabel="12 PRODUCCION Y CONSUMO RESPONSABLE" itemValue="12"/>
+                                    <f:selectItem itemLabel="13 ACCION POR EL CLIMA" itemValue="13"/>
+                                    <f:selectItem itemLabel="14 VIDA SUBMARINA" itemValue="14"/>
+                                    <f:selectItem itemLabel="15 VIDA DE ECOSISTEMAS TERRESTRES" itemValue="15"/>
+                                    <f:selectItem itemLabel="16 PAZ, JUSTICIA E INSTITUCIONES SOLIDAS" itemValue="16"/>
+                                    <f:selectItem itemLabel="17 ALIANZAS PARA LOGRAR OBJETIVOS" itemValue="17"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="FACULTAD"/><p:selectOneMenu value="#{proyectoC.pro.facultad}" required="true" requiredMessage="seleccione un tipo">
                                     <p:ajax event="change"/>

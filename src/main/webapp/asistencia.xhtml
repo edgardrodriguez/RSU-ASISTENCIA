@@ -12,15 +12,20 @@
         <ui:composition template="./plantilla.xhtml">
 
             <ui:define name="content">
+                <p:growl id="msj" showDetail="true" skipDetailIfEqualsSummary="true">
+                    <p:autoUpdate/>
+                </p:growl>
                 <h:head>
-                    <title>Asistencia</title>
-                    <f:event listener="#{asistenciaC.listar()}" type="preRenderView" />
+                    <f:facet name="first">
+                        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                        <title>Asistencia</title>
+                        <f:event listener="#{asistenciaC.listar()}" type="preRenderView" />
+                    </f:facet>
                 </h:head>
                 <h:body>
                     <h:form id="formAsistencia" enctype="multipart/form-data" style="align-content: center;align-items: center;text-align: center">
-                        <h1 style="font-family: sans-serif">ASISTENCIA</h1>
-                        <div class="ui-g-2"></div>
-                        <div class="ui-g-10" style="background-color: white">
+                        <h1 style="font-family: sans-serif">REGISTRO DE ASISTENCIA</h1>
+                        <div align="center" >
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="DIA"/><p:selectOneRadio value="#{asistenciaC.asis.dia}" required="true" requiredMessage="seleccione un dia">
                                     <p:ajax event="change"/>
@@ -36,11 +41,6 @@
                                 <p:inputText value="#{asistenciaC.asis.cantHoras}" required="true" style="width: 250px" requiredMessage="Digite la cantidad de horas">
                                     <p:keyFilter regEx="/[0-9]/"/>
                                 </p:inputText>
-                                <p:outputLabel value="ESTUDIANTE"/>
-                                <p:selectOneMenu  value="#{asistenciaC.asis.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{asistenciaC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
-                                </p:selectOneMenu>
                                 <p:outputLabel value="PROYECTO"/>
                                 <p:selectOneMenu value="#{asistenciaC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem itemLabel="- Seleccione -"/>
@@ -79,9 +79,6 @@
                             </p:column>
                             <p:column headerText="FECHA" sortBy="#{asis.fecha}" filterBy="#{asis.fecha}">
                                 <h:outputText value="#{asis.fecha}" />
-                            </p:column>
-                            <p:column headerText="ESTUDIANTE" sortBy="#{asis.concatEst}" filterBy="#{asis.concatEst}">
-                                <h:outputText value="#{asis.concatEst}" />
                             </p:column>
                             <p:column headerText="DESCRIPCION" sortBy="#{asis.nombrePro}" filterBy="#{asis.nombrePro}">
                                 <h:outputText value="#{asis.nombrePro}" />
@@ -137,11 +134,6 @@
                                     <f:selectItem itemLabel="ACTIVO" itemValue="A"/>
                                     <f:selectItem itemLabel="INACTIVO" itemValue="I"/>
                                 </p:selectOneRadio>
-                                <p:outputLabel value="ESTUDIANTE"/>
-                                <p:selectOneMenu  value="#{asistenciaC.asis.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
-                                    <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{asistenciaC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
-                                </p:selectOneMenu>
                                 <p:outputLabel value="PROYECTO"/>
                                 <p:selectOneMenu value="#{asistenciaC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith">
                                     <f:selectItem itemLabel="- Seleccione -"/>

@@ -32,7 +32,6 @@ public class asistenciaC implements Serializable {
     private AsistenciaModel asis;
     private AsistenciaImpl dao;
     private List<AsistenciaModel> listAsistencia;
-    private List<AsistenciaModel> listEstudiante;
     private List<AsistenciaModel> listProyecto;
 
     public asistenciaC() {
@@ -127,22 +126,6 @@ public class asistenciaC implements Serializable {
 
     public void setListAsistencia(List<AsistenciaModel> listAsistencia) {
         this.listAsistencia = listAsistencia;
-    }
-
-    public List<AsistenciaModel> getListEstudiante() {
-        listEstudiante = new ArrayList<AsistenciaModel>();
-        try {
-            listEstudiante = dao.ListarEstudiantes();
-        } catch (SQLException ex) {
-            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return listEstudiante;
-    }
-
-    public void setListEstudiante(List<AsistenciaModel> listEstudiante) {
-        this.listEstudiante = listEstudiante;
     }
 
     public List<AsistenciaModel> getListProyecto() {

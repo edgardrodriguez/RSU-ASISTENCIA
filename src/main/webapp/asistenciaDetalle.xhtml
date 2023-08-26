@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+
+    <body>
+
+        <ui:composition template="./plantilla.xhtml">
+
+            <ui:define name="content">
+                <p:growl id="msj" showDetail="true" skipDetailIfEqualsSummary="true">
+                    <p:autoUpdate/>
+                </p:growl>
+                <h:head>
+                    <f:facet name="first">
+                        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                        <title>Asistencia</title>
+                    </f:facet>
+                </h:head>
+                <h:body>
+                    <h:form id="formAsistencia" style="align-content: center;align-items: center;text-align: center">
+                        <h1 style="font-family: sans-serif">CONSTANCIA DE ASISTENCIA</h1>
+                        <div align="center" >
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="PROYECTO"/>
+                                <p:selectOneMenu value="#{asistenciaDetalleC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith">
+                                    <p:ajax event="change" update="contAsis" listener="#{asistenciaDetalleC.obtenerCantHoras()}"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{asistenciaDetalleC.listProyecto}" var="apo" itemLabel="#{apo.nomPro}" itemValue="#{apo.idPro}" /> 
+                                </p:selectOneMenu>
+                                <p:outputLabel value="CANTIDAD DE HORAS"/>
+                                <p:inputNumber id="contAsis" value="#{asistenciaDetalleC.asis.cantHorasSum}"/>
+                                <p:commandButton value="LISTAR" actionListener="#{asistenciaDetalleC.reporteAsistencia()}"
+                                                 ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </div>
+                    </h:form>
+                </h:body>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
