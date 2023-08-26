@@ -286,9 +286,9 @@
                         <h:form id="formDialogProyectoArch1" enctype="multipart/form-data">
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="RESOLUCION"  style="font-weight: bold; color: black" />
-                                <p:fileUpload value="#{proyectoC.archivo}" mode="simple" required="true" skinSimple="true" />
+                                <p:fileUpload value="#{proyectoC.archivo2}" mode="simple" required="true" skinSimple="true" />
 
-                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo()}" update="@([id$=formTblProyectos]) formDialogProyectoArch1"/>
+                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo2()}" update="@([id$=formTblProyectos]) formDialogProyectoArch1" oncomplete="PF('dloModProyectoArch1').hide()"/>
                                 <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectoArch1').hide()"/>
                             </p:panelGrid>
                         </h:form>
@@ -297,9 +297,9 @@
                         <h:form id="formDialogProyectoArch2" enctype="multipart/form-data">
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="FORMATO"  style="font-weight: bold; color: black" />
-                                <p:fileUpload value="#{proyectoC.archivo2}" mode="simple" required="true" skinSimple="true" />
+                                <p:fileUpload value="#{proyectoC.archivo}" mode="simple" required="true" skinSimple="true" />
 
-                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo2()}" update="@([id$=formTblProyectos]) formDialogProyectoArch2"/>
+                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificarArchivo()}" update="@([id$=formTblProyectos]) formDialogProyectoArch2" oncomplete="PF('dloModProyectoArch2').hide()"/>
                                 <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectoArch2').hide()"/>
                             </p:panelGrid>
                         </h:form>
@@ -384,7 +384,7 @@
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoC.listEstudiantes}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>
-                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificar()}" update="@([id$=formTblProyectos]) formDialogProyectos"/>
+                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoC.modificar()}" update="@([id$=formTblProyectos]) formDialogProyectos" oncomplete="PF('dloModProyectos').hide()"/>
                                 <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectos').hide()"/>
                             </p:panelGrid>
                         </h:form>

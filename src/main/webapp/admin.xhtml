@@ -31,10 +31,12 @@
                                 <p:inputText id="email" value="#{adminC.adm.email}" maxlength="60" label="Email" validatorMessage="#{docentesC.doc.email} no es valido" required="true" requiredMessage="Rellene el correo">
                                     <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" /> <p:message for="email" />
                                 </p:inputText>
-                                <p:outputLabel value="CONTRASEÑA" />
-                                <p:inputText value="#{adminC.adm.password}" required="true" style="width: 250px" requiredMessage="Rellene la contraseña">
-                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
-                                </p:inputText>
+                                 <p:outputLabel value="CONTRASEÑA"/>
+                                <p:password id="pass" value="#{adminC.adm.password}" maxlength="20" required="true" requiredMessage="Rellene la contraseña" 
+                                            toggleMask="true" redisplay="true"  feedback="true"
+                                            promptLabel="Ingresa tu contraseña" weakLabel="Débil"
+                                            goodLabel="Buena" strongLabel="Fuerte">
+                                </p:password>
                                 <p:commandButton value="Registrar" actionListener="#{adminC.registrar()}"
                                                  update="formAdmin :formTblAdmin:tblAdmin"/>
                             </p:panelGrid>
@@ -82,16 +84,18 @@
                                 <p:inputText id="email" value="#{adminC.adm.email}" maxlength="60" label="Email" validatorMessage="#{docentesC.doc.email} no es valido" required="true" requiredMessage="Rellene el correo">
                                     <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" /> <p:message for="email" />
                                 </p:inputText>
-                                <p:outputLabel value="CONTRASEÑA" />
-                                <p:inputText value="#{adminC.adm.password}" required="true" style="width: 250px" requiredMessage="Rellene la contraseña">
-                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
-                                </p:inputText>
+                                 <p:outputLabel value="CONTRASEÑA"/>
+                                <p:password id="pass" value="#{adminC.adm.password}" maxlength="20" required="true" requiredMessage="Rellene la contraseña" 
+                                            toggleMask="true" redisplay="true"  feedback="true"
+                                            promptLabel="Ingresa tu contraseña" weakLabel="Débil"
+                                            goodLabel="Buena" strongLabel="Fuerte">
+                                </p:password>
                                 <p:outputLabel value="ESTADO"/><p:selectOneRadio value="#{adminC.adm.estado}" required="true" requiredMessage="seleccione un estado">
                                     <p:ajax event="change"/>
                                     <f:selectItem itemLabel="ACTIVO" itemValue="A"/>
                                     <f:selectItem itemLabel="INACTIVO" itemValue="I"/>
                                 </p:selectOneRadio>
-                                <p:commandButton value="MODIFICAR" actionListener="#{adminC.modificar()}" update="@([id$=formTblAdmin]) formDialogAdmin"/>
+                                <p:commandButton value="MODIFICAR" actionListener="#{adminC.modificar()}" update="@([id$=formTblAdmin]) formDialogAdmin" oncomplete="PF('dloModAdmin').hide()"/>
                                 <p:commandButton value="CANCELAR" oncomplete="PF('dloModAdmin').hide()"/>
                             </p:panelGrid>
                         </h:form>

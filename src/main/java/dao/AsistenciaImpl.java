@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.AsistenciaModel;
@@ -167,7 +168,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
         }
     }
 
-    public StreamedContent traerImagen(StreamedContent archivo, int id) {
+    public StreamedContent traerImagen(StreamedContent archivo, int id)throws SQLException, NullPointerException {
 
         String sql = "select evidencia, fecha from ASISTENCIA WHERE id =?";
         try {
@@ -175,7 +176,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
             ps.setInt(1, id);
             ResultSet st = ps.executeQuery();
             while (st.next()) {
-                InputStream stream = st.getBinaryStream("evidencia");
+                InputStream stream = Objects.requireNonNull(st.getBinaryStream("evidencia"), "archivo no debe ser nulo");
                 String fecha = st.getString("fecha");
                 archivo = DefaultStreamedContent.builder()
                         .name(fecha + ".pdf")
@@ -186,7 +187,10 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
                 System.out.println("Estoy en while dao traer imagen, " + archivo);
             }
         } catch (Exception e) {
-            System.out.println("Error en traer imagen: " + e.getMessage());
+            if (e instanceof NullPointerException) {
+               throw e;
+            }
+            System.out.println("Error en traer pdf: " + e.getMessage());
         }
         return archivo;
     }

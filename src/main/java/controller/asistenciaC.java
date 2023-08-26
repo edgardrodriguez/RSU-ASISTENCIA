@@ -81,14 +81,14 @@ public class asistenciaC implements Serializable {
         }
     }
 
-    public void decargar(int id) {
+    public void decargar(int id) throws SQLException {
         try {
             System.out.println("El idemp es esto " + id);
             archivoTraido = dao.traerImagen(archivoTraido, id);
             System.out.println("Mi archivo traido : " + archivoTraido);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Descargado", "Descarga completada"));
-        } catch (Exception e) {
-            System.out.println("Error en Descargar: " + e.getMessage());
+        }catch (NullPointerException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "OK", "NO HAY ARCHIVO"));
         }
     }
 

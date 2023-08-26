@@ -28,13 +28,13 @@
                         <div align="center" >
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="PROYECTO"/>
-                                <p:selectOneMenu value="#{asistenciaDetalleC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu value="#{asistenciaDetalleC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un proyecto">
                                     <p:ajax event="change" update="contAsis" listener="#{asistenciaDetalleC.obtenerCantHoras()}"/>
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{asistenciaDetalleC.listProyecto}" var="apo" itemLabel="#{apo.nomPro}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
                                 <p:outputLabel value="CANTIDAD DE HORAS"/>
-                                <p:inputNumber id="contAsis" value="#{asistenciaDetalleC.asis.cantHorasSum}"/>
+                                <p:inputNumber id="contAsis" value="#{asistenciaDetalleC.asis.cantHorasSum}" disabled="true"/>
                                 <p:commandButton value="LISTAR" actionListener="#{asistenciaDetalleC.reporteAsistencia()}"
                                                  ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
                             </p:panelGrid>

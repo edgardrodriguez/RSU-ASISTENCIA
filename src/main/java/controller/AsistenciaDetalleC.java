@@ -60,7 +60,8 @@ public class AsistenciaDetalleC implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
             }
             if (asis.getProyecto_fk() >= 0) {
-                if (asis.getCantHorasSum() > 60) {
+                if (asis.getCantHorasSum() >= 60) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
                     SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     Date fechaActual = new Date(System.currentTimeMillis());
                     String fechSystem = dateFormat2.format(fechaActual);
@@ -70,7 +71,6 @@ public class AsistenciaDetalleC implements Serializable {
                     Map<String, Object> parameters = new HashMap();
                     parameters.put("Parameter1", sts);
                     report.exportarPDFGlobal(parameters, "asistenciaReporte.jasper", fechSystem + " asistenciaReporte.pdf");
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
                 }else{
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "FALTAN HORAS", null));
                 }

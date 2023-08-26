@@ -28,14 +28,14 @@
                         <div align="center" >
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="ESTUDIANTE"/>
-                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.estudiantes_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un estudiante">
                                     <p:ajax event="change" listener="#{proyectoDetalleC.listproyectos.clear()}" update="proDetalle"/>
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoDetalleC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>
 
                                 <p:outputLabel value="PROYECTOS"/>
-                                <p:selectOneMenu id="proDetalle" value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu id="proDetalle" value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un proyecto">
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoDetalleC.listproyectos}" var="apo" itemLabel="#{apo.nombrePro}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
@@ -48,7 +48,7 @@
                         <h:form style="align-content: center;align-items: center;text-align: center">
                             <p:outputLabel value="POR PROYECTO"/>
                             <p:panelGrid columns="2">
-                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un proyecto">
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoDetalleC.listProyectFilter}" var="apo" itemLabel="#{apo.nombrePro}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
@@ -60,7 +60,7 @@
                         <h:form style="align-content: center;align-items: center;text-align: center">
                             <p:outputLabel value="POR ESTUDIANTE"/>
                             <p:panelGrid columns="2">
-                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.estudiantes_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.estudiantes_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un estudiante">
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoDetalleC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst}" itemValue="#{apo.idEst}" /> 
                                 </p:selectOneMenu>
@@ -85,7 +85,7 @@
                         <h:form style="align-content: center;align-items: center;text-align: center">
                             <p:outputLabel value="POR FECHA"/>
                             <p:panelGrid columns="2">
-                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.fechaNew}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu  value="#{proyectoDetalleC.prod.fechaNew}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione una fecha">
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{proyectoDetalleC.listProyectFecha}" var="apo" itemLabel="#{apo.fechaNew}" itemValue="#{apo.fechaNew}" /> 
                                 </p:selectOneMenu>
@@ -145,7 +145,7 @@
                                     <f:selectItem itemLabel="ACTIVO" itemValue="A"/>
                                     <f:selectItem itemLabel="INACTIVO" itemValue="I"/>
                                 </p:selectOneRadio>
-                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoDetalleC.modificar()}" update="@([id$=formTblProyectoDetalle]) formDialogProyectoDetalle"/>
+                                <p:commandButton value="MODIFICAR" actionListener="#{proyectoDetalleC.modificar()}" update="@([id$=formTblProyectoDetalle]) formDialogProyectoDetalle" oncomplete="PF('dloModProyectoDetalle').hide()"/>
                                 <p:commandButton value="CANCELAR" oncomplete="PF('dloModProyectoDetalle').hide()"/>
                             </p:panelGrid>
                         </h:form>

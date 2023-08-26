@@ -42,12 +42,12 @@
                                     <p:keyFilter regEx="/[0-9]/"/>
                                 </p:inputText>
                                 <p:outputLabel value="PROYECTO"/>
-                                <p:selectOneMenu value="#{asistenciaC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith">
+                                <p:selectOneMenu value="#{asistenciaC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un proyecto">
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{asistenciaC.listProyecto}" var="apo" itemLabel="#{apo.nomPro}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
                                 <p:outputLabel value="EVIDENCIA"  style="font-weight: bold; color: black" />
-                                <p:fileUpload value="#{asistenciaC.archivo}" mode="simple" required="true" skinSimple="true" />
+                                <p:fileUpload value="#{asistenciaC.archivo}" mode="simple" required="true" skinSimple="true" requiredMessage="seleccione un archivo" />
                                 <p:commandButton value="Registrar" actionListener="#{asistenciaC.registrar()}"
                                                  update="formAsistencia :formTblAsistencia:tblAsistencia"/>
                             </p:panelGrid>
@@ -85,7 +85,7 @@
                             </p:column>
                             <p:column>
                                 <p:fragment>
-                                    <p:commandButton value="Descargar" actionListener="#{asistenciaC.decargar(asis.id)}" ajax="false" >
+                                    <p:commandButton value="Descargar" actionListener="#{asistenciaC.decargar(asis.id)}" ajax="true" >
                                         <p:fileDownload value="#{asistenciaC.archivoTraido}"/>
                                     </p:commandButton>
                                 </p:fragment>
@@ -139,7 +139,7 @@
                                     <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItems value="#{asistenciaC.listProyecto}" var="apo" itemLabel="#{apo.nomPro}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
-                                <p:commandButton value="MODIFICAR" actionListener="#{asistenciaC.modificar()}" update="@([id$=formTblAsistencia]) formDialogAsistencia"/>
+                                <p:commandButton value="MODIFICAR" actionListener="#{asistenciaC.modificar()}" update="@([id$=formTblAsistencia]) formDialogAsistencia" oncomplete="PF('dloModAsistencia').hide()"/>
                                 <p:commandButton value="CANCELAR" oncomplete="PF('dloModAsistencia').hide()"/>
                             </p:panelGrid>
                         </h:form>
