@@ -28,7 +28,7 @@ import org.primefaces.model.file.UploadedFile;
 public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
 
     public void registrarProyectos(UploadedFile archivo2, ProyectosModel obj) throws SQLException,PropertyNotFoundException, Exception {
-        String sql = "INSERT INTO PROYECTOS (nombre,descripcion,tipo,estado,revisado,ods,facultad,escuelaProfesional,fecha,link,formato,asesor_fk,estudiantes_fk) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO PROYECTOS (nombre,descripcion,tipo,estado,revisado,ods,facultad,escuelaProfesional,semestre,fecha,link,formato,asesor_fk,estudiantes_fk) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try ( PreparedStatement ps = this.conectar().prepareStatement(sql)) {
             Timestamp fechaActual = new Timestamp(System.currentTimeMillis());
             InputStream inputStream = InputStream.nullInputStream();
@@ -43,11 +43,12 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
             ps.setString(6, obj.getOds());
             ps.setString(7, obj.getFacultad());
             ps.setString(8, obj.getEscuelaProfesional());
-            ps.setTimestamp(9, fechaActual);
-            ps.setString(10, obj.getLink());
-            ps.setBinaryStream(11, archivo2.getInputStream());
-            ps.setString(12, obj.getAsesor_fk());
-            ps.setString(13, obj.getEstudiantes_fk());
+            ps.setString(9, obj.getSemestre());
+            ps.setTimestamp(10, fechaActual);
+            ps.setString(11, obj.getLink());
+            ps.setBinaryStream(12, archivo2.getInputStream());
+            ps.setString(13, obj.getAsesor_fk());
+            ps.setString(14, obj.getEstudiantes_fk());
             ps.execute();
             ps.close();
         } catch (Exception e) {
@@ -61,7 +62,7 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
 
     @Override
     public void modificar(ProyectosModel obj) throws Exception {
-        String sql = "update PROYECTOS set nombre=?,descripcion=?,tipo=?,estado=?,revisado=?,ods=?,facultad=?,escuelaProfesional=?,fecha=?,link=?,asesor_fk=?,estudiantes_fk=? where id=?";
+        String sql = "update PROYECTOS set nombre=?,descripcion=?,tipo=?,estado=?,revisado=?,ods=?,facultad=?,escuelaProfesional=?,semestre=?,fecha=?,link=?,asesor_fk=?,estudiantes_fk=? where id=?";
         try {
             Timestamp fechaActual = new Timestamp(System.currentTimeMillis());
             PreparedStatement ps = this.conectar().prepareStatement(sql);
@@ -73,11 +74,12 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
             ps.setString(6, obj.getOds());
             ps.setString(7, obj.getFacultad());
             ps.setString(8, obj.getEscuelaProfesional());
-            ps.setTimestamp(9, fechaActual);
-            ps.setString(10, obj.getLink());
-            ps.setString(11, obj.getAsesor_fk());
-            ps.setString(12, obj.getEstudiantes_fk());
-            ps.setInt(13, obj.getId());
+            ps.setString(9, obj.getSemestre());
+            ps.setTimestamp(10, fechaActual);
+            ps.setString(11, obj.getLink());
+            ps.setString(12, obj.getAsesor_fk());
+            ps.setString(13, obj.getEstudiantes_fk());
+            ps.setInt(14, obj.getId());
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
@@ -124,14 +126,15 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
                 doc.setOds(rs.getString("ods"));
                 doc.setFacultad(rs.getString("facultad"));
                 doc.setEscuelaProfesional(rs.getString("escuelaProfesional"));
+                doc.setSemestre(rs.getString("semestre")); 
                 doc.setLink(rs.getString("link"));
                 doc.setAsesor_fk(rs.getString("asesor_fk"));
                 doc.setEstudiantes_fk(rs.getString("estudiantes_fk"));
                 doc.setTipoConcat(rs.getString("tipoConcat"));
                 doc.setEstadoConcat(rs.getString("estadoConcat"));
                 doc.setRevisadoConcat(rs.getString("revisadoConcat"));
-                doc.setOds(rs.getString("odsConcat"));
-                doc.setFacultad(rs.getString("facultadConcat"));
+                doc.setOdsConcat(rs.getString("odsConcat"));
+                doc.setFacultadConcat(rs.getString("facultadConcat"));
                 doc.setEscuelProfesionalConcat("escuelProfesionalConcat");
                 doc.setConcatAse(rs.getString("concatAse"));
                 doc.setConcatEst(rs.getString("concatEst"));

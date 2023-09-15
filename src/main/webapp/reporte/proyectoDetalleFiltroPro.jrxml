@@ -183,52 +183,54 @@ where proyectos_fk= $P{Parameter1}]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="31" splitType="Stretch">
+		<band height="87" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="40" height="30" uuid="0b48980e-2d94-4527-996c-1d72682df0a1">
+				<reportElement x="0" y="0" width="40" height="86" uuid="0b48980e-2d94-4527-996c-1d72682df0a1">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f7a9b6d2-81e4-4914-a95d-4c92f4cf9097"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{fila}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="40" y="0" width="210" height="30" uuid="2a30f64d-2f47-4f10-9922-72aadd2e5689">
+				<reportElement x="40" y="0" width="210" height="86" uuid="2a30f64d-2f47-4f10-9922-72aadd2e5689">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4ff22040-1f00-4da9-837d-12578a229d30"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{concatEst}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="250" y="0" width="119" height="30" uuid="da29c1d2-492e-4398-805d-7aba493b5094">
+				<reportElement x="250" y="0" width="119" height="86" uuid="da29c1d2-492e-4398-805d-7aba493b5094">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a36d2afe-5a54-44f9-98e2-6d435fa9fa9e"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{estadoConcat}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="369" y="0" width="185" height="30" uuid="d2130ccc-7fd6-4f0e-826b-4cb8c6cbaf96">
+				<reportElement x="369" y="0" width="185" height="86" uuid="d2130ccc-7fd6-4f0e-826b-4cb8c6cbaf96">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e56d8e06-3f9f-405f-806a-e29012ace4f0"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{proNom}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="0" width="1" height="30" uuid="b707fd49-23a1-4b03-a07a-786d03e94e48"/>
+				<reportElement x="0" y="0" width="1" height="87" uuid="b707fd49-23a1-4b03-a07a-786d03e94e48"/>
 			</line>
 			<line>
-				<reportElement x="0" y="30" width="554" height="1" uuid="9bfe66f3-f3c0-4da9-bd27-cef53330a141"/>
+				<reportElement x="0" y="86" width="555" height="1" uuid="9bfe66f3-f3c0-4da9-bd27-cef53330a141"/>
 			</line>
 			<line>
-				<reportElement x="40" y="0" width="1" height="30" uuid="81b7b61c-8fa9-4c96-aafc-eb777f756215"/>
+				<reportElement x="40" y="0" width="1" height="86" uuid="81b7b61c-8fa9-4c96-aafc-eb777f756215"/>
 			</line>
 			<line>
-				<reportElement x="250" y="0" width="1" height="30" uuid="f952e90d-1b5f-4e82-a40b-c100c86fd769"/>
+				<reportElement x="250" y="0" width="1" height="86" uuid="f952e90d-1b5f-4e82-a40b-c100c86fd769"/>
 			</line>
 			<line>
-				<reportElement x="369" y="0" width="1" height="30" uuid="145f93c3-a7c2-460e-bfcf-25fcda3c0001"/>
+				<reportElement x="369" y="0" width="1" height="86" uuid="145f93c3-a7c2-460e-bfcf-25fcda3c0001"/>
 			</line>
 			<line>
-				<reportElement x="554" y="0" width="1" height="31" uuid="a2554a97-c7cd-4631-8f22-0f9391a18339"/>
+				<reportElement x="554" y="0" width="1" height="87" uuid="a2554a97-c7cd-4631-8f22-0f9391a18339"/>
 			</line>
 		</band>
 	</detail>

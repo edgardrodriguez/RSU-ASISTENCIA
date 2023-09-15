@@ -46,7 +46,6 @@ public class AsistenciaDetalleC implements Serializable {
             if (asis.getProyecto_fk() > 0) {
                 asis.setCantHorasSum(dao.obtenerHoraAsistencia(asis.getProyecto_fk()));
             }
-
         } catch (Exception e) {
             Logger.getGlobal().log(Level.INFO, "Error en obtener asistencia C {0}", e.getMessage());
         }
@@ -71,7 +70,7 @@ public class AsistenciaDetalleC implements Serializable {
                     Map<String, Object> parameters = new HashMap();
                     parameters.put("Parameter1", sts);
                     report.exportarPDFGlobal(parameters, "asistenciaReporte.jasper", fechSystem + " asistenciaReporte.pdf");
-                }else{
+                } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "FALTAN HORAS", null));
                 }
             }

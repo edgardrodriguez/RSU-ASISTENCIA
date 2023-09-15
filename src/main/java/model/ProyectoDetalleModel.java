@@ -18,7 +18,8 @@ public class ProyectoDetalleModel {
     int estudiantes_fk;
     String estado;
     String estadoConcat;
-    
+    String codigoProyecto;
+    String concatCodigo;
     private UploadedFile archivo;
     private StreamedContent archivoTraido;
     

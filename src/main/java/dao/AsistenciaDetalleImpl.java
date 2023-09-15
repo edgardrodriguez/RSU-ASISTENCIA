@@ -39,7 +39,7 @@ public class AsistenciaDetalleImpl extends Conexion  {
         List<AsistenciaDetalleModel> listadoA = null;
         AsistenciaDetalleModel per;
         ResultSet rs;
-        String sql = "select id,nombre from PROYECTOS where estado='A'";
+        String sql = "select id, concat(tipo,\"_\",id,\"_\",semestre)as proyect from PROYECTOS";
         try {
             listadoA = new ArrayList();
             PreparedStatement ps = this.conectar().prepareStatement(sql);
@@ -47,7 +47,7 @@ public class AsistenciaDetalleImpl extends Conexion  {
             while (rs.next()) {
                 per = new AsistenciaDetalleModel();
                 per.setIdPro(rs.getInt("id"));
-                per.setNomPro(rs.getString("nombre"));
+                per.setCodigoProyecto(rs.getString("proyect"));
                 listadoA.add(per);
             }
             rs.close();

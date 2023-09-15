@@ -28,18 +28,16 @@
                         <div align="center" >
                             <p:panelGrid columns="2">
                                 <p:outputLabel value="TITULO" />
-                                <p:inputText value="#{proyectoC.pro.nombre}"  maxlength="60" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
-                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                <p:inputText value="#{proyectoC.pro.nombre}"  maxlength="500" required="true"  style="width: 550px" requiredMessage="Rellene el Nombre">
                                 </p:inputText>
-                                <p:outputLabel value="RESUMEN" />
-                                <p:inputText value="#{proyectoC.pro.descripcion}" required="true" style="width: 250px" requiredMessage="Rellene la descripcion">
-                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                <p:outputLabel value="LUGAR DE EJECUCIÓN" />
+                                <p:inputText value="#{proyectoC.pro.descripcion}" maxlength="500" required="true" style="width: 550px" requiredMessage="Rellene la descripcion">
                                 </p:inputText>
                                 <p:outputLabel value="TIPO"/><p:selectOneRadio value="#{proyectoC.pro.tipo}" required="true" requiredMessage="seleccione un tipo">
                                     <p:ajax event="change"/>
-                                    <f:selectItem itemLabel="PROYECCION SOCIAL" itemValue="P"/>
-                                    <f:selectItem itemLabel="VOLUNTARIADO" itemValue="V"/>
-                                    <f:selectItem itemLabel="EXTENSION UNIVERSITARIA" itemValue="E"/>
+                                    <f:selectItem itemLabel="PROYECCION SOCIAL" itemValue="PS"/>
+                                    <f:selectItem itemLabel="VOLUNTARIADO" itemValue="PV"/>
+                                    <f:selectItem itemLabel="EXTENSION UNIVERSITARIA" itemValue="PE"/>
                                 </p:selectOneRadio>
                                 <p:outputLabel value="OBJETIVOS DE DESARROLLO SOSTENIBLE"/><p:selectOneMenu value="#{proyectoC.pro.ods}" required="true" requiredMessage="seleccione">
                                     <p:ajax event="change"/>
@@ -77,6 +75,15 @@
                                     <f:selectItem itemLabel="ADMINISTRACION" itemValue="3"/>
                                     <f:selectItem itemLabel="CONTABILIDAD" itemValue="4"/>
                                     <f:selectItem itemLabel="ADMINITRACION DE TURISMO Y HOTELERIA" itemValue="5"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="SEMESTRE"/><p:selectOneMenu value="#{proyectoC.pro.semestre}" required="true" requiredMessage="seleccione un semestre">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="2023_1" itemValue="2023_1"/>
+                                    <f:selectItem itemLabel="2023_2" itemValue="2023_2"/>
+                                    <f:selectItem itemLabel="2024_1" itemValue="2024_1"/>
+                                    <f:selectItem itemLabel="2024_2" itemValue="2024_2"/>
+                                    <f:selectItem itemLabel="2025_I" itemValue="2025_I"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="LINK DE DRIVE" />
                                 <p:inputText value="#{proyectoC.pro.link}" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
@@ -136,6 +143,7 @@
                             <p:panelGrid columns="2">
                                 <p:selectOneMenu value="#{proyectoC.pro.reportRevisado}" required="true" requiredMessage="seleccione un revisado">
                                     <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItem itemLabel="SIN REVISAR" itemValue="S"/>
                                     <f:selectItem itemLabel="COORDINADOR" itemValue="C"/>
                                     <f:selectItem itemLabel="DIRECCION RSU" itemValue="D"/>
@@ -150,6 +158,7 @@
                             <p:panelGrid columns="2">
                                 <p:selectOneMenu value="#{proyectoC.pro.ods}" required="true" requiredMessage="seleccione un ods">
                                     <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItem itemLabel="1 FIN DE LA POBREZA" itemValue="1"/>
                                     <f:selectItem itemLabel="2 HAMBRE CERO" itemValue="2"/>
                                     <f:selectItem itemLabel="3 SALUD Y BIENESTAR" itemValue="3"/>
@@ -178,6 +187,7 @@
                             <p:panelGrid columns="2">
                                 <p:selectOneMenu value="#{proyectoC.pro.facultad}" required="true" requiredMessage="seleccione una facultad">
                                     <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItem itemLabel="FACULTAD DE CIENCIAS AGRARIAS" itemValue="1"/>
                                     <f:selectItem itemLabel="FACULTAD DE INGENIERIA" itemValue="2"/>
                                     <f:selectItem itemLabel="FACULTAD DE CIENCIAS EMPRESARIALES" itemValue="3"/>
@@ -192,6 +202,7 @@
                             <p:panelGrid columns="2">
                                 <p:selectOneMenu value="#{proyectoC.pro.escuelaProfesional}" required="true" requiredMessage="seleccione una escuela profesiona">
                                     <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
                                     <f:selectItem itemLabel="INGENIERIA DE SISTEMAS" itemValue="1"/>
                                     <f:selectItem itemLabel="AGRONOMIA" itemValue="2"/>
                                     <f:selectItem itemLabel="ADMINISTRACION" itemValue="3"/>
@@ -255,8 +266,8 @@
                             <p:column headerText="ASESOR" sortBy="#{pro.concatAse}" filterBy="#{pro.concatAse}">
                                 <h:outputText value="#{pro.concatAse}" />
                             </p:column>
-                            <p:column headerText="ESTUDIANTE" sortBy="#{pro.concatEst}" filterBy="#{pro.concatEst}">
-                                <h:outputText value="#{pro.concatEst}" />
+                            <p:column headerText="CODIGO" sortBy="#{pro.tipo.concat('_').concat(pro.id).concat('_').concat(pro.semestre)}" filterBy="#{pro.tipo.concat('_').concat(pro.id).concat('_').concat(pro.semestre)}">
+                                <h:outputText value="#{pro.tipo.concat('_').concat(pro.id).concat('_').concat(pro.semestre)}" />
                             </p:column>
                             <p:column headerText="FORMATO" exportable="false">
                                 <p:fragment>
@@ -308,18 +319,16 @@
                         <h:form id="formDialogProyectos">
                             <p:panelGrid columns="4">
                                 <p:outputLabel value="NOMBRES" />
-                                <p:inputText value="#{proyectoC.pro.nombre}"  maxlength="60" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">
-                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                <p:inputText value="#{proyectoC.pro.nombre}" required="true"  style="width: 550px" requiredMessage="Rellene el Nombre">
                                 </p:inputText>
-                                <p:outputLabel value="DESCRIPCION" />
-                                <p:inputText value="#{proyectoC.pro.descripcion}" required="true" style="width: 250px" requiredMessage="Rellene la descripcion">
-                                    <p:keyFilter regEx="/[A-Z_a-z_ _ñ_á_é_i_ó_ú]/"/>
+                                <p:outputLabel value="LUGAR DE EJECUCIÓN" />
+                                <p:inputText value="#{proyectoC.pro.descripcion}" required="true" style="width: 550px" requiredMessage="Rellene la descripcion">
                                 </p:inputText>
                                 <p:outputLabel value="TIPO"/><p:selectOneRadio value="#{proyectoC.pro.tipo}" required="true" requiredMessage="seleccione un tipo">
                                     <p:ajax event="change"/>
-                                    <f:selectItem itemLabel="PROYECCION SOCIAL" itemValue="P"/>
-                                    <f:selectItem itemLabel="VOLUNTARIADO" itemValue="V"/>
-                                    <f:selectItem itemLabel="EXTENSION UNIVERSITARIA" itemValue="E"/>
+                                    <f:selectItem itemLabel="PROYECCION SOCIAL" itemValue="PS"/>
+                                    <f:selectItem itemLabel="VOLUNTARIADO" itemValue="PV"/>
+                                    <f:selectItem itemLabel="EXTENSION UNIVERSITARIA" itemValue="PE"/>
                                 </p:selectOneRadio>
                                 <p:outputLabel value="ESTADO"/><p:selectOneRadio value="#{proyectoC.pro.estado}" required="true" requiredMessage="seleccione un estado">
                                     <p:ajax event="change"/>
@@ -370,6 +379,15 @@
                                     <f:selectItem itemLabel="ADMINISTRACION" itemValue="3"/>
                                     <f:selectItem itemLabel="CONTABILIDAD" itemValue="4"/>
                                     <f:selectItem itemLabel="ADMINITRACION DE TURISMO Y HOTELERIA" itemValue="5"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="SEMESTRE"/><p:selectOneMenu value="#{proyectoC.pro.semestre}" required="true" requiredMessage="seleccione un semestre">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="2023_1" itemValue="2023_1"/>
+                                    <f:selectItem itemLabel="2023_2" itemValue="2023_2"/>
+                                    <f:selectItem itemLabel="2024_1" itemValue="2024_1"/>
+                                    <f:selectItem itemLabel="2024_2" itemValue="2024_2"/>
+                                    <f:selectItem itemLabel="2025_I" itemValue="2025_I"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="LINK DE DRIVE" />
                                 <p:inputText value="#{proyectoC.pro.link}" required="true"  style="width: 250px" requiredMessage="Rellene el Nombre">

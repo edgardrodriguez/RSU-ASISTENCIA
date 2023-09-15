@@ -24,6 +24,7 @@ public class AsistenciaModel {
     int estudiantes_fk;
     int proyecto_fk;
     String nombrePro;
+    String codigoProyecto;
     
     String diaConcat;
     String fila;
@@ -36,4 +37,5 @@ public class AsistenciaModel {
     
     int idPro;
     String nomPro;
+    String fechaNew;
 }

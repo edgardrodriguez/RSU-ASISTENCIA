@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Data
 public class AsistenciaDetalleModel {
-    
+
     int id;
     String dia;
     int cantHoras;
@@ -23,7 +23,7 @@ public class AsistenciaDetalleModel {
     int estudiantes_fk;
     int proyecto_fk;
     String nombrePro;
-    
+
     String diaConcat;
     String fila;
     String concatEst;
@@ -32,9 +32,9 @@ public class AsistenciaDetalleModel {
     int idEst;
     String nombreEst;
     String apellidoEst;
-    
+
     int idPro;
     String nomPro;
-    
+    String codigoProyecto;
     int cantHorasSum;
 }

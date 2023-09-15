@@ -96,7 +96,7 @@
 	<detail>
 		<band height="125" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="278" height="30" uuid="30c79334-6c6b-4a20-b0b8-9a338f19dd8f">
+				<reportElement x="0" y="0" width="278" height="110" uuid="30c79334-6c6b-4a20-b0b8-9a338f19dd8f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3a4d6715-dbde-4bba-9bf2-356c6252eb6f"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -105,7 +105,7 @@
 				<textFieldExpression><![CDATA[$F{sumatoria}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="278" y="0" width="277" height="30" uuid="bd5d1c69-a908-42bf-9bb0-47a36acd96cd">
+				<reportElement x="278" y="0" width="277" height="110" uuid="bd5d1c69-a908-42bf-9bb0-47a36acd96cd">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="625d92c7-1657-4dd2-bd1b-af769d72b1df"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -114,19 +114,19 @@
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="1" width="1" height="29" uuid="ade4e782-12c6-449b-8394-26cb3496e8be"/>
+				<reportElement x="0" y="1" width="1" height="109" uuid="ade4e782-12c6-449b-8394-26cb3496e8be"/>
 			</line>
 			<line>
-				<reportElement x="278" y="1" width="1" height="29" uuid="8995f10a-26ab-42f7-9210-2c6b33b17b26"/>
+				<reportElement x="278" y="1" width="1" height="109" uuid="8995f10a-26ab-42f7-9210-2c6b33b17b26"/>
 			</line>
 			<line>
-				<reportElement x="554" y="1" width="1" height="29" uuid="3c79057f-cb08-400f-8175-b5c5a98a8252"/>
+				<reportElement x="554" y="1" width="1" height="109" uuid="3c79057f-cb08-400f-8175-b5c5a98a8252"/>
 			</line>
 			<line>
 				<reportElement x="0" y="0" width="555" height="1" uuid="f463cfd2-094f-45fb-9823-c2e95acd0666"/>
 			</line>
 			<line>
-				<reportElement x="1" y="29" width="554" height="1" uuid="98d7282b-1d66-4df8-a970-9a65ae60b530"/>
+				<reportElement x="1" y="110" width="554" height="1" uuid="98d7282b-1d66-4df8-a970-9a65ae60b530"/>
 			</line>
 		</band>
 	</detail>

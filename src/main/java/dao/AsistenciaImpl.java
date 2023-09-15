@@ -135,7 +135,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
         List<AsistenciaModel> listadoA = null;
         AsistenciaModel per;
         ResultSet rs;
-        String sql = "select id,nombre from PROYECTOS where estado='A'";
+        String sql = "select id, concat(tipo,\"_\",id,\"_\",semestre)as proyect from PROYECTOS";
         try {
             listadoA = new ArrayList();
             PreparedStatement ps = this.conectar().prepareStatement(sql);
@@ -143,7 +143,7 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
             while (rs.next()) {
                 per = new AsistenciaModel();
                 per.setIdPro(rs.getInt("id"));
-                per.setNomPro(rs.getString("nombre"));
+                per.setCodigoProyecto(rs.getString("proyect"));
                 listadoA.add(per);
             }
             rs.close();
@@ -198,5 +198,26 @@ public class AsistenciaImpl extends Conexion implements ICRUD<AsistenciaModel> {
     @Override
     public void registrar(AsistenciaModel obj) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    public List<AsistenciaModel> listarFecha() throws Exception {
+        List<AsistenciaModel> lisFech = null;
+        AsistenciaModel fech;
+        ResultSet rs;
+        String sql = " SELECT distinct DATE_FORMAT(fecha,'%Y-%m-%d') AS fechaNew from V_ASISTENCIA";
+        try {
+            lisFech = new ArrayList();
+            PreparedStatement ps = this.getCn().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                fech = new AsistenciaModel();
+                fech.setFechaNew(rs.getString("fechaNew"));
+                lisFech.add(fech);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.SEVERE, "Error al listar fecha {0} ", e.getMessage());
+        }
+        return lisFech;
     }
 }

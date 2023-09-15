@@ -9,6 +9,11 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <error-page>
+        <error-code>404</error-code>
+        <!--dentro del web-content de tu aplicacion -->
+        <location>/faces/error404.xhtml</location> 
+    </error-page>
     <!--Creamos los Filters-->
     <filter>
         <filter-name> 
@@ -38,7 +43,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/plantilla.xhtml</welcome-file>
+        <welcome-file>faces/login.xhtml</welcome-file>
     </welcome-file-list>
     <mime-mapping>
         <extension>ttf</extension>

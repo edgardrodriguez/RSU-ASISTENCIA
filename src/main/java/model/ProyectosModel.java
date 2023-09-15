@@ -33,6 +33,7 @@ public class ProyectosModel {
     String concatAse;
     String concatEst;
     String link;
+    String semestre;
     Timestamp fecha;
     private UploadedFile archivo;
     private StreamedContent archivoTraido;

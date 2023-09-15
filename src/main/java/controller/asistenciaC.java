@@ -9,8 +9,12 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
@@ -18,6 +22,7 @@ import javax.faces.context.FacesContext;
 import model.AsistenciaModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
+import service.Reporte;
 
 /**
  *
@@ -33,7 +38,7 @@ public class asistenciaC implements Serializable {
     private AsistenciaImpl dao;
     private List<AsistenciaModel> listAsistencia;
     private List<AsistenciaModel> listProyecto;
-
+    private List<AsistenciaModel> listProyectFecha;
     public asistenciaC() {
         asis = new AsistenciaModel();
         dao = new AsistenciaImpl();
@@ -41,7 +46,7 @@ public class asistenciaC implements Serializable {
 
     public void registrar() throws Exception {
         try {
-            dao.registrarAsistencia(archivo,asis);
+            dao.registrarAsistencia(archivo, asis);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Registrado con éxito"));
             limpiar();
             listar();
@@ -87,8 +92,70 @@ public class asistenciaC implements Serializable {
             archivoTraido = dao.traerImagen(archivoTraido, id);
             System.out.println("Mi archivo traido : " + archivoTraido);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Descargado", "Descarga completada"));
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "OK", "NO HAY ARCHIVO"));
+        }
+    }
+
+    public void reporteAsistencia() throws Exception {
+        Reporte report = new Reporte();
+        try {
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date fechaActual = new Date(System.currentTimeMillis());
+            String fechSystem = dateFormat2.format(fechaActual);
+            Map<String, Object> parameters = new HashMap();
+            report.exportarPDFGlobal(parameters, "RegistroAsistencia.jasper", fechSystem + " RegistroAsistencia.pdf");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
+        }
+    }
+
+    public void reporteEstado() throws Exception {
+
+        try {
+            if (asis.getEstado()== null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
+            }
+            if (asis.getEstado() != null) {
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date fechaActual = new Date(System.currentTimeMillis());
+                String fechSystem = dateFormat2.format(fechaActual);
+                String sts = asis.getEstado();
+                Reporte report = new Reporte();
+
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("Parameter1", sts);
+                report.exportarPDFGlobal(parameters, "RegistroAsistenciaEstado.jasper", fechSystem + " RegistroAsistenciaEstado.pdf");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
+        }
+    }
+    public void reporteFecha() throws Exception {
+
+        try {
+            if (asis.getFechaNew() == null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
+            }
+            if (asis.getFechaNew() != null) {
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date fechaActual = new Date(System.currentTimeMillis());
+                String fechSystem = dateFormat2.format(fechaActual);
+                String sts = asis.getFechaNew();
+                Reporte report = new Reporte();
+
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("Parameter1", sts);
+                report.exportarPDFGlobal(parameters, "RegistroAsistenciaFecha.jasper", fechSystem + " RegistroAsistenciaFecha.pdf");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
         }
     }
 
@@ -158,6 +225,22 @@ public class asistenciaC implements Serializable {
 
     public void setArchivoTraido(StreamedContent archivoTraido) {
         this.archivoTraido = archivoTraido;
+    }
+
+    public List<AsistenciaModel> getListProyectFecha() {
+        listProyectFecha = new ArrayList<AsistenciaModel>();
+        try {
+            listProyectFecha = dao.listarFecha();
+        } catch (SQLException ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listProyectFecha;
+    }
+
+    public void setListProyectFecha(List<AsistenciaModel> listProyectFecha) {
+        this.listProyectFecha = listProyectFecha;
     }
 
 }

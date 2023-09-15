@@ -21,9 +21,9 @@ public class DashboardImpl extends Conexion {
         this.conectar();
         List<Number> lista = new ArrayList();
         try {
-            String sql = "SELECT COUNT(CASE tipo WHEN 'P' THEN 'P' END) AS PROYECCION_SOCIAL,\n"
-                    + " COUNT(CASE tipo WHEN 'V' THEN 'V' END) AS VOLUNTARIADO,\n"
-                    + " COUNT(CASE tipo WHEN 'E' THEN 'E' END) AS EXTENSION_UNIVERSITARIA FROM PROYECTOS";
+            String sql = "SELECT COUNT(CASE tipo WHEN 'PS' THEN 'PS' END) AS PROYECCION_SOCIAL,\n"
+                    + " COUNT(CASE tipo WHEN 'PV' THEN 'PV' END) AS VOLUNTARIADO,\n"
+                    + " COUNT(CASE tipo WHEN 'PE' THEN 'PE' END) AS EXTENSION_UNIVERSITARIA FROM PROYECTOS";
             Statement st = this.conectar().createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {

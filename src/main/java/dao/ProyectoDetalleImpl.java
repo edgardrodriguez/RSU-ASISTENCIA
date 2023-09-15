@@ -98,9 +98,10 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
                 doc.setProyectos_fk(rs.getInt("proyectos_fk"));
                 doc.setEstudiantes_fk(rs.getInt("estudiantes_fk"));
                 doc.setEstado(rs.getString("estado"));
+                doc.setConcatCodigo(rs.getString("concatCodigo"));
+                doc.setNombrePro(rs.getString("proNom"));
                 doc.setConcatEst(rs.getString("concatEst"));
                 doc.setEstadoConcat(rs.getString("estadoConcat"));
-                doc.setProNom(rs.getString("proNom"));
                 listado.add(doc);
             }
             rs.close();
@@ -162,7 +163,7 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
         List<ProyectoDetalleModel> listadoA = null;
         ProyectoDetalleModel per;
         ResultSet rs;
-        String sql = "select id, nombre from PROYECTOS where id not in (select distinct proyectos_fk from PROYECTO_DETALLE where estudiantes_fk =?) and estado='A'";
+        String sql = "select id,concat(tipo,\"_\",id,\"_\",semestre)as proyect from PROYECTOS where id not in (select distinct proyectos_fk from PROYECTO_DETALLE where estudiantes_fk =?);";
         try {
             listadoA = new ArrayList();
             PreparedStatement ps = this.conectar().prepareStatement(sql);
@@ -171,7 +172,7 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
             while (rs.next()) {
                 per = new ProyectoDetalleModel();
                 per.setIdPro(rs.getInt("id"));
-                per.setNombrePro(rs.getString("nombre"));
+                per.setCodigoProyecto(rs.getString("proyect"));
                 listadoA.add(per);
             }
             rs.close();

@@ -37,7 +37,7 @@
                                 <p:outputLabel value="PROYECTOS"/>
                                 <p:selectOneMenu id="proDetalle" value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un proyecto">
                                     <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{proyectoDetalleC.listproyectos}" var="apo" itemLabel="#{apo.nombrePro}" itemValue="#{apo.idPro}" /> 
+                                    <f:selectItems value="#{proyectoDetalleC.listproyectos}" var="apo" itemLabel="#{apo.codigoProyecto}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
                                 <p:commandButton value="Registrar" actionListener="#{proyectoDetalleC.registrar()}"
                                                  update="formProyectoDetalle :formTblProyectoDetalle:tblProyectoDetalle"/>
@@ -119,14 +119,17 @@
                             <p:column headerText="FILA" sortBy="#{prod.fila}" filterBy="#{prod.fila}">
                                 <h:outputText value="#{prod.fila}" />
                             </p:column>
-                            <p:column headerText="estado" sortBy="#{prod.estadoConcat}" filterBy="#{prod.estadoConcat}">
+                            <p:column headerText="PROYECTO" sortBy="#{prod.nombrePro}" filterBy="#{prod.nombrePro}">
+                                <h:outputText value="#{prod.nombrePro}" />
+                            </p:column>
+                            <p:column headerText="CODIGO" sortBy="#{prod.concatCodigo}" filterBy="#{prod.concatCodigo}">
+                                <h:outputText value="#{prod.concatCodigo}" />
+                            </p:column>
+                            <p:column headerText="ESTADO" sortBy="#{prod.estadoConcat}" filterBy="#{prod.estadoConcat}">
                                 <h:outputText value="#{prod.estadoConcat}" />
                             </p:column>
                             <p:column headerText="ESTUDIANTE" sortBy="#{prod.concatEst}" filterBy="#{prod.concatEst}">
                                 <h:outputText value="#{prod.concatEst}" />
-                            </p:column>
-                            <p:column headerText="PROYECTO" sortBy="#{prod.proNom}" filterBy="#{prod.proNom}">
-                                <h:outputText value="#{prod.proNom}" />
                             </p:column>
                         </p:dataTable>
                         <p:contextMenu for="tblProyectoDetalle">

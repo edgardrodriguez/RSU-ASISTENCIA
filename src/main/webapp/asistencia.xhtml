@@ -44,7 +44,7 @@
                                 <p:outputLabel value="PROYECTO"/>
                                 <p:selectOneMenu value="#{asistenciaC.asis.proyecto_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un proyecto">
                                     <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{asistenciaC.listProyecto}" var="apo" itemLabel="#{apo.nomPro}" itemValue="#{apo.idPro}" /> 
+                                    <f:selectItems value="#{asistenciaC.listProyecto}" var="apo" itemLabel="#{apo.codigoProyecto}" itemValue="#{apo.idPro}" /> 
                                 </p:selectOneMenu>
                                 <p:outputLabel value="EVIDENCIA"  style="font-weight: bold; color: black" />
                                 <p:fileUpload value="#{asistenciaC.archivo}" mode="simple" required="true" skinSimple="true" requiredMessage="seleccione un archivo" />
@@ -53,6 +53,40 @@
                             </p:panelGrid>
                         </div>
                     </h:form>
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center">
+                            <p:outputLabel value="LISTAR TOTAL"/>
+                            <p:panelGrid columns="2">
+                                <p:commandButton value="LISTAR" actionListener="#{asistenciaC.reporteAsistencia()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>                    
+                    </div>
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="REVISADO"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu value="#{asistenciaC.asis.estado}" required="true" requiredMessage="seleccione un revisado">
+                                    <p:ajax event="change"/>
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItem itemLabel="ACTIVO" itemValue="A"/>
+                                    <f:selectItem itemLabel="INACTIVO" itemValue="I"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{asistenciaC.reporteEstado()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-4">
+                        <h:form style="align-content: center;align-items: center;text-align: center">
+                            <p:outputLabel value="POR FECHA"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu  value="#{asistenciaC.asis.fechaNew}" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{asistenciaC.listProyectFecha}" var="apo" itemLabel="#{apo.fechaNew}" itemValue="#{apo.fechaNew}" /> 
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{asistenciaC.reporteFecha()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
                     <h:form id="formTblAsistencia" style="text-align: center;" enctype="multipart/form-data">
                         <p:dataTable id="tblAsistencia"
                                      var="asis"
@@ -83,9 +117,9 @@
                             <p:column headerText="DESCRIPCION" sortBy="#{asis.nombrePro}" filterBy="#{asis.nombrePro}">
                                 <h:outputText value="#{asis.nombrePro}" />
                             </p:column>
-                            <p:column>
+                            <p:column headerText="EVIDENCIA" exportable="false">
                                 <p:fragment>
-                                    <p:commandButton value="Descargar" actionListener="#{asistenciaC.decargar(asis.id)}" ajax="true" >
+                                    <p:commandButton value="Descargar" styleClass="ui-button-success" actionListener="#{asistenciaC.decargar(asis.id)}" ajax="true" >
                                         <p:fileDownload value="#{asistenciaC.archivoTraido}"/>
                                     </p:commandButton>
                                 </p:fragment>
