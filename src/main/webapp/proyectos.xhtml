@@ -19,8 +19,10 @@
                     <f:facet name="first">
                         <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
                         <title>proyectos</title>
-                        <f:event listener="#{proyectoC.listar()}" type="preRenderView" />
                     </f:facet>
+                    <f:event listener="#{usuarioC.seguridadSesion()}" type="preRenderView"></f:event>
+                    <f:event listener="#{usuarioC.seguradUsuarioAdmin()}" type="preRenderView"></f:event>
+                    <f:event listener="#{proyectoC.listar()}" type="preRenderView" />
                 </h:head>
                 <h:body>
                     <h:form id="formProyectos" enctype="multipart/form-data" style="align-content: center;align-items: center;text-align: center">
@@ -100,7 +102,7 @@
                                 </p:selectOneMenu>
                                 <p:outputLabel value="FORMATO DEL PROYECTO"  style="font-weight: bold; color: black" />
                                 <p:fileUpload value="#{proyectoC.archivo2}" mode="simple" required="true" skinSimple="true" requiredMessage="seleccione un archivo"/>
-           
+
                                 <p:commandButton value="Registrar" actionListener="#{proyectoC.registrar()}"
                                                  update="formProyectos :formTblProyectos:tblProyectos"/>
                             </p:panelGrid>
@@ -232,6 +234,30 @@
                                 <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteProyecto()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
                             </p:panelGrid>
                         </h:form>                    
+                    </div>
+                    <div class="ui-g-6">
+                        <h:form>
+                            <p:outputLabel value="ASESOR"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu  value="#{proyectoC.pro.asesorDist}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un asesor">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{proyectoC.listProyectDistAsesor}" var="apo" itemLabel="#{apo.asesorConcatDist}" itemValue="#{apo.asesorDist}" /> 
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteAsesor()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid> 
+                        </h:form>
+                    </div>
+                    <div class="ui-g-6">
+                        <h:form>
+                            <p:outputLabel value="ESTUDIANTE"/>
+                            <p:panelGrid columns="2">
+                                <p:selectOneMenu  value="#{proyectoC.pro.estudiantesDist}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un Estudiante">
+                                    <f:selectItem itemLabel="- Seleccione -"/>
+                                    <f:selectItems value="#{proyectoC.listProyectDisEstudiante}" var="apo" itemLabel="#{apo.estudiantesConcatDist}" itemValue="#{apo.estudiantesDist}" /> 
+                                </p:selectOneMenu>
+                                <p:commandButton value="LISTAR" actionListener="#{proyectoC.reporteEstudiante()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
+                            </p:panelGrid> 
+                        </h:form>
                     </div>
                     <h:form id="formTblProyectos" style="text-align: center;">
                         <p:dataTable id="tblProyectos"

@@ -62,4 +62,12 @@ public class ProyectosModel {
     String reportRevisado;
 
     String fechaNew;
+    
+    
+    
+    String estudiantesDist;
+    String estudiantesConcatDist;
+    
+    String asesorDist;
+    String asesorConcatDist;
 }

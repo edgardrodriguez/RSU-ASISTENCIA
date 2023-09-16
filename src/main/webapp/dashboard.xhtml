@@ -12,40 +12,46 @@
         <ui:composition template="./plantilla.xhtml">
 
             <ui:define name="content">
-                <h2 style="font-family: sans-serif; text-align: center">GRAFICOS DE PROYECTOS</h2>
-                <h:form style="height:600px">
-                    <div class="ui-g-6">
+                <h:head>
+                    <h2 style="font-family: sans-serif; text-align: center">GRAFICOS DE PROYECTOS</h2>
+                    <f:event listener="#{usuarioC.seguridadSesion()}" type="preRenderView"></f:event>
+                    <f:event listener="#{usuarioC.seguradUsuarioAdmin()}" type="preRenderView"></f:event>
+                </h:head>
+                <h:body>
+                    <h:form style="height:600px">
+                        <div class="ui-g-6">
 
-                        <p:panel style="width:500px;height: 500px">
-                            <div class="grid">
-                                <div class="col-12 lg:col-6 xl:col-4">
-                                    <div class="card">
-                                        <div class="box" style="background-color: #FEEDAF">
-                                            <p:pieChart model="#{dashboardC.dashboardProyecto}"/>
-                                            <p/>
-                                            <p  style="font-size: 150%;color:background; font-weight:bold; "><center>TIPO DE PROYECTOS </center></p>
+                            <p:panel style="width:500px;height: 500px">
+                                <div class="grid">
+                                    <div class="col-12 lg:col-6 xl:col-4">
+                                        <div class="card">
+                                            <div class="box" style="background-color: #FEEDAF">
+                                                <p:pieChart model="#{dashboardC.dashboardProyecto}"/>
+                                                <p/>
+                                                <p  style="font-size: 150%;color:background; font-weight:bold; "><center>TIPO DE PROYECTOS </center></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </p:panel>
-                    </div>
-                    <div class="ui-g-6">
-                        <p:panel style="width:500px;height: 500px">
-                            <div class="grid">
-                                <div class="col-12 lg:col-6 xl:col-4">
-                                    <div class="card">
-                                        <div class="box" style="background-color: #FEEDAF">
-                                            <p:pieChart model="#{dashboardC.dashboardProyectoEstado}"/>
-                                            <p/>
-                                            <p  style="font-size: 150%;color:background; font-weight:bold; "><center>ESTADO DE PROYECTOS </center></p>
+                            </p:panel>
+                        </div>
+                        <div class="ui-g-6">
+                            <p:panel style="width:500px;height: 500px">
+                                <div class="grid">
+                                    <div class="col-12 lg:col-6 xl:col-4">
+                                        <div class="card">
+                                            <div class="box" style="background-color: #FEEDAF">
+                                                <p:pieChart model="#{dashboardC.dashboardProyectoEstado}"/>
+                                                <p/>
+                                                <p  style="font-size: 150%;color:background; font-weight:bold; "><center>ESTADO DE PROYECTOS </center></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </p:panel>
-                    </div>
-                </h:form>
+                            </p:panel>
+                        </div>
+                    </h:form>
+                </h:body>
             </ui:define>
 
         </ui:composition>

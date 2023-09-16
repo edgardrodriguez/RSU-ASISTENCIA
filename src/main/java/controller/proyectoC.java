@@ -44,6 +44,8 @@ public class proyectoC implements Serializable {
     private List<ProyectosModel> listEstudiantes;
     private List<ProyectosModel> listAsesor;
     private List<ProyectosModel> listProyectFecha;
+    private List<ProyectosModel> listProyectDisEstudiante;
+    private List<ProyectosModel> listProyectDistAsesor;
     private boolean enabled = true;
 
     public proyectoC() {
@@ -51,7 +53,7 @@ public class proyectoC implements Serializable {
         dao = new ProyectosImpl();
     }
 
-    public void registrar() throws Exception,SQLException {
+    public void registrar() throws Exception, SQLException {
         try {
             dao.registrarProyectos(archivo2, pro);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Registrado con éxito"));
@@ -59,10 +61,10 @@ public class proyectoC implements Serializable {
             listar();
         } catch (PropertyNotFoundException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "OK", "NO HAY ARCHIVO"));
-            
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "OK", "NO HAY ARCHIVO"));
-            
+
         }
     }
 
@@ -326,6 +328,54 @@ public class proyectoC implements Serializable {
         }
     }
 
+    public void reporteEstudiante() throws Exception {
+
+        try {
+            if (pro.getEstudiantesDist()== null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
+            }
+            if (pro.getEstudiantesDist() != null) {
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date fechaActual = new Date(System.currentTimeMillis());
+                String fechSystem = dateFormat2.format(fechaActual);
+                String sts = pro.getEstudiantesDist();
+                Reporte report = new Reporte();
+
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("Parametro1", sts);
+                report.exportarPDFGlobal(parameters, "proyectosEstudiante.jasper", fechSystem + " proyectosEstudiante.pdf");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
+        }
+    }
+
+    public void reporteAsesor() throws Exception {
+
+        try {
+            if (pro.getAsesorDist()== null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Falta rellenar"));
+            }
+            if (pro.getAsesorDist() != null) {
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date fechaActual = new Date(System.currentTimeMillis());
+                String fechSystem = dateFormat2.format(fechaActual);
+                String sts = pro.getAsesorDist();
+                Reporte report = new Reporte();
+
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("Parametro1", sts);
+                report.exportarPDFGlobal(parameters, "proyectosAsesor.jasper", fechSystem + " proyectosAsesor.pdf");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "PDF GENERADO", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR AL GENERAR PDF", null));
+            throw e;
+        }
+    }
+
     public ProyectosModel getPro() {
         return pro;
     }
@@ -436,6 +486,38 @@ public class proyectoC implements Serializable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public List<ProyectosModel> getListProyectDisEstudiante() {
+        listProyectDisEstudiante = new ArrayList<ProyectosModel>();
+        try {
+            listProyectDisEstudiante = dao.ListEstudiantesDist();
+        } catch (SQLException ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listProyectDisEstudiante;
+    }
+
+    public void setListProyectDisEstudiante(List<ProyectosModel> listProyectDisEstudiante) {
+        this.listProyectDisEstudiante = listProyectDisEstudiante;
+    }
+
+    public List<ProyectosModel> getListProyectDistAsesor() {
+        listProyectDistAsesor = new ArrayList<ProyectosModel>();
+        try {
+            listProyectDistAsesor = dao.ListAsesorDist();
+        } catch (SQLException ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(estudiantesC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listProyectDistAsesor;
+    }
+
+    public void setListProyectDistAsesor(List<ProyectosModel> listProyectDistAsesor) {
+        this.listProyectDistAsesor = listProyectDistAsesor;
     }
 
 }

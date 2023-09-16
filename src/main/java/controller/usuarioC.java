@@ -62,6 +62,7 @@ public class usuarioC implements Serializable {
             if (dao.logueo == false) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "INTENTO FALLIDO", "Usuario/Contraseña incorrectas"));
             } else if (dao.logueo == true) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡BIENVENIDO!", "Ingreso Exitoso"));
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("objetoUsuario", usuarrio);
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/RSU-ASISTENCIA/faces/menuContenido.xhtml");
             }
@@ -100,6 +101,35 @@ public class usuarioC implements Serializable {
     public static UsuarioModel obtenerObjetoSesion() {
         return (UsuarioModel) FacesContext.getCurrentInstance().getExternalContext().
                 getSessionMap().get("objetoUsuario");
+    }
+    // Si la sesión no está iniciada no permitirá entrar a otra vista de la aplicación
+
+    public void seguridadSesion() throws IOException {
+        if (obtenerObjetoSesion() == null) {
+            limpiar();
+            FacesContext.getCurrentInstance().getExternalContext().
+                    redirect("/RSU-ASISTENCIA/");
+        }
+    }
+
+    //si inicio sesion como usuario administrador no permitira que ingrese a otra vista que no sea del administrador
+    public void seguradUsuarioAdmin() throws IOException {
+        UsuarioModel us = obtenerObjetoSesion();
+        if (us != null && us.getRol_fk() == 2) {
+            FacesContext.getCurrentInstance().getExternalContext().
+                    redirect("/RSU-ASISTENCIA/faces/menuContenido.xhtml");
+        }
+    }
+
+    // Si la sesión está activa se redirecciona a la vista principal
+    public void seguridadLogin() throws IOException {
+        UsuarioModel us = obtenerObjetoSesion();
+        if (us != null) {
+            if (us.getRol_fk() == 2) {
+                FacesContext.getCurrentInstance().getExternalContext().
+                        redirect("/RSU-ASISTENCIA/faces/menuContenido.xhtml");
+            }
+        }
     }
 
     public UsuarioImpl getDao() {

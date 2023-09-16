@@ -19,8 +19,10 @@
                     <f:facet name="first">
                         <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
                         <title>Asistencia</title>
-                        <f:event listener="#{asistenciaC.listar()}" type="preRenderView" />
                     </f:facet>
+                    <f:event listener="#{usuarioC.seguridadSesion()}" type="preRenderView"></f:event>
+                    <f:event listener="#{usuarioC.seguradUsuarioAdmin()}" type="preRenderView"></f:event>
+                    <f:event listener="#{asistenciaC.listar()}" type="preRenderView" />
                 </h:head>
                 <h:body>
                     <h:form id="formAsistencia" enctype="multipart/form-data" style="align-content: center;align-items: center;text-align: center">

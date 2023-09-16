@@ -308,4 +308,48 @@ public class ProyectosImpl extends Conexion implements ICRUD<ProyectosModel> {
         }
         return lisFech;
     }
+    public List<ProyectosModel> ListEstudiantesDist() throws SQLException {
+        List<ProyectosModel> listadoA = null;
+        ProyectosModel per;
+        ResultSet rs;
+        String sql = "select distinct estudiantes_fk, concatEst from V_PROYECTOS";
+        try {
+            listadoA = new ArrayList();
+            PreparedStatement ps = this.conectar().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                per = new ProyectosModel();
+                per.setEstudiantesDist(rs.getString("estudiantes_fk"));
+                per.setEstudiantesConcatDist(rs.getString("concatEst"));
+                listadoA.add(per);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.WARNING, "Error aL listar ESTUDIANTES Dao {0} ", e.getMessage());
+        }
+        return listadoA;
+    }
+    public List<ProyectosModel> ListAsesorDist() throws SQLException {
+        List<ProyectosModel> listadoA = null;
+        ProyectosModel per;
+        ResultSet rs;
+        String sql = "select distinct asesor_fk, concatAse from V_PROYECTOS";
+        try {
+            listadoA = new ArrayList();
+            PreparedStatement ps = this.conectar().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                per = new ProyectosModel();
+                per.setAsesorDist(rs.getString("asesor_fk"));
+                per.setAsesorConcatDist(rs.getString("concatAse"));
+                listadoA.add(per);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            Logger.getGlobal().log(Level.WARNING, "Error aL listar ESTUDIANTES Dao {0} ", e.getMessage());
+        }
+        return listadoA;
+    }
 }
