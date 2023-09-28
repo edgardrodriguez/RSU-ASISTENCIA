@@ -17,8 +17,8 @@ CREATE TABLE ADMIN (
 -- Table: ASESOR
 CREATE TABLE ASESOR (
     id int  NOT NULL AUTO_INCREMENT COMMENT 'identificador de la tabla asesor.',
-    nombre varchar(30)  NOT NULL COMMENT 'nombres de los docentes',
-    apellidos varchar(30)  NOT NULL COMMENT 'apellidos de los docentes',
+    nombre varchar(40)  NOT NULL COMMENT 'nombres de los docentes',
+    apellidos varchar(40)  NOT NULL COMMENT 'apellidos de los docentes',
     password varchar(20)  NOT NULL COMMENT 'contraseña del docente',
     email varchar(60)  NOT NULL COMMENT 'correo del docente',
     DNI char(8)  NOT NULL COMMENT 'DNI del docente',
@@ -36,7 +36,6 @@ CREATE TABLE ASISTENCIA (
     fecha timestamp  NOT NULL COMMENT 'fecha de la realización de la asistencia.',
     estado char(1)  NOT NULL COMMENT 'estado de la asistencia (activo=A, inactivo=I)',
     evidencia mediumblob  NULL,
-    estudiantes_fk int  NOT NULL COMMENT 'llave foránea de la tabla estudiantes.',
     proyecto_fk int  NOT NULL COMMENT 'llave foránea de la tabla proyectos.',
     CONSTRAINT ASISTENCIA_pk PRIMARY KEY (id)
 ) COMMENT 'tabla asistencia de estudiantes';
@@ -53,8 +52,8 @@ CREATE TABLE CARRERAS (
 -- Table: ESTUDIANTES
 CREATE TABLE ESTUDIANTES (
     id int  NOT NULL AUTO_INCREMENT COMMENT 'id de la tabla estudiantes',
-    nombre varchar(30)  NOT NULL COMMENT 'nombre de los estudiantes',
-    apellidos varchar(30)  NOT NULL COMMENT 'apellidos de los estudiantes',
+    nombre varchar(40)  NOT NULL COMMENT 'nombre de los estudiantes',
+    apellidos varchar(40)  NOT NULL COMMENT 'apellidos de los estudiantes',
     password varchar(20)  NOT NULL COMMENT 'contraseña de los estudiantes',
     email varchar(60)  NOT NULL COMMENT 'correo institucional del estudiante',
     DNI char(8)  NOT NULL COMMENT 'dni del estudiante',
@@ -69,14 +68,15 @@ CREATE TABLE ESTUDIANTES (
 -- Table: PROYECTOS
 CREATE TABLE PROYECTOS (
     id int  NOT NULL AUTO_INCREMENT COMMENT 'id de la tabla proyectos',
-    nombre varchar(60)  NOT NULL COMMENT 'nombre de la tabla proyectos',
-    descripcion varchar(250)  NOT NULL COMMENT 'descripción de la tabla proyectos.',
-    tipo char(1)  NOT NULL COMMENT 'tipo de proyecto de resposabilidad social (proyeccion social = P, voluntariado = V, extension universitaria = E)',
+    nombre varchar(500)  NOT NULL COMMENT 'nombre de la tabla proyectos',
+    descripcion varchar(500)  NOT NULL COMMENT 'descripción de la tabla proyectos.',
+    tipo char(2)  NOT NULL COMMENT 'tipo de proyecto de resposabilidad social (proyeccion social = P, voluntariado = V, extension universitaria = E)',
     estado char(1)  NOT NULL COMMENT 'estado de la tabla proyectos (aprobacion=A, ejecucion(suben evidencia)=E, finalizacion=F)',
     revisado char(1)  NOT NULL COMMENT 'revisado por (coordinador=C, direccion RSU=D)',
-    ods char(1)  NOT NULL COMMENT 'OBJETIVOS DE DESARROLLO SOSTENIBLE',
+    ods char(2)  NOT NULL COMMENT 'OBJETIVOS DE DESARROLLO SOSTENIBLE',
     facultad char(1)  NOT NULL COMMENT 'facultad a la ue va dirigida el proyecto.',
     escuelaProfesional char(1)  NOT NULL COMMENT 'escuela profesional a la que va dirigido el proyecto.',
+    semestre char(6) NOT NULL,
     fecha timestamp  NOT NULL COMMENT 'fecha de registro del proyecto',
     link text NULL COMMENT 'link de el enlace de google drive',
     resolucion mediumblob NULL,
@@ -115,52 +115,47 @@ CREATE TABLE ROL (
 -- foreign keys
 -- Reference: ASESOR_PROYECTOS (table: PROYECTOS)
 ALTER TABLE PROYECTOS ADD CONSTRAINT ASESOR_PROYECTOS FOREIGN KEY ASESOR_PROYECTOS (asesor_fk)
-    REFERENCES ASESOR (id);
+    REFERENCES ASESOR (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: CARRERAS_ALUMNOS (table: ESTUDIANTES)
 ALTER TABLE ESTUDIANTES ADD CONSTRAINT CARRERAS_ALUMNOS FOREIGN KEY CARRERAS_ALUMNOS (carreras_fk)
-    REFERENCES CARRERAS (id);
-
--- Reference: ESTUDIANTES_ASISTENCIA (table: ASISTENCIA)
-ALTER TABLE ASISTENCIA ADD CONSTRAINT ESTUDIANTES_ASISTENCIA FOREIGN KEY ESTUDIANTES_ASISTENCIA (estudiantes_fk)
-    REFERENCES ESTUDIANTES (id);
+    REFERENCES CARRERAS (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: ESTUDIANTES_ESTUDIANTES (table: ESTUDIANTES)
 ALTER TABLE ESTUDIANTES ADD CONSTRAINT ESTUDIANTES_ESTUDIANTES FOREIGN KEY ESTUDIANTES_ESTUDIANTES (estudiantes_fk)
-    REFERENCES ESTUDIANTES (id);
+    REFERENCES ESTUDIANTES (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: ESTUDIANTES_PROYECTOS (table: PROYECTOS)
 ALTER TABLE PROYECTOS ADD CONSTRAINT ESTUDIANTES_PROYECTOS FOREIGN KEY ESTUDIANTES_PROYECTOS (estudiantes_fk)
-    REFERENCES ESTUDIANTES (id);
+    REFERENCES ESTUDIANTES (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: ESTUDIANTES_PROYECTO_DETALLE (table: PROYECTO_DETALLE)
 ALTER TABLE PROYECTO_DETALLE ADD CONSTRAINT ESTUDIANTES_PROYECTO_DETALLE FOREIGN KEY ESTUDIANTES_PROYECTO_DETALLE (estudiantes_fk)
-    REFERENCES ESTUDIANTES (id);
+    REFERENCES ESTUDIANTES (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: PROYECTOS_ASISTENCIA (table: ASISTENCIA)
 ALTER TABLE ASISTENCIA ADD CONSTRAINT PROYECTOS_ASISTENCIA FOREIGN KEY PROYECTOS_ASISTENCIA (proyecto_fk)
-    REFERENCES PROYECTOS (id);
+    REFERENCES PROYECTOS (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: PROYECTOS_PROYECTO_DETALLE (table: PROYECTO_DETALLE)
 ALTER TABLE PROYECTO_DETALLE ADD CONSTRAINT PROYECTOS_PROYECTO_DETALLE FOREIGN KEY PROYECTOS_PROYECTO_DETALLE (proyectos_fk)
-    REFERENCES PROYECTOS (id);
+    REFERENCES PROYECTOS (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: PROYECTOS_REPOSITORIO_PROYECTO (table: REPOSITORIO_PROYECTO)
 ALTER TABLE REPOSITORIO_PROYECTO ADD CONSTRAINT PROYECTOS_REPOSITORIO_PROYECTO FOREIGN KEY PROYECTOS_REPOSITORIO_PROYECTO (proyecto_fk)
-    REFERENCES PROYECTOS (id);
+    REFERENCES PROYECTOS (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: ROL_ADMIN (table: ADMIN)
 ALTER TABLE ADMIN ADD CONSTRAINT ROL_ADMIN FOREIGN KEY ROL_ADMIN (rol_fk)
-    REFERENCES ROL (id);
+    REFERENCES ROL (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: ROL_DOCENTES (table: ASESOR)
 ALTER TABLE ASESOR ADD CONSTRAINT ROL_DOCENTES FOREIGN KEY ROL_DOCENTES (rol_fk)
-    REFERENCES ROL (id);
+    REFERENCES ROL (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Reference: ROL_ESTUDIANTES (table: ESTUDIANTES)
 ALTER TABLE ESTUDIANTES ADD CONSTRAINT ROL_ESTUDIANTES FOREIGN KEY ROL_ESTUDIANTES (rol_fk)
-    REFERENCES ROL (id);
-
+    REFERENCES ROL (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- End of file.
 CREATE OR REPLACE VIEW V_ASESOR AS
@@ -187,10 +182,10 @@ select CARRERAS.id,CONCAT(CARRERAS.nombre," ",CARRERAS.ciclo," ", CARRERAS.turno
 CREATE OR REPLACE VIEW V_PROYECTOS AS
 select ROW_NUMBER() OVER( ORDER BY PRO.id desc) AS fila, PRO.id,PRO.fecha,
 PRO.nombre, PRO.descripcion, PRO.tipo, PRO.estado, PRO.revisado, PRO.link, 
-PRO.asesor_fk, PRO.estudiantes_fk, PRO.ods,PRO.facultad,PRO.escuelaProfesional,
-CASE WHEN PRO.tipo='P' THEN 'PROYECCION SOCIAL'
-WHEN PRO.tipo='V' THEN 'VOLUNTARIADO'
-WHEN PRO.tipo='E' THEN 'EXTENSION UNIVERSITARIA'
+PRO.asesor_fk, PRO.estudiantes_fk, PRO.ods,PRO.facultad,PRO.escuelaProfesional,PRO.semestre,
+CASE WHEN PRO.tipo='PS' THEN 'PROYECCION SOCIAL'
+WHEN PRO.tipo='PV' THEN 'VOLUNTARIADO'
+WHEN PRO.tipo='PE' THEN 'EXTENSION UNIVERSITARIA'
 END AS tipoConcat,
 CASE WHEN PRO.estado='A' THEN 'APROBACION'
 WHEN PRO.estado='E' THEN 'EJECUCION'
@@ -201,23 +196,23 @@ CASE WHEN PRO.revisado='C' THEN 'COORDINADOR'
 WHEN PRO.revisado='D' THEN 'DIRECCION RSU'
 WHEN PRO.revisado='S' THEN 'SIN REVISAR'
 END AS revisadoConcat,
-CASE WHEN PRO.ods='1' THEN 'FIN DE LA POBREZA' 
-WHEN PRO.ods='2' THEN 'HAMBRE CERO' 
-WHEN PRO.ods='3' THEN 'SALUD Y BIENESTAR' 
-WHEN PRO.ods='4' THEN 'EDUCACIÒN DE CALIDAD' 
-WHEN PRO.ods='5' THEN 'IGUALDAD DE GENERO' 
-WHEN PRO.ods='6' THEN 'AGUA LIMPIA Y SANEAMIENTO' 
-WHEN PRO.ods='7' THEN 'ENERGIA ASEQUIBLE Y NO CONTAMINANTE' 
-WHEN PRO.ods='8' THEN 'TRABAJO DECENTE Y CRECIMIENTO ECONOMICO' 
-WHEN PRO.ods='9' THEN 'INDUSTRIA INNOVACION E INFRAESTRUCTURA' 
-WHEN PRO.ods='10' THEN 'REDUCCION DE LAS DESIGUALDADES' 
-WHEN PRO.ods='11' THEN 'CIUDADES Y COMUNIDADES SOSTENIBLES' 
-WHEN PRO.ods='12' THEN 'PRODUCCION Y CONSUMO RESPONSABLE' 
-WHEN PRO.ods='13' THEN 'ACCION POR EL CLIMA' 
-WHEN PRO.ods='14' THEN 'VIDA SUBMARINA' 
-WHEN PRO.ods='15' THEN 'VIDA DE ECOSISTEMAS TERRESTRES' 
-WHEN PRO.ods='16' THEN 'PAZ, JUSTICIA E INSTITUCIONES SOLIDAS' 
-WHEN PRO.ods='17' THEN 'ALIANZAS PARA LOGRAR OBJETIVOS' 
+CASE WHEN PRO.ods='1' THEN '1 FIN DE LA POBREZA' 
+WHEN PRO.ods='2' THEN '2 HAMBRE CERO' 
+WHEN PRO.ods='3' THEN '3 SALUD Y BIENESTAR' 
+WHEN PRO.ods='4' THEN '4 EDUCACIÒN DE CALIDAD' 
+WHEN PRO.ods='5' THEN '5 IGUALDAD DE GENERO' 
+WHEN PRO.ods='6' THEN '6 AGUA LIMPIA Y SANEAMIENTO' 
+WHEN PRO.ods='7' THEN '7 ENERGIA ASEQUIBLE Y NO CONTAMINANTE' 
+WHEN PRO.ods='8' THEN '8 TRABAJO DECENTE Y CRECIMIENTO ECONOMICO' 
+WHEN PRO.ods='9' THEN '9 INDUSTRIA INNOVACION E INFRAESTRUCTURA' 
+WHEN PRO.ods='10' THEN '10 REDUCCION DE LAS DESIGUALDADES' 
+WHEN PRO.ods='11' THEN '11 CIUDADES Y COMUNIDADES SOSTENIBLES' 
+WHEN PRO.ods='12' THEN '12 PRODUCCION Y CONSUMO RESPONSABLE' 
+WHEN PRO.ods='13' THEN '13 ACCION POR EL CLIMA' 
+WHEN PRO.ods='14' THEN '14 VIDA SUBMARINA' 
+WHEN PRO.ods='15' THEN '15 VIDA DE ECOSISTEMAS TERRESTRES' 
+WHEN PRO.ods='16' THEN '16 PAZ, JUSTICIA E INSTITUCIONES SOLIDAS' 
+WHEN PRO.ods='17' THEN '17 ALIANZAS PARA LOGRAR OBJETIVOS' 
 END AS odsConcat,
 CASE WHEN PRO.facultad='1' THEN 'FACULTAD DE CIENCIAS AGRARIAS'
 WHEN PRO.facultad='2' THEN 'FACULTAD DE INGENIERIA'
@@ -244,6 +239,7 @@ CONCAT(ESTUDIANTES.nombre," ",ESTUDIANTES.apellidos) as concatEst,
 CASE WHEN PROD.estado='A' THEN 'ACTIVO'
 WHEN PROD.estado='I' THEN 'INACTIVO'
 END AS estadoConcat,
+concat(PROYECTOS.tipo,"_",PROYECTOS.id,"_",PROYECTOS.semestre)as concatCodigo,
 PROYECTOS.nombre as proNom
 FROM PROYECTO_DETALLE AS PROD
 INNER JOIN ESTUDIANTES ON ESTUDIANTES.id = PROD.estudiantes_fk
@@ -260,12 +256,30 @@ WHEN ASIS.dia='5' THEN 'VIERNES'
 WHEN ASIS.dia='6' THEN 'SABADO'
 WHEN ASIS.dia='7' THEN 'DOMINGO'
 END AS diaConcat, ASIS.cantHoras,
-ASIS.fecha,ASIS.estado, ASIS.estudiantes_fk, ASIS.proyecto_fk,
-CONCAT(ESTUDIANTES.nombre," ",ESTUDIANTES.apellidos) as concatEst,
+ASIS.fecha,ASIS.estado,
+CASE WHEN ASIS.estado ='A' THEN 'ACTIVO'
+WHEN ASIS.estado ='I' THEN 'INACTIVO'END AS estadoConcat, ASIS.proyecto_fk,
 PROYECTOS.nombre FROM ASISTENCIA AS ASIS
-INNER JOIN ESTUDIANTES ON ESTUDIANTES.id = ASIS.estudiantes_fk
 INNER JOIN PROYECTOS ON PROYECTOS.id = ASIS.proyecto_fk;
 
-select * from V_ASISTENCIA;
+select * from V_ASISTENCIA where proyecto_fk="2";
+DELIMITER $$
+DROP FUNCTION IF EXISTS contar_asistencia$$
+CREATE FUNCTION contar_asistencia(proyecto int)
+  RETURNS INT 
+BEGIN
+  -- Paso 1. Declaramos una variable local
+  DECLARE total INT;
 
+  -- Paso 2. Contamos los productos
+
+  SET total = (SELECT sum(cantHoras) FROM ASISTENCIA WHERE proyecto_fk = proyecto);
+  -- Paso 3. Devolvemos el resultado
+  RETURN total;
+END
+$$
+
+DELIMITER ;
+SELECT contar_asistencia(1) as contAsistencia from dual;
+select * from ASISTENCIA;
 

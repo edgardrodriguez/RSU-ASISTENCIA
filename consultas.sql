@@ -1,11 +1,19 @@
 USE RSU_ASISTENCIA;
 SELECT id,estado,fecha,proyectos_fk,estudiantes_fk FROM PROYECTO_DETALLE where estudiantes_fk="5";
+select * from ROL;
+select * from V_ASISTENCIA where DATE_FORMAT(fecha,'%Y-%m-%d')='2023-09-15';
+select id, nombre, concat(tipo,"_",id,"_",semestre)as proyect from PROYECTOS;
+-- $P{Parameter1};
+select id,concat(tipo,"_",id,"_",semestre)as Proyect from PROYECTOS 
+where id not in (select distinct proyectos_fk from PROYECTO_DETALLE where estudiantes_fk ="2");
 
-select id,nombre from PROYECTOS where estado ='A';
-
-select * from V_PROYECTO_DETALLE where estado='A';
+select * from V_PROYECTOS;
+select distinct estudiantes_fk, concatEst from V_PROYECTOS;
+select distinct asesor_fk, concatAse from V_PROYECTOS;
+drop table ROL  ;
+show tables;
 select * from V_PROYECTO_DETALLE where estudiantes_fk="2";
-select id,nombre from PROYECTOS where estado ='A' OR estado='E';
+select id,email,password,estado,rol_fk from ADMIN where email="admin1@admin1.com" and password="1234";
                                     <f:selectItem itemLabel="EN PROCESO" itemValue="P"/>
                                     <f:selectItem itemLabel="APROBACION" itemValue="A"/>
                                     <f:selectItem itemLabel="EJECUCION" itemValue="E"/>
@@ -14,7 +22,7 @@ SELECT COUNT(CASE estado WHEN 'P' THEN 'P' END) AS EN_PROCESO,
  COUNT(CASE estado WHEN 'A' THEN 'A' END) AS APROBACION,
  COUNT(CASE estado WHEN 'E' THEN 'E' END) AS EJECUCION,
  COUNT(CASE estado WHEN 'F' THEN 'F' END) AS FINALIZACION FROM PROYECTOS;
-select * from PROYECTO_DETALLE; 
+select * from ESTUDIANTES; 
  select * from ESTUDIANTES WHERE rol_fk=1;
  select fecha from V_PROYECTOS;
  
