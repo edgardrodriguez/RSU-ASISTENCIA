@@ -21,8 +21,6 @@
                         <title>Estudiantes</title>
                     </f:facet>
                     <f:event listener="#{estudiantesC.listar()}" type="preRenderView" />
-                    <f:event listener="#{usuarioC.seguridadSesion()}" type="preRenderView"></f:event>
-                    <f:event listener="#{usuarioC.seguradUsuarioAdmin()}" type="preRenderView"></f:event>
                 </h:head>
                 <h:body>
                     <h:form id="formEstudiantes" style="align-content: center;align-items: center;text-align: center">

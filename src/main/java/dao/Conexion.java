@@ -17,10 +17,10 @@ public class Conexion {
     
     public static Connection conectar() {
         try {
-            String user = "root";
-            String pwd = "1234";
+            String user = "edgard";
+            String pwd = "Quilmana123*";
             String driver = "com.mysql.cj.jdbc.Driver";
-            String url = "jdbc:mysql://localhost:3306/RSU_ASISTENCIA?useSSL=false";
+            String url = "jdbc:mysql://51.222.205.196:3306/RSU_ASISTENCIA?useSSL=false";
             Class.forName(driver).newInstance();
             cnx = DriverManager.getConnection(url, user, pwd);
         } catch (Exception e) {

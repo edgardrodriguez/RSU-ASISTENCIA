@@ -64,7 +64,7 @@ public class usuarioC implements Serializable {
             } else if (dao.logueo == true) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡BIENVENIDO!", "Ingreso Exitoso"));
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("objetoUsuario", usuarrio);
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/RSU-ASISTENCIA/faces/menuContenido.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/ASISTENCIA/faces/menuContenido.xhtml");
             }
         } catch (Exception e) {
             Logger.getGlobal().log(Level.WARNING, "Error en acceso_C {0} ", e.getMessage());
@@ -94,44 +94,17 @@ public class usuarioC implements Serializable {
     public void cerrarSesion() throws IOException {
         limpiar();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/RSU-ASISTENCIA/");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/ASISTENCIA/");
     }
 
-    // Obtener el objeto de la sesión activa
+    //Obtener el objeto de la sesión activa
     public static UsuarioModel obtenerObjetoSesion() {
-        return (UsuarioModel) FacesContext.getCurrentInstance().getExternalContext().
+       return (UsuarioModel) FacesContext.getCurrentInstance().getExternalContext().
                 getSessionMap().get("objetoUsuario");
     }
     // Si la sesión no está iniciada no permitirá entrar a otra vista de la aplicación
 
-    public void seguridadSesion() throws IOException {
-        if (obtenerObjetoSesion() == null) {
-            limpiar();
-            FacesContext.getCurrentInstance().getExternalContext().
-                    redirect("/RSU-ASISTENCIA/");
-        }
-    }
-
-    //si inicio sesion como usuario administrador no permitira que ingrese a otra vista que no sea del administrador
-    public void seguradUsuarioAdmin() throws IOException {
-        UsuarioModel us = obtenerObjetoSesion();
-        if (us != null && us.getRol_fk() == 2) {
-            FacesContext.getCurrentInstance().getExternalContext().
-                    redirect("/RSU-ASISTENCIA/faces/menuContenido.xhtml");
-        }
-    }
-
-    // Si la sesión está activa se redirecciona a la vista principal
-    public void seguridadLogin() throws IOException {
-        UsuarioModel us = obtenerObjetoSesion();
-        if (us != null) {
-            if (us.getRol_fk() == 2) {
-                FacesContext.getCurrentInstance().getExternalContext().
-                        redirect("/RSU-ASISTENCIA/faces/menuContenido.xhtml");
-            }
-        }
-    }
-
+   
     public UsuarioImpl getDao() {
         return dao;
     }
