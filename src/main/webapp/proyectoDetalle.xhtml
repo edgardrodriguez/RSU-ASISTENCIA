@@ -44,25 +44,25 @@
                             </p:panelGrid>
                         </div>
                     </h:form>
-                    <div class="ui-g-4">
+                    <div class="ui-g-6">
                         <h:form style="align-content: center;align-items: center;text-align: center">
                             <p:outputLabel value="POR PROYECTO"/>
                             <p:panelGrid columns="2">
                                 <p:selectOneMenu  value="#{proyectoDetalleC.prod.proyectos_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un proyecto">
                                     <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{proyectoDetalleC.listProyectFilter}" var="apo" itemLabel="#{apo.nombrePro}" itemValue="#{apo.idPro}" /> 
+                                    <f:selectItems value="#{proyectoDetalleC.listProyectFilter}" var="apo" itemLabel="#{apo.codigoProyec}" itemValue="#{apo.fkProyecto}" /> 
                                 </p:selectOneMenu>
                                 <p:commandButton value="LISTAR" actionListener="#{proyectoDetalleC.reporteProyecto()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
                             </p:panelGrid>
                         </h:form>
                     </div>
-                    <div class="ui-g-4">
+                    <div class="ui-g-6">
                         <h:form style="align-content: center;align-items: center;text-align: center">
                             <p:outputLabel value="POR ESTUDIANTE"/>
                             <p:panelGrid columns="2">
                                 <p:selectOneMenu  value="#{proyectoDetalleC.prod.estudiantes_fk}" filter="true" filterMatchMode="startsWith" required="true" requiredMessage="seleccione un estudiante">
                                     <f:selectItem itemLabel="- Seleccione -"/>
-                                    <f:selectItems value="#{proyectoDetalleC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst}" itemValue="#{apo.idEst}" /> 
+                                    <f:selectItems value="#{proyectoDetalleC.listEstudiante}" var="apo" itemLabel="#{apo.nombreEst.concat(' ').concat(apo.apellidoEst)}" itemValue="#{apo.idEst}" />  
                                 </p:selectOneMenu>
                                 <p:commandButton value="LISTAR" actionListener="#{proyectoDetalleC.reporteEstudiante()}" ajax="false" style="background-color:yellowgreen;color:black;font-weight:bold;" />
                             </p:panelGrid>
@@ -81,7 +81,7 @@
                             </p:panelGrid>
                         </h:form>
                     </div>
-                    <div class="ui-g-6">
+                    <div class="ui-g-4">
                         <h:form style="align-content: center;align-items: center;text-align: center">
                             <p:outputLabel value="POR FECHA"/>
                             <p:panelGrid columns="2">
@@ -93,7 +93,7 @@
                             </p:panelGrid>
                         </h:form>
                     </div>
-                    <div class="ui-g-6">
+                    <div class="ui-g-4">
                         <h:form style="align-content: center;align-items: center">
                             <p:outputLabel value="LISTAR TOTAL"/>
                             <p:panelGrid columns="2">

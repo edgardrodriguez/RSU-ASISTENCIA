@@ -38,4 +38,7 @@ public class ProyectoDetalleModel {
     int idFecha;
     String fechaNew;
     
+    int fkProyecto;
+    String codigoProyec;
+    
 }

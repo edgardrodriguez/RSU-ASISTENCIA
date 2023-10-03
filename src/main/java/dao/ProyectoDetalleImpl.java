@@ -140,15 +140,15 @@ public class ProyectoDetalleImpl extends Conexion implements ICRUD<ProyectoDetal
         List<ProyectoDetalleModel> listadoA = null;
         ProyectoDetalleModel per;
         ResultSet rs;
-        String sql = "select id,nombre from PROYECTOS where estado ='A'";
+        String sql = "select distinct proyectos_fk,concatCodigo from V_PROYECTO_DETALLE";
         try {
             listadoA = new ArrayList();
             PreparedStatement ps = this.conectar().prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
                 per = new ProyectoDetalleModel();
-                per.setIdPro(rs.getInt("id"));
-                per.setNombrePro(rs.getString("nombre"));
+                per.setFkProyecto(rs.getInt("proyectos_fk"));
+                per.setCodigoProyec(rs.getString("concatCodigo"));
                 listadoA.add(per);
             }
             rs.close();
